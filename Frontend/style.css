@@ -1,0 +1,325 @@
+/* general stuff */
+
+:root {
+    --grid-color: #cecece;
+    --time-color: #777;
+    --slot-hover-color: #eee;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --font-color: #222;
+    --color-red: rgb(190, 35, 15);
+    --color-blue: rgb(54, 92, 175);
+    --color-green: rgb(21, 129, 21);
+    --color-orange: rgb(233, 153, 4);
+    --slotHeight: 30px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--font-color);
+}
+
+input,
+textarea {
+    font-family: inherit;
+    font-size: inherit;
+    outline: none;
+    border: none;
+}
+
+/* header */
+
+.header {
+    text-align: center;
+    padding: 20px 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header h1 {
+    color: var(--color-blue);
+    font-weight: 400;
+}
+
+.header i {
+    cursor: pointer;
+    margin: 0px 5px;
+    color: var(--time-color);
+    transition: all 80ms linear;
+}
+
+.header i:hover {
+    color: var(--font-color);
+    border-color: var(--font-color);
+}
+
+/* controls */
+
+.weekControls {
+    position: absolute;
+    left: 20px;
+    font-size: 22px;
+}
+
+.generalControls {
+    position: absolute;
+    right: 20px;
+}
+
+.generalControls i {
+    line-height: 25px;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border: 3px solid var(--time-color);
+    border-radius: 50%;
+}
+
+.generalControls .fa-plus {
+    font-size: 20px;
+}
+
+.generalControls .fa-trash-alt {
+    font-size: 18px;
+}
+
+/* calendar */
+
+#calendar {
+    display: flex;
+    width: 100%;
+    transition: opacity 200ms ease-in;
+    border-bottom: 1px solid var(--grid-color);
+}
+
+#calendar.opaque {
+    opacity: 0.4;
+}
+
+/* columns */
+
+.dayTime {
+    width: 100%;
+    min-width: 100px;
+    max-width: 100px;
+    text-align: center;
+    color: var(--time-color);
+}
+
+.day {
+    width: 100%;
+    min-width: 110px;
+    border-left: 1px solid var(--grid-color);
+}
+
+.columnHeader {
+    text-align: center;
+    font-size: 20px;
+    padding: 10px 0px;
+    height: 60px;
+    overflow: hidden;
+}
+
+.day .columnHeader {
+    border-top: 1px solid var(--grid-color);
+}
+
+.day.currentDay .columnHeader {
+    background: var(--slot-hover-color);
+}
+
+.dayDisplay {
+    font-size: 15px;
+    color: var(--time-color);
+}
+
+/* slots */
+
+.slots {
+    position: relative;
+}
+
+.slot,
+.time {
+    border-top: 1px solid var(--grid-color);
+    height: var(--slotHeight);
+}
+
+.time {
+    font-size: 14px;
+}
+
+.slot:hover {
+    cursor: pointer;
+    background-color: var(--slot-hover-color);
+}
+
+.time.currentTime {
+    background-color: var(--slot-hover-color);
+    color: var(--font-color);
+}
+
+/* events */
+
+.event {
+    position: absolute;
+    left: 1px;
+    width: calc(100% - 2px);
+    border-radius: 4px;
+    padding: 2px 5px;
+    color: white;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.shortEvent {
+    padding: 0px 5px;
+    font-size: 12px;
+}
+
+.veryShortEvent {
+    margin-top: -1px;
+    padding: 0px 5px;
+    font-size: 10px;
+}
+
+/* event modal */
+
+#eventModal {
+    display: none;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px var(--shadow-color);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    z-index: 10;
+    padding: 20px;
+    width: 450px;
+    min-width: 250px;
+}
+
+#errors {
+    color: var(--color-red);
+}
+
+#modalTitle {
+    margin-bottom: 20px;
+}
+
+#eventModal label {
+    font-weight: bold;
+    display: inline-block;
+    margin: 20px 10px 5px 0px;
+}
+
+.shortInput {
+    border-bottom: 1px solid var(--grid-color);
+    padding: 2px 1px;
+}
+
+.shortInput:focus {
+    border-bottom: 1px solid var(--font-color);
+}
+
+#eventTitle {
+    width: 95% !important;
+}
+
+#eventStart {
+    margin-right: 10px;
+}
+
+#eventEnd {
+    margin-left: 10px;
+}
+
+#eventDescription {
+    border: 1px solid var(--grid-color);
+    width: 95% !important;
+    height: 170px;
+    min-height: 40px;
+    resize: vertical;
+    padding: 4px;
+}
+
+#eventDescription:focus {
+    border: 1px solid var(--font-color);
+}
+
+#eventControls {
+    margin: 25px 0px 10px 0px;
+}
+
+.button {
+    padding: 10px 20px;
+    background-color: var(--color-blue);
+    color: white;
+    cursor: pointer;
+    margin-right: 12px;
+    border-radius: 2px;
+}
+
+#deleteButton {
+    background-color: var(--color-red);
+}
+
+.button:hover,
+.button:focus {
+    opacity: 0.8;
+}
+
+/* colors in event modal */
+
+#colors {
+    height: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 150px;
+}
+
+.color {
+    width: 20px !important;
+    height: 20px !important;
+    border-radius: 50%;
+    border: 5px solid white;
+    box-sizing: content-box;
+    cursor: pointer;
+}
+
+.color.active,
+.color:focus,
+.color:hover {
+    border: 5px solid var(--grid-color);
+}
+
+.color-red {
+    background-color: var(--color-red);
+}
+
+.color-blue {
+    background-color: var(--color-blue);
+}
+
+.color-green {
+    background-color: var(--color-green);
+}
+
+.color-orange {
+    background-color: var(--color-orange);
+}
+
+@media (max-width: 800px) {
+    #weekDisplay {
+        display: none;
+    }
+}
