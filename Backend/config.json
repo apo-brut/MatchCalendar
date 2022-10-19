@@ -1,0 +1,20 @@
+{
+    "matchCalender": {
+        "enviroment": "LOCAL",
+        "version":"1.0",
+        "author":"",
+        "documentation":"./documentation/"
+    },
+    "sqlLOCAL": {
+        "user":"",
+        "password":"",
+        "host":"127.0.0.1",
+        "database":""
+    },
+    "sqlLIVE": {
+        "user":"",
+        "password":"",
+        "host":"127.0.0.1",
+        "database":""
+    }
+}

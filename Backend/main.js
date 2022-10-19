@@ -1,9 +1,23 @@
 const express = require('express')
+const helmet = require('helmet');
+const Logger = require("./Logger.js");
+var nconf = require('nconf');
 const app = express()
 const port = 3000
 
+// Node logger
+const logger = new Logger();
+
 app.get('/', (req, res) => {
-  res.send('MatchCalender API Version: 1.0.0')
+  res.json({
+    "author": nconf.get('matchCalender:author'),
+    "version": nconf.get('matchCalender:version'),
+    "documentation": nconf.get('matchCalender:documentation'),
+    "enviroment": nconf.get('matchCalender:enviroment'),
+    "openapi-version": "3.0.0",
+    "title": "matchCalender API",
+    "description": "This is a API for matchCalender",
+  });
 })
 
   // Testing API
@@ -14,6 +28,13 @@ app.get('/', (req, res) => {
 
   //Middleware
 
+  app.use((req, res, next) => {
+    logger.writeLog(`[API_CALL] Time: ` + Date.now())
+    next()
+  })
+
+  //Helmet security
+  app.use(helmet())
 
   //API Calender
 
@@ -33,7 +54,7 @@ app.get('/', (req, res) => {
     res.send('Events to work with')
   })
 
-  app.update('/api/calenderevent', (req, res) => {
+  app.put('/api/calenderevent', (req, res) => {
     res.send('Event updated')
   })
 
@@ -52,10 +73,10 @@ app.get('/', (req, res) => {
   })
 
   //Settings API
-  app.update('/api/settings', (req, res) => {
+  app.put('/api/settings', (req, res) => {
     res.send('Settings updated')
   })
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  logger.writeLog(`[SYSTEM] listening on port ${port}`)
 })
