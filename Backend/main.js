@@ -8,6 +8,31 @@ const port = 3000
 // Node logger
 const logger = new Logger();
 
+// First consider commandline arguments and environment variables, respectively.
+nconf.argv().env();
+
+// Then load configuration from a designated file.
+nconf.file({
+  file: 'config.json'
+});
+
+  //Helmet security
+  app.use(helmet())
+
+
+
+  /**
+   * API
+   */
+
+  
+  //Middleware
+
+  app.use((req, res, next) => {
+    logger.writeLog(`[API_CALL] Time: ` + Date.now())
+    next()
+  })
+
 app.get('/', (req, res) => {
   res.json({
     "author": nconf.get('matchCalender:author'),
@@ -25,16 +50,6 @@ app.get('/', (req, res) => {
   app.get('/api/test', (req, res) => {
     res.send('Wenn du das hier zurückbekommst, dann hast du es geschaft!')
   })
-
-  //Middleware
-
-  app.use((req, res, next) => {
-    logger.writeLog(`[API_CALL] Time: ` + Date.now())
-    next()
-  })
-
-  //Helmet security
-  app.use(helmet())
 
   //API Calender
 
