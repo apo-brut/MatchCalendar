@@ -1,2 +1,2 @@
 # MatchCalendar
-Dieses Projekt ein BKT Projekt. Der Kalender ermöglicht neben den Standard Funktionen, dass Menschen Überschneidende Zeiten herausfinden können um so mögliche Verbannungszeiten zu finden. 
+Dieses Projekt ist ein BKT Projekt. Der Kalender ermöglicht neben den Standard Funktionen, dass Menschen Überschneidende Zeiten herausfinden können um so mögliche Verabredung Zeiten zu finden. 
