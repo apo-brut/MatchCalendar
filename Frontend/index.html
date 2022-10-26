@@ -27,7 +27,7 @@
             <div class="generalControls">
                 <i id="addButton" class="fas fa-plus"></i>
                 <i id="trashButton" class="fas fa-trash-alt"></i>
-                
+                <i id="addUserButton" class="fas fa-user"></i>
             </div>
         </header>
     
@@ -50,7 +50,8 @@
             </div>
         </section>
     
-        <form id="eventModal">
+        <form id="eventModal" class="modal">
+            <span class="close" id="cancelButton">&times;</span>
             <h2 id="modalTitle">
             </h2>
             <label class="descriptor" for="title">Title</label>
@@ -94,8 +95,63 @@
             </div>
             
         </form>
+
+        <div id="myModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+              <div class="modal-header">
+                <span class="close">&times;</span>
+                <h2>Account</h2>
+              </div>
+                <div class="fcontainer">
+                    <div class="fbtn">
+                        <span onclick="login()">Login</span>
+                        <span onclick="register()">Registieren</span>
+                        <hr id="Indicator">
+                    </div>
+                    <form id="LoginForm">
+                        <input type="text" id="username" placeholder="Username" class="finput">
+                        <input type="password" id="password" placeholder="Kennenwort" class="finput"></i>
+                        <input type="button" onclick="getinfo()" value="Login" class="button" id="LogInBtn">  
+                       
+                        <br>
+                        <br>
+                        <a href=""> Kennenwort vergessen? </a>
+                    </form>
+                    <form id="RegForm">
+                        <input type="text" id="newuser" placeholder="Username" class="finput">
+                        <input type="email"  id="newemail" placeholder="E-mail Adresse" class="finput">
+                        <input type="password" id="newpassword" placeholder="Kennenwort" class="finput">
+                        <input type="button" onclick="registeruser()" value="Registieren" class="button" id="RegistierenBtn">                    
+                    </form>
+                </div>
+            </div>
+          
+          </div>
+        <form id="eventModalUser">
+            
+            <div id="errors">    
+            </div>
+        </form>
     </main>    
 
+    <!----- js für form----->
+    <script>
+    var LoginForm = document.getElementById ("LoginForm");
+    var RegForm = document.getElementById ("RegForm");
+    var Indicator = document.getElementById("Indicator");
+
+    function register(){
+       RegForm.style.transform = "translateX(0px)";
+       LoginForm.style.transform = "translateX(0px)";
+       Indicator.style.transform = "translateX(100px)";
+    }
+    function login(){
+       RegForm.style.transform = "translateX(300px)";
+       LoginForm.style.transform = "translateX(300px)";
+       Indicator.style.transform = "translateX(0px)";
+    }
+</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="main.js" type="module"></script>
 
