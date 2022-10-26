@@ -20,6 +20,7 @@ export class Calendar {
         this.showWeek();
         this.loadEvents();
         this.setupControls();
+        this.SetupDatePickerSidebar();
     }
 
     setupControls() {
@@ -29,6 +30,15 @@ export class Calendar {
         $("#trashButton").click(() => this.trash());
         $("#cancelButton").click(() => this.closeModal());
         $(".color").click(this.changeColor);
+    }
+
+    SetupDatePickerSidebar(){
+        $("#datePickerSidebar").datepicker({
+            prevText: "Last",
+            nextText: "Next"
+        });
+        //$(".ui-icon ui-icon-circle-triangle-e").addClass("fas fa-angle-double-right")
+        $(".ui-datepicker-next ui-corner-all").append('<i class="fas fa-angle-double-right"></i>')
     }
 
     setupTimes() {

@@ -7,7 +7,8 @@
     <title>Calendar</title>
     <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-    <link rel="stylesheet" href="style.css">    
+    <link rel="stylesheet" href="style.css"> 
+    <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"> -->
 </head>
 <body>
 
@@ -30,26 +31,50 @@
                 
             </div>
         </header>
-    
-        <section id="calendar">
-            <div class="dayTime">            
+        <div style="display: flex">
+            <div style="width: 272; border-bottom: 1px solid #cecece; margin-left: 10px">
+                <div style="height: 100%;">
+                    <div id="datePickerSidebar" style="height: 50%; border: 1px solid #cecece; border-left: none; ">
+                        
+                        
+                    </div>
+                    <div style="height: 50%; border: 1px solid #cecece; border-left: none; border-top: none">
+                        <h3>Verknüpfte Kalender</h3>
+                        <ul >
+                            <li>
+                                <input type="checkbox" name="calendar1" id="calendar1">
+                                <label for="calendar1">Wladislaw Kusnezow</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" name="calendar2" id="calendar2">
+                                <label for="calendar2">Gennadi Kusnezow</label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div data-name="Monday" data-dayIndex = "0" class="day">           
+            <div style="flex: 1;">
+                <section id="calendar">
+                    <div class="dayTime">
+                    </div>
+                    <div data-name="Monday" data-dayIndex="0" class="day">
+                    </div>
+                    <div data-name="Tuesday" data-dayIndex="1" class="day">
+                    </div>
+                    <div data-name="Wednesday" data-dayIndex="2" class="day">
+                    </div>
+                    <div data-name="Thursday" data-dayIndex="3" class="day">
+                    </div>
+                    <div data-name="Friday" data-dayIndex="4" class="day">
+                    </div>
+                    <div data-name="Saturday" data-dayIndex="5" class="day">
+                    </div>
+                    <div data-name="Sunday" data-dayIndex="6" class="day">
+                    </div>
+                </section>
             </div>
-            <div data-name="Tuesday" data-dayIndex = "1" class="day">           
-            </div>
-            <div data-name="Wednesday" data-dayIndex = "2" class="day">           
-            </div>
-            <div data-name="Thursday" data-dayIndex = "3" class="day">            
-            </div>
-            <div data-name="Friday" data-dayIndex = "4" class="day">           
-            </div>
-            <div data-name="Saturday" data-dayIndex = "5" class="day">            
-            </div>
-            <div data-name="Sunday" data-dayIndex = "6" class="day">           
-            </div>
-        </section>
-    
+        </div>
+        
         <form id="eventModal">
             <h2 id="modalTitle">
             </h2>
@@ -98,6 +123,8 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="main.js" type="module"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
 </body>
 </html>
