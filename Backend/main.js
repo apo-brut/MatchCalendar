@@ -20,6 +20,12 @@ nconf.file({
   app.use(helmet())
 
 
+  app.all('/app/*', function (req, res, next) {
+    // Just send the index.html for other files to support HTML5Mode
+    res.sendFile('./public/index.html', {
+      root: __dirname
+    });
+  });
 
   /**
    * API
@@ -62,6 +68,19 @@ app.get('/', (req, res) => {
   })
 
   app.post('/api/calenderevent', (req, res) => {
+
+    if( req.query.userid == null ||  req.query.start == null ||  req.query.end == null ||  req.query.title == null ||  req.query.describtion == null ||  req.query.color == null){
+      res.send('Some required data not included')
+      return false;
+    }
+
+    let userid = req.query.userid;
+    let start = req.query.start;
+    let end = req.query.end;
+    let title = req.query.title;
+    let describtion = req.query.describtion;
+    let color = req.query.color;
+
     res.send('Event created')
   })
 
