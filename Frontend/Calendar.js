@@ -19,26 +19,52 @@ export class Calendar {
         this.calculateCurrentWeek();
         this.showWeek();
         this.loadEvents();
-        this.setupControls();
         this.SetupDatePickerSidebar();
+        this.setupControls();
     }
 
     setupControls() {
-        $("#nextWeekBtn").click(() => this.changeWeek(1));
-        $("#prevWeekBtn").click(() => this.changeWeek(-1));
+        //$("#nextWeekBtn").click(() => this.changeWeek(1));
+        //$("#prevWeekBtn").click(() => this.changeWeek(-1));
         $("#addButton").click(() => this.addNewEvent());
         $("#trashButton").click(() => this.trash());
         $("#cancelButton").click(() => this.closeModal());
         $(".color").click(this.changeColor);
     }
 
-    SetupDatePickerSidebar(){
+    changeWeekWithByDatepicker = function (selectedDate) {
+
+        var temp2 = new Date(selectedDate);
+        var temp3 = new Date(selectedDate);
+
+        //get last monday
+        const previousMonday = temp2;
+        previousMonday.setDate(temp2.getDate() - ((temp2.getDay() + 6) % 7));
+      
+        //get next sunday
+        const first = temp3.getDate() - temp3.getDay() + 1;
+        const last = first + 6;
+        const sunday = new Date(temp3.setDate(last));
+
+
+        //this.weekOffset += number;
+        this.weekStart = previousMonday;
+        this.weekEnd = sunday;
+        this.showWeek();
+        this.loadEvents();
+    }
+
+    SetupDatePickerSidebar() {
+        var tempThis = this;
         $("#datePickerSidebar").datepicker({
             prevText: "Last",
-            nextText: "Next"
+            nextText: "Next",
+            onSelect: function (dateText, inst) {
+                var date = $(this).val();
+                console.log("Current Date selected: " + date);
+                tempThis.changeWeekWithByDatepicker(new Date(date));
+            }
         });
-        //$(".ui-icon ui-icon-circle-triangle-e").addClass("fas fa-angle-double-right")
-        $(".ui-datepicker-next ui-corner-all").append('<i class="fas fa-angle-double-right"></i>')
     }
 
     setupTimes() {
@@ -268,8 +294,8 @@ export class Calendar {
             this.readyToTrash = true;
             window.alert(
                 "This will delete all the events in your calendar. " +
-                    "This cannot be undone. If you are sure, click " +
-                    "the trash can again in the next minute."
+                "This cannot be undone. If you are sure, click " +
+                "the trash can again in the next minute."
             );
             setTimeout(() => {
                 this.readyToTrash = false;
