@@ -1,0 +1,60 @@
+{
+	"info": {
+		"_postman_id": "7aa6ad25-95f4-42de-aeb4-ce16fc6f25df",
+		"name": "MatchCalender",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21484794"
+	},
+	"item": [
+		{
+			"name": "calenderevent",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/calenderevent?userid=1&start=s&end=e&title=Neuer Eintrag&describtion=Neue Beschreibung&color=red",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"calenderevent"
+					],
+					"query": [
+						{
+							"key": "userid",
+							"value": "1"
+						},
+						{
+							"key": "start",
+							"value": "s"
+						},
+						{
+							"key": "end",
+							"value": "e"
+						},
+						{
+							"key": "title",
+							"value": "Neuer Eintrag"
+						},
+						{
+							"key": "describtion",
+							"value": "Neue Beschreibung"
+						},
+						{
+							"key": "color",
+							"value": "red"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
