@@ -59,6 +59,7 @@ export class Calendar {
         $("#datePickerSidebar").datepicker({
             prevText: "Last",
             nextText: "Next",
+            firstDay: 1,
             onSelect: function (dateText, inst) {
                 var date = $(this).val();
                 console.log("Current Date selected: " + date);
@@ -133,6 +134,7 @@ export class Calendar {
             const display = date.toLocaleDateString(undefined, {
                 month: "2-digit",
                 day: "2-digit",
+                year: "2-digit"
             });
             $(`.day[data-dayIndex=${dayIndex}] .dayDisplay`).text(display);
         }
