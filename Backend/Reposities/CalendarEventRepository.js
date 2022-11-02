@@ -43,7 +43,7 @@ class CalenderEventRepository {
 
     async AddCalenderEvent(){
               //Get app name by applicationID
-      const appName = await new Promise((resolve, reject) => {
+     /* const appName = await new Promise((resolve, reject) => {
         connection.query("SELECT `name` FROM `oauth_applications` WHERE `applicationID` = ?",
           [client_id],
           function (err, results, fields) {
@@ -64,6 +64,7 @@ class CalenderEventRepository {
       [auth_TokenHash, identifier, accountID, functions.getCurrentDate()],
       function (err, results, fields) {}
     );
+    */
 
     }
 
