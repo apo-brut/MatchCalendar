@@ -87,7 +87,7 @@ app.get('/', (req, res) => {
     let describtion = req.query.describtion;
     let color = req.query.color;
 
-    calenderevent.AddCalenderEvent();
+    calenderevent.AddCalenderEvent(userid,start,end,title,describtion,color);
 
     res.send('Event created')
   })
