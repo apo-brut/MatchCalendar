@@ -2,6 +2,62 @@ import { dateString, getDayIndex, addDays } from "./helper.js";
 import { Event, MODE } from "./Event.js";
 var testarray = [];
 
+var lstAllCalendarEntriesByUser = {
+    'Wladislaw Kusnezow': {
+        "2022-11-02": {
+            "zwXPQTUx3PJCPx8h24xC": {
+                  'color': "blue"
+                , 'date': "2022-11-02"
+                , 'description': "oh boy\n"
+                , 'end': "21:27"
+                , 'id': "zwXPQTUx3PJCPx8h24xC"
+                , 'prevDate': "2022-11-01"
+                , 'start': "03:00"
+                , 'title': "Wladi 2022-11-02"
+            }
+        },
+        "2022-11-03": {
+            "zwXPQTUx3PJCPx8h25xD": {
+                  'color': "green"
+                , 'date': "2022-11-03"
+                , 'description': "oh boy Jolli\n"
+                , 'end': "16:00"
+                , 'id': "zwXPQTUx3PJCPx8h25xD"
+                , 'prevDate': "2022-11-02"
+                , 'start': "13:00"
+                , 'title': "Wladi 2022-11-03"
+            }
+        }
+    },
+    'Gennadi Kusnezow': {
+        "2022-11-01": {
+            "zwXPQTUx3PJCPx8h24xA": {
+                  'color': "red"
+                , 'date': "2022-11-01"
+                , 'description': "oh boy\n"
+                , 'end': "21:27"
+                , 'id': "zwXPQTUx3PJCPx8h24xA"
+                , 'prevDate': "2022-11-01"
+                , 'start': "03:00"
+                , 'title': "Genna 2022-11-01"
+            }
+        },
+        "2022-11-04": {
+            "zwXPQTUx3PJCPx8h25xF": {
+                  'color': "orange"
+                , 'date': "2022-11-04"
+                , 'description': "oh boy Jolli\n"
+                , 'end': "16:00"
+                , 'id': "zwXPQTUx3PJCPx8h25xF"
+                , 'prevDate': "2022-11-03"
+                , 'start': "13:00"
+                , 'title': "Genna 2022-11-04"
+            }
+        }
+    }
+};
+
+
 export class Calendar {
 
     constructor() {
@@ -266,7 +322,21 @@ export class Calendar {
     loadEvents() {
         $(".event").remove();
         if (!this.eventsLoaded) {
-            this.events = JSON.parse(localStorage.getItem("events"));
+            //var testtest  = JSON.parse(localStorage.getItem("events"));
+            this.event = {};
+            var tempJson = "";
+
+            Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
+                console.log(key, lstAllCalendarEntriesByUser[key]);
+
+                Object.keys(lstAllCalendarEntriesByUser[key]).forEach(innerKey => {
+                    this.events[innerKey] = lstAllCalendarEntriesByUser[key][innerKey];
+                });
+
+                //this.events = JSON.parse(JSON.stringify(lstAllCalendarEntriesByUser[key]));
+                //tempJson += JSON.parse(JSON.stringify(lstAllCalendarEntriesByUser[key]));                
+            });
+             //this.events = JSON.parse(JSON.stringify(tempJson));
             if (this.events) {
                 for (const date of Object.keys(this.events)) {
                     for (const id of Object.keys(this.events[date])) {
@@ -275,6 +345,7 @@ export class Calendar {
                     }
                 }
             }
+            
             this.eventsLoaded = true;
         }
         if (this.events) {
