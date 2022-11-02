@@ -1,10 +1,14 @@
 const mysql = require('mysql2');
 var nconf = require('nconf');
+const Logger = require("../Logger.js");
 
 let user = "root";
 let password = "";
 let host = "localhost";
 let database = "";
+
+// Node logger
+const logger = new Logger();
 
 // First consider commandline arguments and environment variables, respectively.
 nconf.argv().env();

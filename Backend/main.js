@@ -10,7 +10,7 @@ const logger = new Logger();
 
 //Repositories
 const CalendarEventRepository = require("./Reposities/CalendarEventRepository.js");
-const calenderevent = CalendarEventRepository();
+const calenderevent = new CalendarEventRepository();
 
 // First consider commandline arguments and environment variables, respectively.
 nconf.argv().env();
