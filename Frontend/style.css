@@ -65,7 +65,7 @@ textarea {
 .weekControls {
     position: absolute;
     left: 20px;
-    font-size: 22px;
+    /*font-size: 22px;*/
 }
 
 .generalControls {
@@ -495,4 +495,12 @@ form .btn:focus{
     #weekDisplay {
         display: none;
     }
+}
+
+.linkedCalendarDiv {
+    height: 50%; 
+    border: 1px solid #cecece; 
+    border-left: none; 
+    border-top: none;
+    border-bottom: none;
 }

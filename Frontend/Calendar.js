@@ -1,7 +1,65 @@
 import { dateString, getDayIndex, addDays } from "./helper.js";
 import { Event, MODE } from "./Event.js";
+var testarray = [];
+
+var lstAllCalendarEntriesByUser = {
+    'Wladislaw Kusnezow': {
+        "2022-11-02": {
+            "zwXPQTUx3PJCPx8h24xC": {
+                  'color': "blue"
+                , 'date': "2022-11-02"
+                , 'description': "oh boy\n"
+                , 'end': "21:27"
+                , 'id': "zwXPQTUx3PJCPx8h24xC"
+                , 'prevDate': "2022-11-01"
+                , 'start': "03:00"
+                , 'title': "Wladi 2022-11-02"
+            }
+        },
+        "2022-11-03": {
+            "zwXPQTUx3PJCPx8h25xD": {
+                  'color': "green"
+                , 'date': "2022-11-03"
+                , 'description': "oh boy Jolli\n"
+                , 'end': "16:00"
+                , 'id': "zwXPQTUx3PJCPx8h25xD"
+                , 'prevDate': "2022-11-02"
+                , 'start': "13:00"
+                , 'title': "Wladi 2022-11-03"
+            }
+        }
+    },
+    'Gennadi Kusnezow': {
+        "2022-11-01": {
+            "zwXPQTUx3PJCPx8h24xA": {
+                  'color': "red"
+                , 'date': "2022-11-01"
+                , 'description': "oh boy\n"
+                , 'end': "21:27"
+                , 'id': "zwXPQTUx3PJCPx8h24xA"
+                , 'prevDate': "2022-11-01"
+                , 'start': "03:00"
+                , 'title': "Genna 2022-11-01"
+            }
+        },
+        "2022-11-04": {
+            "zwXPQTUx3PJCPx8h25xF": {
+                  'color': "orange"
+                , 'date': "2022-11-04"
+                , 'description': "oh boy Jolli\n"
+                , 'end': "16:00"
+                , 'id': "zwXPQTUx3PJCPx8h25xF"
+                , 'prevDate': "2022-11-03"
+                , 'start': "13:00"
+                , 'title': "Genna 2022-11-04"
+            }
+        }
+    }
+};
+
 
 export class Calendar {
+
     constructor() {
         this.mode = MODE.VIEW;
         this.events = {};
@@ -20,12 +78,13 @@ export class Calendar {
         this.showWeek();
         this.loadEvents();
         this.SetupDatePickerSidebar();
+        this.LoadLinkedCalendar();
         this.setupControls();
     }
 
     setupControls() {
-        //$("#nextWeekBtn").click(() => this.changeWeek(1));
-        //$("#prevWeekBtn").click(() => this.changeWeek(-1));
+        $("#nextWeekBtn").click(() => this.changeWeek(1));
+        $("#prevWeekBtn").click(() => this.changeWeek(-1));
         $("#addButton").click(() => this.addNewEvent());
         $("#trashButton").click(() => this.trash());
         $("#cancelButton").click(() => this.closeModal());
@@ -40,16 +99,27 @@ export class Calendar {
         //get last monday
         const previousMonday = temp2;
         previousMonday.setDate(temp2.getDate() - ((temp2.getDay() + 6) % 7));
+        previousMonday.setMonth(temp2.getMonth());
+        previousMonday.setFullYear(temp2.getFullYear());
       
         //get next sunday
         const first = temp3.getDate() - temp3.getDay() + 1;
         const last = first + 6;
         const sunday = new Date(temp3.setDate(last));
+        sunday.setMonth(temp3.getMonth());
 
 
         //this.weekOffset += number;
         this.weekStart = previousMonday;
         this.weekEnd = sunday;
+        this.showWeek();
+        this.loadEvents();
+    }
+
+    changeWeek(number) {
+        this.weekOffset += number;
+        this.weekStart = addDays(this.weekStart, 7 * number);
+        this.weekEnd = addDays(this.weekEnd, 7 * number);
         this.showWeek();
         this.loadEvents();
     }
@@ -108,14 +178,6 @@ export class Calendar {
         const now = new Date();
         this.weekStart = addDays(now, -getDayIndex(now));
         this.weekEnd = addDays(this.weekStart, 6);
-    }
-
-    changeWeek(number) {
-        this.weekOffset += number;
-        this.weekStart = addDays(this.weekStart, 7 * number);
-        this.weekEnd = addDays(this.weekEnd, 7 * number);
-        this.showWeek();
-        this.loadEvents();
     }
 
     showWeek() {
@@ -260,7 +322,21 @@ export class Calendar {
     loadEvents() {
         $(".event").remove();
         if (!this.eventsLoaded) {
-            this.events = JSON.parse(localStorage.getItem("events"));
+            //var testtest  = JSON.parse(localStorage.getItem("events"));
+            this.event = {};
+            var tempJson = "";
+
+            Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
+                console.log(key, lstAllCalendarEntriesByUser[key]);
+
+                Object.keys(lstAllCalendarEntriesByUser[key]).forEach(innerKey => {
+                    this.events[innerKey] = lstAllCalendarEntriesByUser[key][innerKey];
+                });
+
+                //this.events = JSON.parse(JSON.stringify(lstAllCalendarEntriesByUser[key]));
+                //tempJson += JSON.parse(JSON.stringify(lstAllCalendarEntriesByUser[key]));                
+            });
+             //this.events = JSON.parse(JSON.stringify(tempJson));
             if (this.events) {
                 for (const date of Object.keys(this.events)) {
                     for (const id of Object.keys(this.events[date])) {
@@ -269,6 +345,7 @@ export class Calendar {
                     }
                 }
             }
+            
             this.eventsLoaded = true;
         }
         if (this.events) {
@@ -304,4 +381,24 @@ export class Calendar {
             }, 60 * 1000);
         }
     }
+
+    LoadLinkedCalendar() {
+
+        //hier get aus db
+        testarray.push("Wladislaw Kusnezow");
+        testarray.push("Gennadi Kusnezow");
+
+        var html = "<ul id='ulLstLinkedCalendar'><h3>Verknüpfte Kalender</h3>"
+        
+        testarray.forEach( function callback (element, index) {
+            html = html + '<li>'
+            + '<input type="checkbox" name="calendar'+index+'" id="calendar'+index+'">'
+            + '<label for="calendar'+index+'">'+element+'</label>'
+            + '</li>';
+        });
+
+        html = html + "</ul>";
+        $("#lstLinkedCalendar").append(html);
+    }
+
 }
