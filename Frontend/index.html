@@ -14,7 +14,8 @@
 
     <main>
         <header class="header">
-            <div class="weekControls">
+            <h1 class="weekControls">Calendar</h1>
+            <div >
                 <i id="prevWeekBtn" class="fas fa-angle-double-left"></i>
                 <span id="weekDisplay">
                     <span id="weekStartDisplay"></span>
@@ -23,7 +24,6 @@
                 <i id="nextWeekBtn" class="fas fa-angle-double-right"></i>
     
             </div>
-            <h1>Calendar</h1>
             <div class="generalControls">
                 <i id="addButton" class="fas fa-plus"></i>
                 <i id="trashButton" class="fas fa-trash-alt"></i>
@@ -37,19 +37,7 @@
                         <div id="datePickerSidebar"></div>
                     </div>
                     
-                    <div style="height: 50%; border: 1px solid #cecece; border-left: none; border-top: none">
-                        <h3>Verknüpfte Kalender</h3>
-                        <ul >
-                            <li>
-                                <input type="checkbox" name="calendar1" id="calendar1">
-                                <label for="calendar1">Wladislaw Kusnezow</label>
-                            </li>
-                            <li>
-                                <input type="checkbox" name="calendar2" id="calendar2">
-                                <label for="calendar2">Gennadi Kusnezow</label>
-                            </li>
-                        </ul>
-                    </div>
+                    <div id="lstLinkedCalendar" class="linkedCalendarDiv"></div>
                 </div>
             </div>
             <div style="flex: 1;">

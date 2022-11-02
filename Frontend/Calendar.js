@@ -1,7 +1,9 @@
 import { dateString, getDayIndex, addDays } from "./helper.js";
 import { Event, MODE } from "./Event.js";
+var testarray = [];
 
 export class Calendar {
+
     constructor() {
         this.mode = MODE.VIEW;
         this.events = {};
@@ -20,12 +22,13 @@ export class Calendar {
         this.showWeek();
         this.loadEvents();
         this.SetupDatePickerSidebar();
+        this.LoadLinkedCalendar();
         this.setupControls();
     }
 
     setupControls() {
-        //$("#nextWeekBtn").click(() => this.changeWeek(1));
-        //$("#prevWeekBtn").click(() => this.changeWeek(-1));
+        $("#nextWeekBtn").click(() => this.changeWeek(1));
+        $("#prevWeekBtn").click(() => this.changeWeek(-1));
         $("#addButton").click(() => this.addNewEvent());
         $("#trashButton").click(() => this.trash());
         $("#cancelButton").click(() => this.closeModal());
@@ -40,16 +43,27 @@ export class Calendar {
         //get last monday
         const previousMonday = temp2;
         previousMonday.setDate(temp2.getDate() - ((temp2.getDay() + 6) % 7));
+        previousMonday.setMonth(temp2.getMonth());
+        previousMonday.setFullYear(temp2.getFullYear());
       
         //get next sunday
         const first = temp3.getDate() - temp3.getDay() + 1;
         const last = first + 6;
         const sunday = new Date(temp3.setDate(last));
+        sunday.setMonth(temp3.getMonth());
 
 
         //this.weekOffset += number;
         this.weekStart = previousMonday;
         this.weekEnd = sunday;
+        this.showWeek();
+        this.loadEvents();
+    }
+
+    changeWeek(number) {
+        this.weekOffset += number;
+        this.weekStart = addDays(this.weekStart, 7 * number);
+        this.weekEnd = addDays(this.weekEnd, 7 * number);
         this.showWeek();
         this.loadEvents();
     }
@@ -108,14 +122,6 @@ export class Calendar {
         const now = new Date();
         this.weekStart = addDays(now, -getDayIndex(now));
         this.weekEnd = addDays(this.weekStart, 6);
-    }
-
-    changeWeek(number) {
-        this.weekOffset += number;
-        this.weekStart = addDays(this.weekStart, 7 * number);
-        this.weekEnd = addDays(this.weekEnd, 7 * number);
-        this.showWeek();
-        this.loadEvents();
     }
 
     showWeek() {
@@ -304,4 +310,24 @@ export class Calendar {
             }, 60 * 1000);
         }
     }
+
+    LoadLinkedCalendar() {
+
+        //hier get aus db
+        testarray.push("Wladislaw Kusnezow");
+        testarray.push("Gennadi Kusnezow");
+
+        var html = "<ul id='ulLstLinkedCalendar'><h3>Verknüpfte Kalender</h3>"
+        
+        testarray.forEach( function callback (element, index) {
+            html = html + '<li>'
+            + '<input type="checkbox" name="calendar'+index+'" id="calendar'+index+'">'
+            + '<label for="calendar'+index+'">'+element+'</label>'
+            + '</li>';
+        });
+
+        html = html + "</ul>";
+        $("#lstLinkedCalendar").append(html);
+    }
+
 }
