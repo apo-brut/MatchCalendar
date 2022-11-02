@@ -1,9 +1,9 @@
 import { dateString, getDayIndex, addDays } from "./helper.js";
 import { Event, MODE } from "./Event.js";
-var testarray = [];
+var LinkedCalendarChecked = [];
 
 var lstAllCalendarEntriesByUser = {
-    'Wladislaw Kusnezow': {
+    'WladislawKusnezow': {
         "2022-11-02": {
             "zwXPQTUx3PJCPx8h24xC": {
                   'color': "blue"
@@ -29,7 +29,7 @@ var lstAllCalendarEntriesByUser = {
             }
         }
     },
-    'Gennadi Kusnezow': {
+    'GennadiKusnezow': {
         "2022-11-01": {
             "zwXPQTUx3PJCPx8h24xA": {
                   'color': "red"
@@ -322,21 +322,13 @@ export class Calendar {
     loadEvents() {
         $(".event").remove();
         if (!this.eventsLoaded) {
-            //var testtest  = JSON.parse(localStorage.getItem("events"));
             this.event = {};
-            var tempJson = "";
 
             Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
-                console.log(key, lstAllCalendarEntriesByUser[key]);
-
                 Object.keys(lstAllCalendarEntriesByUser[key]).forEach(innerKey => {
                     this.events[innerKey] = lstAllCalendarEntriesByUser[key][innerKey];
                 });
-
-                //this.events = JSON.parse(JSON.stringify(lstAllCalendarEntriesByUser[key]));
-                //tempJson += JSON.parse(JSON.stringify(lstAllCalendarEntriesByUser[key]));                
             });
-             //this.events = JSON.parse(JSON.stringify(tempJson));
             if (this.events) {
                 for (const date of Object.keys(this.events)) {
                     for (const id of Object.keys(this.events[date])) {
@@ -382,23 +374,23 @@ export class Calendar {
         }
     }
 
-    LoadLinkedCalendar() {
-
-        //hier get aus db
-        testarray.push("Wladislaw Kusnezow");
-        testarray.push("Gennadi Kusnezow");
-
+    LoadLinkedCalendar() {        
         var html = "<ul id='ulLstLinkedCalendar'><h3>Verknüpfte Kalender</h3>"
         
-        testarray.forEach( function callback (element, index) {
-            html = html + '<li>'
-            + '<input type="checkbox" name="calendar'+index+'" id="calendar'+index+'">'
-            + '<label for="calendar'+index+'">'+element+'</label>'
+        Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
+            html = html + '<li click="CheckboxClicked(calendar'+key+')">'
+            + '<input type="checkbox" name="calendar'+key+'" id="calendar'+key+'">'
+            + '<label for="calendar'+key+'">'+key+'</label>'
             + '</li>';
         });
 
         html = html + "</ul>";
         $("#lstLinkedCalendar").append(html);
+    }
+
+    CheckboxClicked(elementId){
+        LinkedCalendarChecked.push(elementId);
+        console.log(LinkedCalendarChecked);
     }
 
 }
