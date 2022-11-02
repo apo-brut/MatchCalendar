@@ -8,6 +8,10 @@ const port = 3000
 // Node logger
 const logger = new Logger();
 
+//Repositories
+const CalendarEventRepository = require("./Reposities/CalendarEventRepository.js");
+const calenderevent = CalendarEventRepository();
+
 // First consider commandline arguments and environment variables, respectively.
 nconf.argv().env();
 
@@ -82,6 +86,8 @@ app.get('/', (req, res) => {
     let title = req.query.title;
     let describtion = req.query.describtion;
     let color = req.query.color;
+
+    calenderevent.AddCalenderEvent();
 
     res.send('Event created')
   })
