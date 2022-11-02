@@ -16,10 +16,12 @@
 					"urlencoded": []
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/calenderevent?userid=1&start=s&end=e&title=Neuer Eintrag&describtion=Neue Beschreibung&color=red",
+					"raw": "http://h2970110.stratoserver.net:3000/api/calenderevent?userid=1&start=s&end=e&title=Neuer Eintrag&describtion=Neue Beschreibung&color=red",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"h2970110",
+						"stratoserver",
+						"net"
 					],
 					"port": "3000",
 					"path": [
