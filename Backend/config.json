@@ -6,7 +6,7 @@
         "documentation":"./documentation/"
     },
     "sqlLOCAL": {
-        "user":"",
+        "user":"root",
         "password":"",
         "host":"127.0.0.1",
         "database":"calendar_db"
