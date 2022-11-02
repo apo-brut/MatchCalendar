@@ -1,57 +1,63 @@
 import { dateString, getDayIndex, addDays } from "./helper.js";
 import { Event, MODE } from "./Event.js";
-var testarray = [];
+var LinkedCalendarChecked = [];
 
 var lstAllCalendarEntriesByUser = {
-    'Wladislaw Kusnezow': {
-        "2022-11-02": {
-            "zwXPQTUx3PJCPx8h24xC": {
-                  'color': "blue"
-                , 'date': "2022-11-02"
-                , 'description': "oh boy\n"
-                , 'end': "21:27"
-                , 'id': "zwXPQTUx3PJCPx8h24xC"
-                , 'prevDate': "2022-11-01"
-                , 'start': "03:00"
-                , 'title': "Wladi 2022-11-02"
-            }
-        },
-        "2022-11-03": {
-            "zwXPQTUx3PJCPx8h25xD": {
-                  'color': "green"
-                , 'date': "2022-11-03"
-                , 'description': "oh boy Jolli\n"
-                , 'end': "16:00"
-                , 'id': "zwXPQTUx3PJCPx8h25xD"
-                , 'prevDate': "2022-11-02"
-                , 'start': "13:00"
-                , 'title': "Wladi 2022-11-03"
+    '1': {
+        'userName': "Wladislaw Kusnezow"
+        , 'events': {
+            "2022-11-02": {
+                "zwXPQTUx3PJCPx8h24xC": {
+                    'color': "blue"
+                    , 'date': "2022-11-02"
+                    , 'description': "oh boy\n"
+                    , 'end': "21:27"
+                    , 'id': "zwXPQTUx3PJCPx8h24xC"
+                    , 'prevDate': "2022-11-01"
+                    , 'start': "03:00"
+                    , 'title': "Wladi 2022-11-02"
+                }
+            },
+            "2022-11-03": {
+                "zwXPQTUx3PJCPx8h25xD": {
+                    'color': "green"
+                    , 'date': "2022-11-03"
+                    , 'description': "oh boy Jolli\n"
+                    , 'end': "16:00"
+                    , 'id': "zwXPQTUx3PJCPx8h25xD"
+                    , 'prevDate': "2022-11-02"
+                    , 'start': "13:00"
+                    , 'title': "Wladi 2022-11-03"
+                }
             }
         }
     },
-    'Gennadi Kusnezow': {
-        "2022-11-01": {
-            "zwXPQTUx3PJCPx8h24xA": {
-                  'color': "red"
-                , 'date': "2022-11-01"
-                , 'description': "oh boy\n"
-                , 'end': "21:27"
-                , 'id': "zwXPQTUx3PJCPx8h24xA"
-                , 'prevDate': "2022-11-01"
-                , 'start': "03:00"
-                , 'title': "Genna 2022-11-01"
-            }
-        },
-        "2022-11-04": {
-            "zwXPQTUx3PJCPx8h25xF": {
-                  'color': "orange"
-                , 'date': "2022-11-04"
-                , 'description': "oh boy Jolli\n"
-                , 'end': "16:00"
-                , 'id': "zwXPQTUx3PJCPx8h25xF"
-                , 'prevDate': "2022-11-03"
-                , 'start': "13:00"
-                , 'title': "Genna 2022-11-04"
+    '2': {
+        'userName': "Wladislaw Kusnezow"
+        , 'events': {
+            "2022-11-01": {
+                "zwXPQTUx3PJCPx8h24xA": {
+                    'color': "red"
+                    , 'date': "2022-11-01"
+                    , 'description': "oh boy\n"
+                    , 'end': "21:27"
+                    , 'id': "zwXPQTUx3PJCPx8h24xA"
+                    , 'prevDate': "2022-11-01"
+                    , 'start': "03:00"
+                    , 'title': "Genna 2022-11-01"
+                }
+            },
+            "2022-11-04": {
+                "zwXPQTUx3PJCPx8h25xF": {
+                    'color': "orange"
+                    , 'date': "2022-11-04"
+                    , 'description': "oh boy Jolli\n"
+                    , 'end': "16:00"
+                    , 'id': "zwXPQTUx3PJCPx8h25xF"
+                    , 'prevDate': "2022-11-03"
+                    , 'start': "13:00"
+                    , 'title': "Genna 2022-11-04"
+                }
             }
         }
     }
@@ -101,7 +107,7 @@ export class Calendar {
         previousMonday.setDate(temp2.getDate() - ((temp2.getDay() + 6) % 7));
         previousMonday.setMonth(temp2.getMonth());
         previousMonday.setFullYear(temp2.getFullYear());
-      
+
         //get next sunday
         const first = temp3.getDate() - temp3.getDay() + 1;
         const last = first + 6;
@@ -322,21 +328,13 @@ export class Calendar {
     loadEvents() {
         $(".event").remove();
         if (!this.eventsLoaded) {
-            //var testtest  = JSON.parse(localStorage.getItem("events"));
             this.event = {};
-            var tempJson = "";
 
             Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
-                console.log(key, lstAllCalendarEntriesByUser[key]);
-
                 Object.keys(lstAllCalendarEntriesByUser[key]).forEach(innerKey => {
                     this.events[innerKey] = lstAllCalendarEntriesByUser[key][innerKey];
                 });
-
-                //this.events = JSON.parse(JSON.stringify(lstAllCalendarEntriesByUser[key]));
-                //tempJson += JSON.parse(JSON.stringify(lstAllCalendarEntriesByUser[key]));                
             });
-             //this.events = JSON.parse(JSON.stringify(tempJson));
             if (this.events) {
                 for (const date of Object.keys(this.events)) {
                     for (const id of Object.keys(this.events[date])) {
@@ -345,7 +343,7 @@ export class Calendar {
                     }
                 }
             }
-            
+
             this.eventsLoaded = true;
         }
         if (this.events) {
@@ -383,22 +381,22 @@ export class Calendar {
     }
 
     LoadLinkedCalendar() {
-
-        //hier get aus db
-        testarray.push("Wladislaw Kusnezow");
-        testarray.push("Gennadi Kusnezow");
-
         var html = "<ul id='ulLstLinkedCalendar'><h3>Verknüpfte Kalender</h3>"
-        
-        testarray.forEach( function callback (element, index) {
-            html = html + '<li>'
-            + '<input type="checkbox" name="calendar'+index+'" id="calendar'+index+'">'
-            + '<label for="calendar'+index+'">'+element+'</label>'
-            + '</li>';
+
+        Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
+            html = html + '<li click="CheckboxClicked(calendar' + key + ')">'
+                + '<input type="checkbox" name="calendar' + key + '" id="calendar' + key + '">'
+                + '<label for="calendar' + key + '">' + key + '</label>'
+                + '</li>';
         });
 
         html = html + "</ul>";
         $("#lstLinkedCalendar").append(html);
+    }
+
+    CheckboxClicked(elementId) {
+        LinkedCalendarChecked.push(elementId);
+        console.log(LinkedCalendarChecked);
     }
 
 }

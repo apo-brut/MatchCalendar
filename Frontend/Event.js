@@ -58,6 +58,13 @@ export class Event {
         }
         calendar.events[this.date][this.id] = this;
         calendar.saveEvents();
+
+        // hier sind bislnag nur dummyDaten drin
+        var url = "http://h2970110.stratoserver.net:3000/api/calenderevent?userid=99&start="+this.start+"&end="+this.end+"&title="+this.title+"&describtion="+this.description+"&color="+this.color+"";
+
+        $.post(url, function (reponse){
+            console.log(reponse);
+        });
     }
 
     showIn(calendar) {
