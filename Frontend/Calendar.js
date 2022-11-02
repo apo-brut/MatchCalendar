@@ -3,55 +3,61 @@ import { Event, MODE } from "./Event.js";
 var LinkedCalendarChecked = [];
 
 var lstAllCalendarEntriesByUser = {
-    'WladislawKusnezow': {
-        "2022-11-02": {
-            "zwXPQTUx3PJCPx8h24xC": {
-                  'color': "blue"
-                , 'date': "2022-11-02"
-                , 'description': "oh boy\n"
-                , 'end': "21:27"
-                , 'id': "zwXPQTUx3PJCPx8h24xC"
-                , 'prevDate': "2022-11-01"
-                , 'start': "03:00"
-                , 'title': "Wladi 2022-11-02"
-            }
-        },
-        "2022-11-03": {
-            "zwXPQTUx3PJCPx8h25xD": {
-                  'color': "green"
-                , 'date': "2022-11-03"
-                , 'description': "oh boy Jolli\n"
-                , 'end': "16:00"
-                , 'id': "zwXPQTUx3PJCPx8h25xD"
-                , 'prevDate': "2022-11-02"
-                , 'start': "13:00"
-                , 'title': "Wladi 2022-11-03"
+    '1': {
+        'userName': "Wladislaw Kusnezow"
+        , 'events': {
+            "2022-11-02": {
+                "zwXPQTUx3PJCPx8h24xC": {
+                    'color': "blue"
+                    , 'date': "2022-11-02"
+                    , 'description': "oh boy\n"
+                    , 'end': "21:27"
+                    , 'id': "zwXPQTUx3PJCPx8h24xC"
+                    , 'prevDate': "2022-11-01"
+                    , 'start': "03:00"
+                    , 'title': "Wladi 2022-11-02"
+                }
+            },
+            "2022-11-03": {
+                "zwXPQTUx3PJCPx8h25xD": {
+                    'color': "green"
+                    , 'date': "2022-11-03"
+                    , 'description': "oh boy Jolli\n"
+                    , 'end': "16:00"
+                    , 'id': "zwXPQTUx3PJCPx8h25xD"
+                    , 'prevDate': "2022-11-02"
+                    , 'start': "13:00"
+                    , 'title': "Wladi 2022-11-03"
+                }
             }
         }
     },
-    'GennadiKusnezow': {
-        "2022-11-01": {
-            "zwXPQTUx3PJCPx8h24xA": {
-                  'color': "red"
-                , 'date': "2022-11-01"
-                , 'description': "oh boy\n"
-                , 'end': "21:27"
-                , 'id': "zwXPQTUx3PJCPx8h24xA"
-                , 'prevDate': "2022-11-01"
-                , 'start': "03:00"
-                , 'title': "Genna 2022-11-01"
-            }
-        },
-        "2022-11-04": {
-            "zwXPQTUx3PJCPx8h25xF": {
-                  'color': "orange"
-                , 'date': "2022-11-04"
-                , 'description': "oh boy Jolli\n"
-                , 'end': "16:00"
-                , 'id': "zwXPQTUx3PJCPx8h25xF"
-                , 'prevDate': "2022-11-03"
-                , 'start': "13:00"
-                , 'title': "Genna 2022-11-04"
+    '2': {
+        'userName': "Wladislaw Kusnezow"
+        , 'events': {
+            "2022-11-01": {
+                "zwXPQTUx3PJCPx8h24xA": {
+                    'color': "red"
+                    , 'date': "2022-11-01"
+                    , 'description': "oh boy\n"
+                    , 'end': "21:27"
+                    , 'id': "zwXPQTUx3PJCPx8h24xA"
+                    , 'prevDate': "2022-11-01"
+                    , 'start': "03:00"
+                    , 'title': "Genna 2022-11-01"
+                }
+            },
+            "2022-11-04": {
+                "zwXPQTUx3PJCPx8h25xF": {
+                    'color': "orange"
+                    , 'date': "2022-11-04"
+                    , 'description': "oh boy Jolli\n"
+                    , 'end': "16:00"
+                    , 'id': "zwXPQTUx3PJCPx8h25xF"
+                    , 'prevDate': "2022-11-03"
+                    , 'start': "13:00"
+                    , 'title': "Genna 2022-11-04"
+                }
             }
         }
     }
@@ -101,7 +107,7 @@ export class Calendar {
         previousMonday.setDate(temp2.getDate() - ((temp2.getDay() + 6) % 7));
         previousMonday.setMonth(temp2.getMonth());
         previousMonday.setFullYear(temp2.getFullYear());
-      
+
         //get next sunday
         const first = temp3.getDate() - temp3.getDay() + 1;
         const last = first + 6;
@@ -337,7 +343,7 @@ export class Calendar {
                     }
                 }
             }
-            
+
             this.eventsLoaded = true;
         }
         if (this.events) {
@@ -374,21 +380,21 @@ export class Calendar {
         }
     }
 
-    LoadLinkedCalendar() {        
+    LoadLinkedCalendar() {
         var html = "<ul id='ulLstLinkedCalendar'><h3>Verknüpfte Kalender</h3>"
-        
+
         Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
-            html = html + '<li click="CheckboxClicked(calendar'+key+')">'
-            + '<input type="checkbox" name="calendar'+key+'" id="calendar'+key+'">'
-            + '<label for="calendar'+key+'">'+key+'</label>'
-            + '</li>';
+            html = html + '<li click="CheckboxClicked(calendar' + key + ')">'
+                + '<input type="checkbox" name="calendar' + key + '" id="calendar' + key + '">'
+                + '<label for="calendar' + key + '">' + key + '</label>'
+                + '</li>';
         });
 
         html = html + "</ul>";
         $("#lstLinkedCalendar").append(html);
     }
 
-    CheckboxClicked(elementId){
+    CheckboxClicked(elementId) {
         LinkedCalendarChecked.push(elementId);
         console.log(LinkedCalendarChecked);
     }
