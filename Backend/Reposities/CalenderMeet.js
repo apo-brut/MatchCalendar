@@ -38,33 +38,22 @@ const connection = mysql.createConnection({
 });
 
 
+class CalenderMeet { 
 
-class CalenderEventRepository {
-
-  async AddCalenderEvent(userid,start,end,title,describtion,color){
-    
-
-    connection.query("INSERT INTO `save`(`UserId`, `Start`, `End`, `Title`, `Description`, `Color`) VALUES (?, ?, ?, ?, ?, ? )",
-    [userid,start,end,title,describtion,color],
-    function (err, results, fields) {
-      console.log(err);
+    async AddCalenderMeet (ID, userId1, userId2) {
+     connection.query ("INSERT INTO `meet`(`ID`, `UserId1`, `UserId2`) VALUES (?, ?, ?)",
+     [ID,UserId1,UserId2],
+     function (err, results, fields) {
+    //   console.log(err);
+     });
     }
-  );
- }
 
-async DeleteCalenderEvent(Id) {
-  connection.query("DELETE FROM `save` WHERE Id) VALUES(?, ?, ?, ?, ? ,?)",
-
-    [Id,username,password,firstname,lastname,entry],
-    function (err, results, fields) {
-   //   console.log(err);
+    async DeleteCalenderMeet (ID, userId1, userId2) {
+     connection.query ("DELETE FROM `meet` WHERE ID) VALUES(?, ?, ?, ?, ? ,?)"
+     [ID, userId1, userId2],
+     function (err, results, fields) {
+    //   console.log(err);
+     });
     }
-    );
-}
-
 
 }
-
-    
-module.exports = CalenderEventRepository; 
-

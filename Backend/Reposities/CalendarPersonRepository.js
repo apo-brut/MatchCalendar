@@ -39,21 +39,21 @@ const connection = mysql.createConnection({
 
 
 
-class CalenderEventRepository {
+class CalendarPersonRepository {
 
-  async AddCalenderEvent(userid,start,end,title,describtion,color){
-    
+  async AddCalenderPerson(Id,username,password,firstname,lastname,entry){
 
-    connection.query("INSERT INTO `save`(`UserId`, `Start`, `End`, `Title`, `Description`, `Color`) VALUES (?, ?, ?, ?, ?, ? )",
-    [userid,start,end,title,describtion,color],
+    connection.query("INSERT INTO `person`(`ID`, `Username`, `Password`, `Firstname`, `Lastname`, `Entry`) VALUES (?, ?, ?, ?, ?, ? )",
+    [Id,username,password,firstname,lastname,entry],
     function (err, results, fields) {
       console.log(err);
     }
   );
- }
 
-async DeleteCalenderEvent(Id) {
-  connection.query("DELETE FROM `save` WHERE Id) VALUES(?, ?, ?, ?, ? ,?)",
+    }
+
+  async DeleteCalenderPerson(Id) {
+    connection.query("DELETE FROM `person` WHERE Id) VALUES(?, ?, ?, ?, ? ,?)",
 
     [Id,username,password,firstname,lastname,entry],
     function (err, results, fields) {
@@ -63,8 +63,23 @@ async DeleteCalenderEvent(Id) {
 }
 
 
-}
 
+    async UpdateCalenderPerson(Id) {
+        connection.query("UPDATE `person` SET `ID`='[value-1]',`Username`='',`Password`='',`Firstname`='',`Lastname`='',`Entry`='' WHERE 1",
     
-module.exports = CalenderEventRepository; 
+        [Id,username,password,firstname,lastname,entry],
+        function (err, results, fields) {
+       //   console.log(err);
+        }
+        );
+
+
+ }
+}
+    
+
+
+
+
+module.exports = CalendarPersonRepository; 
 
