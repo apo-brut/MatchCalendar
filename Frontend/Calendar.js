@@ -1,4 +1,4 @@
-import { dateString, getDayIndex, addDays } from "./helper.js";
+import { dateString, getDayIndex, addDays, generateId } from "./helper.js";
 import { Event, MODE } from "./Event.js";
 var LinkedCalendarChecked = [];
 
@@ -6,36 +6,36 @@ var lstAllCalendarEntriesByUser = {
     '1': {
         'userName': "Wladislaw Kusnezow"
         , 'events': {
-            "2022-11-02": {
+            "2022-11-09": {
                 "1": {
                     'color': "blue"
-                    , 'date': "2022-11-02"
+                    , 'date': "2022-11-09"
                     , 'description': "oh boy\n"
                     , 'end': "21:27"
                     , 'id': "zwXPQTUx3PJCPx8h24xC"
-                    , 'prevDate': "2022-11-01"
+                    , 'prevDate': "2022-11-08"
                     , 'start': "03:00"
                     , 'title': "Wladi 2022-11-02"
                 }
             },
-            "2022-11-03": {
+            "2022-11-10": {
                 "2": {
                     'color': "green"
-                    , 'date': "2022-11-03"
+                    , 'date': "2022-11-10"
                     , 'description': "oh boy Jolli\n"
                     , 'end': "16:00"
                     , 'id': "zwXPQTUx3PJCPx8h25xD"
-                    , 'prevDate': "2022-11-02"
+                    , 'prevDate': "2022-11-09"
                     , 'start': "13:00"
-                    , 'title': "Wladi 2022-11-03"
+                    , 'title': "Wladi 2022-11-09"
                 }
-                ,"6": {
+                , "6": {
                     'color': "green"
-                    , 'date': "2022-11-03"
+                    , 'date': "2022-11-10"
                     , 'description': "oh boy Jolli\n"
                     , 'end': "12:00"
                     , 'id': "zwXPQTUx3PJCPx8h25xL"
-                    , 'prevDate': "2022-11-02"
+                    , 'prevDate': "2022-11-09"
                     , 'start': "11:00"
                     , 'title': "test"
                 }
@@ -45,38 +45,38 @@ var lstAllCalendarEntriesByUser = {
     '2': {
         'userName': "Abdullah Yüksel"
         , 'events': {
-            "2022-11-01": {
+            "2022-11-08": {
                 "3": {
                     'color': "red"
-                    , 'date': "2022-11-01"
+                    , 'date': "2022-11-08"
                     , 'description': "oh boy\n"
                     , 'end': "21:27"
                     , 'id': "zwXPQTUx3PJCPx8h24xA"
-                    , 'prevDate': "2022-11-01"
+                    , 'prevDate': "2022-11-07"
                     , 'start': "03:00"
                     , 'title': "Genna 2022-11-01"
                 }
             },
-            "2022-11-04": {
+            "2022-11-11": {
                 "4": {
                     'color': "orange"
-                    , 'date': "2022-11-04"
+                    , 'date': "2022-11-11"
                     , 'description': "oh boy Jolli\n"
                     , 'end': "16:00"
                     , 'id': "zwXPQTUx3PJCPx8h25xF"
-                    , 'prevDate': "2022-11-03"
+                    , 'prevDate': "2022-11-10"
                     , 'start': "13:00"
                     , 'title': "Genna 2022-11-04"
                 }
             },
-            "2022-11-02": {
+            "2022-11-09": {
                 "5": {
                     'color': "green"
-                    , 'date': "2022-11-02"
+                    , 'date': "2022-11-09"
                     , 'description': "oh boy Jolli\n"
                     , 'end': "16:00"
                     , 'id': "zwXPQTUx3PJCPx8h25xG"
-                    , 'prevDate': "2022-11-01"
+                    , 'prevDate': "2022-11-08"
                     , 'start': "3:00"
                     , 'title': "AAAAAA"
                 }
@@ -353,10 +353,10 @@ export class Calendar {
             this.events = {};
 
             Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
-                if (LinkedCalendarChecked.find(x => x.userName === lstAllCalendarEntriesByUser[key].userName).isChecked === true){
+                if (LinkedCalendarChecked.find(x => x.userName === lstAllCalendarEntriesByUser[key].userName).isChecked === true) {
                     Object.keys(lstAllCalendarEntriesByUser[key]["events"]).forEach(innerKey => {
                         if (!this.events[innerKey])
-                            this.events[innerKey] = {};1
+                            this.events[innerKey] = {}; 1
 
                         Object.keys(lstAllCalendarEntriesByUser[key]["events"][innerKey]).forEach(lastKey => {
                             this.events[innerKey][lastKey] = lstAllCalendarEntriesByUser[key]["events"][innerKey][lastKey];
@@ -410,7 +410,7 @@ export class Calendar {
     }
 
     LoadLinkedCalendar() {
-        var html = "<ul id='ulLstLinkedCalendar'><h3>Verknüpfte Kalender</h3>"
+        var html = "<ul id='ulLstLinkedCalendar'><h3>Linked Calendar</h3>"
 
         Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
             var userName = lstAllCalendarEntriesByUser[key].userName;
@@ -419,37 +419,130 @@ export class Calendar {
                 + '<input type="checkbox" name="LinkedCalendar_' + key + '" id="LinkedCalendar_' + key + '" >'
                 + '<label for="LinkedCalendar_' + key + '" >' + userName + '</label>'
                 + '</li>';
-            
-            LinkedCalendarChecked.push({"userName": userName, "key": "LinkedCalendar_" + key, "isChecked": null});
+
+            LinkedCalendarChecked.push({ "userName": userName, "key": "LinkedCalendar_" + key, "isChecked": null });
         });
 
         html = html + "</ul>";
+
+        //create button for generating of Events
+        html = html + '<input id="GenerateEventsBtn" class="button generateBtn" type="button" value="Generate" class="button" >';
+
+        //append created html to its div
         $("#lstLinkedCalendar").append(html);
-        
+
+        //set functions
         var tempThis = this;
         //does not work
         Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
-            var test = document.getElementById('LinkedCalendar_'+ key);
-            test.onclick = function (){
-                tempThis.CheckboxClicked(test.id);
+            var checkbox = document.getElementById('LinkedCalendar_' + key);
+            checkbox.onclick = function () {
+                tempThis.CheckboxClicked(checkbox.id);
             }
         });
+
+        var generateBtn = document.getElementById('GenerateEventsBtn');
+        generateBtn.onclick = function () {
+            tempThis.GenerateEventsForLinkedCalendar();
+        }
     }
 
     CheckboxClicked(elementId) {
-        var checkboxValue = $('#'+elementId).is(":checked");
+        var checkboxValue = $('#' + elementId).is(":checked");
 
         var tst = LinkedCalendarChecked.filter(x => x.key === elementId);
         tst.isChecked = checkboxValue;
         LinkedCalendarChecked.find(x => x.key === elementId).isChecked = checkboxValue;
 
-        console.log(LinkedCalendarChecked);
+        //console.log(LinkedCalendarChecked);
         this.eventsLoaded = false;
         this.loadEvents();
     }
 
+    GenerateEventsForLinkedCalendar = function () {
+        var currentEvents = {};
+        var currentEventsDates = [];
+        var generateEvents = {};
 
-    //this shit is needed
-    //https://my.living-apps.de/static/jquery-ui/1.12.1/themes/base/images/
-    //https://jqueryui.com/datepicker/
+        //get all events from all linked caledar
+        Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
+            if (!currentEvents[key]) currentEvents[key] = {};
+
+            Object.keys(lstAllCalendarEntriesByUser[key]["events"]).forEach(innerKey => {
+                if (!currentEventsDates.find(x => x === innerKey)) currentEventsDates.push(innerKey);
+
+                if (!currentEvents[key][innerKey]) currentEvents[key][innerKey] = {}; 1
+
+                Object.keys(lstAllCalendarEntriesByUser[key]["events"][innerKey]).forEach(lastKey => {
+                    currentEvents[key][innerKey][lastKey] = lstAllCalendarEntriesByUser[key]["events"][innerKey][lastKey];
+                });
+            });
+        });
+
+        //get currentweek
+        var currentWeekStart = new Date(this.weekStart);
+        currentWeekStart.setHours(0, 0, 0, 0);
+        var currentWeekEnd = new Date(this.weekEnd);
+        currentWeekEnd.setHours(23, 59, 59, 999);
+
+        var tempDate = new Date(currentWeekStart);
+        //get days without event and create event from 00:00 - 23:59
+        for (let i = 0; i < 7; i++) {
+            tempDate.setDate(currentWeekStart.getDate() + i);
+            var year = tempDate.getFullYear();
+            var month = tempDate.getMonth() + 1;
+            var day = tempDate.getDate().toString().length === 1 ? "0" + tempDate.getDate() : tempDate.getDate();
+
+            if (tempDate >= currentWeekStart && tempDate <= currentWeekEnd) {
+
+                if (!currentEventsDates.find(x => x === year + '-' + month + '-' + day)) {
+                    var newId = generateId();
+
+                    generateEvents[year + '-' + month + '-' + day] = {}
+                    generateEvents[year + '-' + month + '-' + day][newId] = {
+                        "color": "grey"
+                        , "date": year + '-' + month + '-' + day
+                        , "description": ""
+                        , "end": "23:59"
+                        , "id": newId
+                        , "prevDate": year + '-' + month + '-' + day //todo get prevDate
+                        , "start": "00:00"
+                        , "title": "Generated Event"
+                    }
+
+                } else {
+                    var currentEventsForDate = [];
+                    //console.log(lstAllCalendarEntriesByUser);
+                    // get time between events on day with events
+                    //first get events for current date in loop
+                    Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
+                        Object.keys(lstAllCalendarEntriesByUser[key]["events"]).forEach(date => {
+
+                            if (new Date(date).setHours(0, 0, 0, 0) === tempDate.setHours(0, 0, 0, 0)) {
+                                if (Object.keys(lstAllCalendarEntriesByUser[key]["events"][date]).length > 1) {
+
+                                    Object.keys(lstAllCalendarEntriesByUser[key]["events"][date]).forEach(innerEvent => {
+                                        var event = lstAllCalendarEntriesByUser[key]["events"][date][innerEvent]
+                                        currentEventsForDate.push({ date, event });
+                                    });
+
+                                } else {
+                                    var event = lstAllCalendarEntriesByUser[key]["events"][date]
+                                    currentEventsForDate.push({ date, event });
+                                }
+                            }
+                        });
+                    });
+
+                    console.log(currentEventsForDate);
+
+                    currentEventsForDate.forEach((event) => {
+                        //anzahl zu generierender events für tag = anzahl der bestehenden events von tag +1
+
+                    })
+                }
+            }
+        }
+    }
 }
+

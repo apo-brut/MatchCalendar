@@ -10,6 +10,7 @@
     --color-blue: rgb(54, 92, 175);
     --color-green: rgb(21, 129, 21);
     --color-orange: rgb(233, 153, 4);
+    --color-grey: rgb(128,128,128);
     --slotHeight: 30px;
 }
 
@@ -503,4 +504,11 @@ form .btn:focus{
     border-left: none; 
     border-top: none;
     border-bottom: none;
+    position: relative;
+}
+
+.generateBtn {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
