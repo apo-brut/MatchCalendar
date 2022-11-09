@@ -15,6 +15,9 @@ var btn = document.getElementById("addUserButton");
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 
+var loginTabBtn = document.getElementById("loginTabBtn");
+var registerTabBtn = document.getElementById("registerTabBtn");
+
 // When the user clicks the button, open the modal 
 btn.onclick = function() {
   modal.style.display = "block";
@@ -36,12 +39,12 @@ var LoginForm = document.getElementById ("LoginForm");
 var RegForm = document.getElementById ("RegForm");
 var Indicator = document.getElementById("Indicator");
 
-function register(){
+registerTabBtn.onclick = function (){
    RegForm.style.transform = "translateX(0px)";
    LoginForm.style.transform = "translateX(0px)";
    Indicator.style.transform = "translateX(100px)";
 }
-function login(){
+loginTabBtn.onclick = function (){
    RegForm.style.transform = "translateX(300px)";
    LoginForm.style.transform = "translateX(300px)";
    Indicator.style.transform = "translateX(0px)";
