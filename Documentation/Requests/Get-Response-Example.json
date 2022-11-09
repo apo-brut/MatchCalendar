@@ -12,6 +12,16 @@
                     , "prevDate": "2022-11-01"
                     , "start": "03:00"
                     , "title": "Wladi 2022-11-02"
+                },
+                "zwXPQTUx3PJCPx8h25fdd": {
+                    "color": "green"
+                    , "date": "2022-11-03"
+                    , "description": "oh boy Jolli\n"
+                    , "end": "16:00"
+                    , "id": "zwXPQTUx3PJCPx8h25xD"
+                    , "prevDate": "2022-11-02"
+                    , "start": "13:00"
+                    , "title": "Wladi 2022-11-03"
                 }
             },
             "2022-11-03": {

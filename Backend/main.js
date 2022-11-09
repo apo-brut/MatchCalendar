@@ -97,51 +97,96 @@ app.get('/', (req, res) => {
       res.send('Error Body invalid');
       return false;
     }
+  
+    let body = req.body;
+	
+    Object.keys(body).forEach(key => {
 
-    var dataReceived = JSON.parse(req.body);
+      let userID = 0;
+      let color = "blue";
+      let date = "blue";
+      let description = "oh boy Jolli\n";
+      let end = "16:00";
+      let id = "0";
+      let prevDate = "2022-11-02";
+      let start = "13:00";
+      let title = "Title";
 
-    console.log(dataReceived[0]);
+      userID = key;
 
-    /**
-     * 
-{
-    "WladislawKusnezow": {
-        "2022-11-02": {
-            "zwXPQTUx3PJCPx8h24xC": {
-                  "color": "blue"
-                , "date": "2022-11-02"
-                , "descriptionv": "oh boy\n"
-                , "end": "21:27"
-                , "id": "zwXPQTUx3PJCPx8h24xC"
-                , "prevDate": "2022-11-01"
-                , "start": "03:00"
-                , "title": "Wladi 2022-11-02"
-            }
-        }
-      }
-    }
-     */
+      Object.keys(body[key]["events"]).forEach(dateKey => {
+        Object.keys(body[key]["events"][dateKey]).forEach(eventID => {
 
-   /* if( req.query.userid == null ||  req.query.start == null ||  req.query.end == null ||  req.query.title == null ||  req.query.describtion == null ||  req.query.color == null){
-      res.send('Some required data not included')
-      return false;
-    }
+          let event = body[key]["events"][dateKey][eventID];
+        
+          color = event["color"];
+          date = event["date"];
+          description = event["description"];
+          end = date + " " + event["end"] + ":00";
+          id = event["id"];
+          prevDate = event["prevDate"];
+          start = date + " " + event["start"] + ":00";
+          title = event["title"];
 
-    let userid = req.query.userid;
-    let start = req.query.start;
-    let end = req.query.end;
-    let title = req.query.title;
-    let describtion = req.query.describtion;
-    let color = req.query.color;
-    */
-
-   // calenderevent.AddCalenderEvent(userid,start,end,title,describtion,color);
+          //Add event
+          calenderevent.AddCalenderEvent(userID,start,end,title,description,color);
+        });
+        
+      });
+    });
 
     res.send('Event created')
   })
 
-  app.get('/api/calenderevent', (req, res) => {
-    res.send('Events to work with')
+  app.get('/api/calenderevent', async (req, res) => {
+
+    let userid = req.query.userid;
+
+    let username = "Wladislaw Kusnezow";
+
+    const calenderEvents = await calenderevent.GetCalendarEvents(userid);
+
+    let response = {};
+
+    calenderEvents.forEach((event)=>{
+      let color = "blue";
+      let date = "2022-11-02";
+      let description = "oh boy Jolli\n";
+      let end = "16:00";
+      let id = "zwXPQTUx3PJCPx8h24xC";
+      let prevDate = "2022-11-02";
+      let start = "13:00";
+      let title = "Title";
+
+  
+      response[userid] = {
+        username: username,
+        events: {
+  
+        }
+    };
+  
+  response[userid].events[date] = {};
+  
+  response[userid].events[date][id] = {
+    color: "blue",
+    date: "2022-11-02",
+    description: "oh boy\n",
+    end: "21:27",
+    id: "zwXPQTUx3PJCPx8h24xC",
+    prevDate: "2022-11-01",
+    start: "03:00",
+    title: "Wladi 2022-11-02"
+  }
+    });
+
+
+
+
+
+    
+
+    res.send(response)
   })
 
   app.put('/api/calenderevent', (req, res) => {
@@ -171,3 +216,5 @@ app.get('/', (req, res) => {
     cert: fs.readFileSync('./ssl/cert.pem'),
     passphrase: 'd§$Fsdftr34rwefefdegfdwf'
   }, app).listen(port);
+
+  logger.log(`API server running at port: ${port}/`);
