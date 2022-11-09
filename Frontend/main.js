@@ -44,6 +44,7 @@ registerTabBtn.onclick = function (){
    LoginForm.style.transform = "translateX(0px)";
    Indicator.style.transform = "translateX(100px)";
 }
+
 loginTabBtn.onclick = function (){
    RegForm.style.transform = "translateX(300px)";
    LoginForm.style.transform = "translateX(300px)";
