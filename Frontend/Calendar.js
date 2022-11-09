@@ -7,7 +7,7 @@ var lstAllCalendarEntriesByUser = {
         'userName': "Wladislaw Kusnezow"
         , 'events': {
             "2022-11-02": {
-                "zwXPQTUx3PJCPx8h24xC": {
+                "1": {
                     'color': "blue"
                     , 'date': "2022-11-02"
                     , 'description': "oh boy\n"
@@ -19,7 +19,7 @@ var lstAllCalendarEntriesByUser = {
                 }
             },
             "2022-11-03": {
-                "zwXPQTUx3PJCPx8h25xD": {
+                "2": {
                     'color': "green"
                     , 'date': "2022-11-03"
                     , 'description': "oh boy Jolli\n"
@@ -29,6 +29,16 @@ var lstAllCalendarEntriesByUser = {
                     , 'start': "13:00"
                     , 'title': "Wladi 2022-11-03"
                 }
+                ,"6": {
+                    'color': "green"
+                    , 'date': "2022-11-03"
+                    , 'description': "oh boy Jolli\n"
+                    , 'end': "12:00"
+                    , 'id': "zwXPQTUx3PJCPx8h25xL"
+                    , 'prevDate': "2022-11-02"
+                    , 'start': "11:00"
+                    , 'title': "test"
+                }
             }
         }
     },
@@ -36,7 +46,7 @@ var lstAllCalendarEntriesByUser = {
         'userName': "Abdullah Yüksel"
         , 'events': {
             "2022-11-01": {
-                "zwXPQTUx3PJCPx8h24xA": {
+                "3": {
                     'color': "red"
                     , 'date': "2022-11-01"
                     , 'description': "oh boy\n"
@@ -48,7 +58,7 @@ var lstAllCalendarEntriesByUser = {
                 }
             },
             "2022-11-04": {
-                "zwXPQTUx3PJCPx8h25xF": {
+                "4": {
                     'color': "orange"
                     , 'date': "2022-11-04"
                     , 'description': "oh boy Jolli\n"
@@ -57,6 +67,18 @@ var lstAllCalendarEntriesByUser = {
                     , 'prevDate': "2022-11-03"
                     , 'start': "13:00"
                     , 'title': "Genna 2022-11-04"
+                }
+            },
+            "2022-11-02": {
+                "5": {
+                    'color': "green"
+                    , 'date': "2022-11-02"
+                    , 'description': "oh boy Jolli\n"
+                    , 'end': "16:00"
+                    , 'id': "zwXPQTUx3PJCPx8h25xG"
+                    , 'prevDate': "2022-11-01"
+                    , 'start': "3:00"
+                    , 'title': "AAAAAA"
                 }
             }
         }
@@ -82,9 +104,9 @@ export class Calendar {
         this.setupDays();
         this.calculateCurrentWeek();
         this.showWeek();
-        this.loadEvents();
         this.SetupDatePickerSidebar();
         this.LoadLinkedCalendar();
+        this.loadEvents();
         this.setupControls();
     }
 
@@ -328,12 +350,19 @@ export class Calendar {
     loadEvents() {
         $(".event").remove();
         if (!this.eventsLoaded) {
-            this.event = {};
+            this.events = {};
 
             Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
-                Object.keys(lstAllCalendarEntriesByUser[key]["events"]).forEach(innerKey => {
-                    this.events[innerKey] = lstAllCalendarEntriesByUser[key]["events"][innerKey];
-                });
+                if (LinkedCalendarChecked.find(x => x.userName === lstAllCalendarEntriesByUser[key].userName).isChecked === true){
+                    Object.keys(lstAllCalendarEntriesByUser[key]["events"]).forEach(innerKey => {
+                        if (!this.events[innerKey])
+                            this.events[innerKey] = {};1
+
+                        Object.keys(lstAllCalendarEntriesByUser[key]["events"][innerKey]).forEach(lastKey => {
+                            this.events[innerKey][lastKey] = lstAllCalendarEntriesByUser[key]["events"][innerKey][lastKey];
+                        });
+                    });
+                }
             });
             if (this.events) {
                 for (const date of Object.keys(this.events)) {
@@ -386,34 +415,41 @@ export class Calendar {
         Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
             var userName = lstAllCalendarEntriesByUser[key].userName;
 
-            //TODO: function cannot be called, due to it that it is in other scope / this
             html = html + '<li>'
                 + '<input type="checkbox" name="LinkedCalendar_' + key + '" id="LinkedCalendar_' + key + '" >'
                 + '<label for="LinkedCalendar_' + key + '" >' + userName + '</label>'
                 + '</li>';
+            
+            LinkedCalendarChecked.push({"userName": userName, "key": "LinkedCalendar_" + key, "isChecked": null});
         });
 
         html = html + "</ul>";
         $("#lstLinkedCalendar").append(html);
-
+        
+        var tempThis = this;
         //does not work
         Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
-            var test = $('#LinkedCalendar_'+ key);
-            $('#LinkedCalendar_'+ key).click = function (){
-                CheckboxClicked(key);
-            };
+            var test = document.getElementById('LinkedCalendar_'+ key);
+            test.onclick = function (){
+                tempThis.CheckboxClicked(test.id);
+            }
         });
     }
 
     CheckboxClicked(elementId) {
-        var checkboxValue = $('#LinkedCalendar_' + elementId).val();
+        var checkboxValue = $('#'+elementId).is(":checked");
 
-        if (checkboxValue)
-            LinkedCalendarChecked = LinkedCalendarChecked.filter(x => x !== elementId);
-        else
-            LinkedCalendarChecked.push(elementId);
+        var tst = LinkedCalendarChecked.filter(x => x.key === elementId);
+        tst.isChecked = checkboxValue;
+        LinkedCalendarChecked.find(x => x.key === elementId).isChecked = checkboxValue;
 
         console.log(LinkedCalendarChecked);
+        this.eventsLoaded = false;
+        this.loadEvents();
     }
 
+
+    //this shit is needed
+    //https://my.living-apps.de/static/jquery-ui/1.12.1/themes/base/images/
+    //https://jqueryui.com/datepicker/
 }
