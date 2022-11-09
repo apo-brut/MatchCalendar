@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 09. Nov 2022 um 11:13
--- Server-Version: 10.4.22-MariaDB
--- PHP-Version: 7.4.27
+-- Erstellungszeit: 09. Nov 2022 um 18:55
+-- Server-Version: 10.4.24-MariaDB
+-- PHP-Version: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,6 +20,20 @@ SET time_zone = "+00:00";
 --
 -- Datenbank: `calendar_db`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `auth_token`
+--
+
+CREATE TABLE `auth_token` (
+  `id` int(11) NOT NULL,
+  `auth_token` varchar(255) NOT NULL,
+  `identifier` varchar(255) NOT NULL,
+  `userID` int(11) NOT NULL,
+  `date` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -43,7 +57,8 @@ CREATE TABLE `meet` (
 CREATE TABLE `person` (
   `ID` int(11) NOT NULL,
   `Username` varchar(30) NOT NULL,
-  `Password` varchar(30) NOT NULL,
+  `Email` varchar(255) NOT NULL,
+  `Password` varchar(255) NOT NULL,
   `Firstname` varchar(30) NOT NULL,
   `Lastname` varchar(30) NOT NULL,
   `Entry` date NOT NULL
@@ -52,6 +67,9 @@ CREATE TABLE `person` (
 --
 -- Daten für Tabelle `person`
 --
+
+INSERT INTO `person` (`ID`, `Username`, `Email`, `Password`, `Firstname`, `Lastname`, `Entry`) VALUES
+(4, 'mbohland', '', 'Qwertz1!_not_hashed', 'Marcel', 'Bohland', '2022-11-09');
 
 -- --------------------------------------------------------
 
@@ -69,10 +87,6 @@ CREATE TABLE `save` (
   `Color` varchar(30) DEFAULT NULL,
   `Date` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Daten für Tabelle `save`
---
 
 -- --------------------------------------------------------
 
@@ -95,6 +109,12 @@ CREATE TABLE `settings` (
 --
 -- Indizes der exportierten Tabellen
 --
+
+--
+-- Indizes für die Tabelle `auth_token`
+--
+ALTER TABLE `auth_token`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `meet`
@@ -127,6 +147,12 @@ ALTER TABLE `settings`
 --
 
 --
+-- AUTO_INCREMENT für Tabelle `auth_token`
+--
+ALTER TABLE `auth_token`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT für Tabelle `meet`
 --
 ALTER TABLE `meet`
@@ -136,7 +162,7 @@ ALTER TABLE `meet`
 -- AUTO_INCREMENT für Tabelle `person`
 --
 ALTER TABLE `person`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT für Tabelle `save`
