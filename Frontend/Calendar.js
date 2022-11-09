@@ -116,6 +116,7 @@ export class Calendar {
         $("#addButton").click(() => this.addNewEvent());
         $("#trashButton").click(() => this.trash());
         $("#cancelButton").click(() => this.closeModal());
+        $("#cancelButtonEvent").click(() => this.closeModal());
         $(".color").click(this.changeColor);
     }
 

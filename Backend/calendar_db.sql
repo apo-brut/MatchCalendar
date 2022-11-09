@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 26. Okt 2022 um 11:15
+-- Erstellungszeit: 09. Nov 2022 um 11:13
 -- Server-Version: 10.4.22-MariaDB
 -- PHP-Version: 7.4.27
 
@@ -30,7 +30,8 @@ SET time_zone = "+00:00";
 CREATE TABLE `meet` (
   `ID` int(11) NOT NULL,
   `UserId1` int(11) DEFAULT NULL,
-  `UserId2` int(11) DEFAULT NULL
+  `UserId2` int(11) DEFAULT NULL,
+  `Date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -48,6 +49,10 @@ CREATE TABLE `person` (
   `Entry` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Daten für Tabelle `person`
+--
+
 -- --------------------------------------------------------
 
 --
@@ -61,8 +66,13 @@ CREATE TABLE `save` (
   `End` datetime DEFAULT NULL,
   `Title` varchar(30) DEFAULT NULL,
   `Description` varchar(30) DEFAULT NULL,
-  `Color` varchar(30) DEFAULT NULL
+  `Color` varchar(30) DEFAULT NULL,
+  `Date` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Daten für Tabelle `save`
+--
 
 -- --------------------------------------------------------
 
@@ -126,13 +136,13 @@ ALTER TABLE `meet`
 -- AUTO_INCREMENT für Tabelle `person`
 --
 ALTER TABLE `person`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT für Tabelle `save`
 --
 ALTER TABLE `save`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT für Tabelle `settings`

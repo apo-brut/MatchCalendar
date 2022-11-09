@@ -43,7 +43,7 @@ class CalendarPersonRepository {
 
   async AddCalenderPerson(Id,username,password,firstname,lastname,entry){
 
-    connection.query("INSERT INTO `person`(`ID`, `Username`, `Password`, `Firstname`, `Lastname`, `Entry`) VALUES (?, ?, ?, ?, ?, ? )",
+    connection.query("INSERT INTO `person`(`Username`, `Password`, `Firstname`, `Lastname`, `Entry`) VALUES (?, ?, ?, ?, ? )",
     [Id,username,password,firstname,lastname,entry],
     function (err, results, fields) {
       console.log(err);
@@ -53,7 +53,7 @@ class CalendarPersonRepository {
     }
 
   async DeleteCalenderPerson(Id) {
-    connection.query("DELETE FROM `person` WHERE Id) VALUES(?, ?, ?, ?, ? ,?)",
+    connection.query("DELETE * FROM `person` WHERE Id = ?",
 
     [Id,username,password,firstname,lastname,entry],
     function (err, results, fields) {
@@ -65,7 +65,7 @@ class CalendarPersonRepository {
 
 
     async UpdateCalenderPerson(Id) {
-        connection.query("UPDATE `person` SET `ID`='[value-1]',`Username`='',`Password`='',`Firstname`='',`Lastname`='',`Entry`='' WHERE 1",
+        connection.query("UPDATE `person` SET `ID`='[value-1]',`Username`='',`Password`='',`Firstname`='',`Lastname`='',`Entry`='' WHERE ID = ?",
     
         [Id,username,password,firstname,lastname,entry],
         function (err, results, fields) {
