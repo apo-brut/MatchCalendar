@@ -331,10 +331,9 @@ export class Calendar {
             this.event = {};
 
             Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
+                var test = lstAllCalendarEntriesByUser[key]["events"];
                 Object.keys(lstAllCalendarEntriesByUser[key]["events"]).forEach(innerKey => {
-
                     this.events[innerKey] = lstAllCalendarEntriesByUser[key]["events"][innerKey];
-
                 });
             });
             if (this.events) {
