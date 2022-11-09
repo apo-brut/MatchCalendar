@@ -33,7 +33,7 @@ var lstAllCalendarEntriesByUser = {
         }
     },
     '2': {
-        'userName': "Wladislaw Kusnezow"
+        'userName': "Abdullah Yüksel"
         , 'events': {
             "2022-11-01": {
                 "zwXPQTUx3PJCPx8h24xA": {
@@ -331,7 +331,6 @@ export class Calendar {
             this.event = {};
 
             Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
-                var test = lstAllCalendarEntriesByUser[key]["events"];
                 Object.keys(lstAllCalendarEntriesByUser[key]["events"]).forEach(innerKey => {
                     this.events[innerKey] = lstAllCalendarEntriesByUser[key]["events"][innerKey];
                 });
@@ -385,18 +384,35 @@ export class Calendar {
         var html = "<ul id='ulLstLinkedCalendar'><h3>Verknüpfte Kalender</h3>"
 
         Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
-            html = html + '<li click="CheckboxClicked(calendar' + key + ')">'
-                + '<input type="checkbox" name="calendar' + key + '" id="calendar' + key + '">'
-                + '<label for="calendar' + key + '">' + key + '</label>'
+            var userName = lstAllCalendarEntriesByUser[key].userName;
+
+            //TODO: function cannot be called, due to it that it is in other scope / this
+            html = html + '<li>'
+                + '<input type="checkbox" name="LinkedCalendar_' + key + '" id="LinkedCalendar_' + key + '" >'
+                + '<label for="LinkedCalendar_' + key + '" >' + userName + '</label>'
                 + '</li>';
         });
 
         html = html + "</ul>";
         $("#lstLinkedCalendar").append(html);
+
+        //does not work
+        Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
+            var test = $('#LinkedCalendar_'+ key);
+            $('#LinkedCalendar_'+ key).click = function (){
+                CheckboxClicked(key);
+            };
+        });
     }
 
     CheckboxClicked(elementId) {
-        LinkedCalendarChecked.push(elementId);
+        var checkboxValue = $('#LinkedCalendar_' + elementId).val();
+
+        if (checkboxValue)
+            LinkedCalendarChecked = LinkedCalendarChecked.filter(x => x !== elementId);
+        else
+            LinkedCalendarChecked.push(elementId);
+
         console.log(LinkedCalendarChecked);
     }
 

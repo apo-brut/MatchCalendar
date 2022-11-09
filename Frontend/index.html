@@ -117,8 +117,8 @@
               </div>
                 <div class="fcontainer">
                     <div class="fbtn">
-                        <span onclick="login()">Login</span>
-                        <span onclick="register()">Registieren</span>
+                        <span id="loginTabBtn">Login</span>
+                        <span id="registerTabBtn">Registieren</span>
                         <hr id="Indicator">
                     </div>
                     <form id="LoginForm">
@@ -148,24 +148,8 @@
     </main>    
 
     <!----- js für form----->
-    <script>
-    var LoginForm = document.getElementById ("LoginForm");
-    var RegForm = document.getElementById ("RegForm");
-    var Indicator = document.getElementById("Indicator");
-
-    function register(){
-       RegForm.style.transform = "translateX(0px)";
-       LoginForm.style.transform = "translateX(0px)";
-       Indicator.style.transform = "translateX(100px)";
-    }
-    function login(){
-       RegForm.style.transform = "translateX(300px)";
-       LoginForm.style.transform = "translateX(300px)";
-       Indicator.style.transform = "translateX(0px)";
-    }
-</script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="main.js" type="module"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
