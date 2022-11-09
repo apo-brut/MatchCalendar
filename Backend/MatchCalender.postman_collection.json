@@ -12,11 +12,16 @@
 				"method": "POST",
 				"header": [],
 				"body": {
-					"mode": "urlencoded",
-					"urlencoded": []
+					"mode": "raw",
+					"raw": "{\r\n    \"1\": {\r\n        \"userName\": \"mb\"\r\n        , \"events\": {\r\n            \"2022-11-02\": {\r\n                \"zwXPQTUx3PJCPx8h24xC\": {\r\n                    \"color\": \"blue\"\r\n                    , \"date\": \"2022-11-02\"\r\n                    , \"description\": \"oh boy\\n\"\r\n                    , \"end\": \"21:27\"\r\n                    , \"id\": \"zwXPQTUx3PJCPx8h24xC\"\r\n                    , \"prevDate\": \"2022-11-01\"\r\n                    , \"start\": \"03:00\"\r\n                    , \"title\": \"Wladi 2022-11-02\"\r\n                },\r\n                \"zwXPQTUx3PJCPx8h25fdd\": {\r\n                    \"color\": \"green\"\r\n                    , \"date\": \"2022-11-03\"\r\n                    , \"description\": \"oh boy Jolli\\n\"\r\n                    , \"end\": \"16:00\"\r\n                    , \"id\": \"zwXPQTUx3PJCPx8h25xD\"\r\n                    , \"prevDate\": \"2022-11-02\"\r\n                    , \"start\": \"13:00\"\r\n                    , \"title\": \"Wladi 2022-11-03\"\r\n                }\r\n            },\r\n            \"2022-11-03\": {\r\n                \"zwXPQTUx3PJCPx8h25xD\": {\r\n                    \"color\": \"green\"\r\n                    , \"date\": \"2022-11-03\"\r\n                    , \"description\": \"oh boy Jolli\\n\"\r\n                    , \"end\": \"16:00\"\r\n                    , \"id\": \"zwXPQTUx3PJCPx8h25xD\"\r\n                    , \"prevDate\": \"2022-11-02\"\r\n                    , \"start\": \"13:00\"\r\n                    , \"title\": \"Wladi 2022-11-03\"\r\n                }\r\n            }\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
 				},
 				"url": {
-					"raw": "https://h2970110.stratoserver.net:3000/api/calenderevent?userid=1&start=s&end=e&title=Neuer Eintrag&describtion=Neue Beschreibung&color=red",
+					"raw": "https://h2970110.stratoserver.net:3000/api/calenderevent",
 					"protocol": "https",
 					"host": [
 						"h2970110",
@@ -31,27 +36,33 @@
 					"query": [
 						{
 							"key": "userid",
-							"value": "1"
+							"value": "1",
+							"disabled": true
 						},
 						{
 							"key": "start",
-							"value": "s"
+							"value": "13:00",
+							"disabled": true
 						},
 						{
 							"key": "end",
-							"value": "e"
+							"value": "16:00",
+							"disabled": true
 						},
 						{
 							"key": "title",
-							"value": "Neuer Eintrag"
+							"value": "Neuer Eintrag",
+							"disabled": true
 						},
 						{
 							"key": "describtion",
-							"value": "Neue Beschreibung"
+							"value": "Neue Beschreibung",
+							"disabled": true
 						},
 						{
 							"key": "color",
-							"value": "red"
+							"value": "blue",
+							"disabled": true
 						}
 					]
 				}
@@ -154,6 +165,34 @@
 						{
 							"key": "identifier",
 							"value": "783012105c63cdb643bc556cc5fa3f76a138cd59475ee692e1c45727dcb883b1a6a08eb8f470757aca1745197495ef345c616e4b3420df4afeecaaa6ecb6d2bc58f35c5d4b84c9ff9a911375a28b2fd3ffc31e7a95addb86ee2fccb75d04490a7d2192d3a0543036f8b4d37c7fdadb8df68b1571d90d97ece81964bff53b83"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "calenderevent",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://h2970110.stratoserver.net:3000/api/calenderevent?userid=1",
+					"protocol": "https",
+					"host": [
+						"h2970110",
+						"stratoserver",
+						"net"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"calenderevent"
+					],
+					"query": [
+						{
+							"key": "userid",
+							"value": "1"
 						}
 					]
 				}

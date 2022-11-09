@@ -49,10 +49,10 @@ app.use(cors());
 app.use((req, res, next) => {
   // Website you wish to allow to connect
   res.setHeader("Access-Control-Allow-Origin", "*");
-
   // Pass to next layer of middleware
   next();
 });
+
 
 app.all("/app/*", function (req, res, next) {
   // Just send the index.html for other files to support HTML5Mode
@@ -262,16 +262,36 @@ app.get("/api/calenderevent", async (req, res) => {
   let response = {};
 
   calenderEvents.forEach((event) => {
-    response[userid] = {
-      username: username,
-      events: {},
-    };
 
-    response[userid].events[date] = {};
+    function join(t, a, s) {
+      function format(m) {
+         let f = new Intl.DateTimeFormat('en', m);
+         return f.format(t);
+      }
+      return a.map(format).join(s);
+   }
+   
+   let a = [{year: 'numeric'}, {month: 'numeric'}, {day: 'numeric'}];
+   let date = join(Date.parse(event["Date"]), a, '-');
 
-    response[userid].events[date][id] = {
+    if(! response.hasOwnProperty(userid)){
+      response[userid] = {
+        username: username
+      };
+    }
+    
+    if(! response[userid].hasOwnProperty('events')){
+      response[userid]["events"] = {};
+    }
+
+    if(! response[userid]["events"].hasOwnProperty(date)){
+      response[userid]["events"][date] = {};
+    }
+
+
+    response[userid]["events"][date][event["ID"]] = {
       color: event["Color"],
-      date: event["Date"],
+      date: date,
       description: event["Description"],
       end: event["End"],
       id: event["ID"],

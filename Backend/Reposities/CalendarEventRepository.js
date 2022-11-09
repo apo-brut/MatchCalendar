@@ -58,17 +58,15 @@ class CalenderEventRepository {
           }
         );
       });
-
-      console.log(CalenderEvents);
       
     return CalenderEvents;
    }
 
-  async AddCalenderEvent(userid,start,end,title,describtion,color){
+  async AddCalenderEvent(userid,start,end,title,describtion,color,date){
   
 
-   connection.query("INSERT INTO `save`(`UserId`, `Start`, `End`, `Title`, `Description`, `Color`) VALUES (?, ?, ?, ?, ?, ? )",
-    [userid,start,end,title,describtion,color],
+   connection.query("INSERT INTO `save`(`UserId`, `Date`, `Start`, `End`, `Title`, `Description`, `Color`) VALUES (?, ?, ?, ?, ?, ?, ? )",
+    [userid,date,start,end,title,describtion,color],
     function (err, results, fields) {
       console.log(err);
     }
