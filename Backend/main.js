@@ -5,15 +5,21 @@ const fs = require("fs");
 const Logger = require("./Logger.js");
 var nconf = require("nconf");
 var cors = require("cors");
+const Utils = require("./utils.js");
 const app = express();
 const port = 3000;
 
 // Node logger
 const logger = new Logger();
 
+// Node Utils
+const utils = new Utils();
+
 //Repositories
 const CalendarEventRepository = require("./Reposities/CalendarEventRepository.js");
 const calenderevent = new CalendarEventRepository();
+const AccountRepository = require("./Reposities/AccountRepository.js");
+const account = new AccountRepository();
 
 // First consider commandline arguments and environment variables, respectively.
 nconf.argv().env();
@@ -29,6 +35,12 @@ app.use(helmet());
 app.use(express.static("public"));
 
 app.use(express.json());
+
+//Regex for pw and mail validation
+const passwordRequirements =
+  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,800000}$/;
+const emailRequirements =
+  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 //Cors
 app.use(cors());
@@ -48,6 +60,8 @@ app.all("/app/*", function (req, res, next) {
     root: __dirname,
   });
 });
+
+let newToken = "";
 
 /**
  * API
@@ -80,12 +94,113 @@ app.get("/api/test", (req, res) => {
 
 //API Calender
 
-app.post("/api/signup", (req, res) => {
-  res.send("User angelegt");
+/*
+ * Login API
+ */
+app.get("/api/login", async (req, res) => {
+  if (
+    req.query.email == null ||
+    req.query.password == null
+  ) {
+    res.send({
+      status: "false",
+      response: "some fielddata null",
+    });
+    return false;
+  }
+
+  let email = utils.XSS(req.query.email);
+
+  //check if account already exsist
+  let [token, identifier] = await account.Login(email, req.query.password);
+
+  if (token == "") {
+    res.send({
+      status: "false",
+      response: "email or password is wrong",
+    });
+    return false;
+  }
+
+  res.send({
+    status: "true",
+    response: "successfull loged in",
+    token: token,
+    identifier: identifier,
+  });
 });
 
-app.post("/api/login", (req, res) => {
-  res.send("User angemeldet");
+/*
+ * Signup API
+ */
+app.post("/api/signup", async (req, res) => {
+  if (
+    req.query.email == null ||
+    req.query.password == null ||
+    req.query.username == null
+  ) {
+    res.send({
+      status: "false",
+      response: "some fielddata null",
+    });
+    return false;
+  }
+
+  if (req.query.email.length > 255 || req.query.username.length > 255) {
+    res.send({
+      status: "false",
+      response: "some fielddata to long",
+    });
+    return false;
+  }
+
+  let email = utils.XSS(req.query.email);
+  let password = utils.XSS(req.query.password);
+  let username = utils.XSS(req.query.username);
+
+  //check username
+  let isUsernameAvalible = await account.IsUsernameAvalible(username);
+
+  if (!isUsernameAvalible) {
+    res.send({
+      status: "false",
+      response: "Username is already taken",
+    });
+    return false;
+  }
+
+  //check email
+  if (!req.query.email.match(emailRequirements)) {
+    res.send({
+      status: "false",
+      response: "E-mail is not valid",
+    });
+    return false;
+  }
+
+  //check if account already exsist
+  let isEmailAvalible = await account.IsEmailAvalible(email);
+
+  if (!isEmailAvalible) {
+    res.send({
+      status: "false",
+      response: "E-mail is already taken",
+    });
+    return false;
+  }
+
+  //check password
+  if (!req.query.password.match(passwordRequirements)) {
+    res.send({
+      status: "false",
+      response: "Password is to weak",
+    });
+    return false;
+  }
+
+  account.Signup(username, email, password);
+
+  res.send({ status: "true", response: "Account is created" });
 });
 
 app.post("/api/calenderevent", (req, res) => {
@@ -193,8 +308,40 @@ app.put("/api/settings", (req, res) => {
   res.send("Settings updated");
 });
 
+/*
+ *
+ * API Auth Middleware
+ *
+ */
+
+app.use("/api/:token/:identifier/*", async (req, res, next) => {
+  if (!res.headersSent) {
+
+    let token = utils.XSS(req.params.token);
+    let identifier = utils.XSS(req.params.identifier);
+
+    const isAuthTokenValid = await account.VerifyLoginToken(token,identifier);
+
+    if (!isAuthTokenValid) {
+      res.send({ status: "false", response: "invalid API Token" });
+      return false;
+    }
+
+    newToken = await account.UpdateAuthToken(identifier);
+
+
+    next();
+  }
+});
+
+app.get("/api/:token/:identifier/test", async (req, res) => {
+
+
+  res.send({newToken: newToken});
+});
+
 /**
- * Server create 
+ * Server create
  */
 
 https

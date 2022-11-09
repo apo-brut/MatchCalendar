@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "7aa6ad25-95f4-42de-aeb4-ce16fc6f25df",
+		"_postman_id": "3625262d-87c3-4af6-91e3-e95f77a6cb99",
 		"name": "MatchCalender",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "21484794"
+		"_exporter_id": "23277931"
 	},
 	"item": [
 		{
@@ -16,8 +16,8 @@
 					"urlencoded": []
 				},
 				"url": {
-					"raw": "http://h2970110.stratoserver.net:3000/api/calenderevent?userid=1&start=s&end=e&title=Neuer Eintrag&describtion=Neue Beschreibung&color=red",
-					"protocol": "http",
+					"raw": "https://h2970110.stratoserver.net:3000/api/calenderevent?userid=1&start=s&end=e&title=Neuer Eintrag&describtion=Neue Beschreibung&color=red",
+					"protocol": "https",
 					"host": [
 						"h2970110",
 						"stratoserver",
@@ -52,6 +52,108 @@
 						{
 							"key": "color",
 							"value": "red"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://h2970110.stratoserver.net:3000/api/signup?email=a@a.de&password=Qwertz1!&username=mb",
+					"protocol": "https",
+					"host": [
+						"h2970110",
+						"stratoserver",
+						"net"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"signup"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "a@a.de"
+						},
+						{
+							"key": "password",
+							"value": "Qwertz1!"
+						},
+						{
+							"key": "username",
+							"value": "mb"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://h2970110.stratoserver.net:3000/api/login?email=a@a.de&password=Qwertz1!",
+					"protocol": "https",
+					"host": [
+						"h2970110",
+						"stratoserver",
+						"net"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"login"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "a@a.de"
+						},
+						{
+							"key": "password",
+							"value": "Qwertz1!"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "auth token and identifier test",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://h2970110.stratoserver.net:3000/api/:token/:identifier/test",
+					"protocol": "https",
+					"host": [
+						"h2970110",
+						"stratoserver",
+						"net"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						":token",
+						":identifier",
+						"test"
+					],
+					"variable": [
+						{
+							"key": "token",
+							"value": "715730d830aa5c3f983842e9b2d7b50069682488b49b102fa51b84f1cbe64c3515ab082e2b587cd1eccf53caa9c2c525b95c32a809acf9f4310a4ddfe78a591607ee96b8d0affd5f3e01bf37bff720a0251ab2ea9a5fff2377400f7844f70af7d92cb3ba5b5f72bc0f6e989f61d78941c6447dc2f91b81f15450b474ba7d9a"
+						},
+						{
+							"key": "identifier",
+							"value": "783012105c63cdb643bc556cc5fa3f76a138cd59475ee692e1c45727dcb883b1a6a08eb8f470757aca1745197495ef345c616e4b3420df4afeecaaa6ecb6d2bc58f35c5d4b84c9ff9a911375a28b2fd3ffc31e7a95addb86ee2fccb75d04490a7d2192d3a0543036f8b4d37c7fdadb8df68b1571d90d97ece81964bff53b83"
 						}
 					]
 				}
