@@ -1,7 +1,10 @@
 const express = require('express')
 const helmet = require('helmet');
+const https = require('https');
+const fs = require('fs')
 const Logger = require("./Logger.js");
 var nconf = require('nconf');
+var cors = require('cors')
 const app = express()
 const port = 3000
 
@@ -25,10 +28,25 @@ nconf.file({
 
   app.use(express.static('public'))
 
+  app.use(express.json()) 
+
+  //Cors
+  app.use(cors())
+  
+  // Add headers before the routes are defined
+ app.use((req, res, next) => {
+
+   // Website you wish to allow to connect
+   res.setHeader('Access-Control-Allow-Origin', '*');
+
+   // Pass to next layer of middleware
+   next();
+ });
+
 
   app.all('/app/*', function (req, res, next) {
     // Just send the index.html for other files to support HTML5Mode
-    res.sendFile('./public/index.html', {
+    res.sendFile('./public/app/index.html', {
       root: __dirname
     });
   });
@@ -75,7 +93,36 @@ app.get('/', (req, res) => {
 
   app.post('/api/calenderevent', (req, res) => {
 
-    if( req.query.userid == null ||  req.query.start == null ||  req.query.end == null ||  req.query.title == null ||  req.query.describtion == null ||  req.query.color == null){
+    if(req.body == null){
+      res.send('Error Body invalid');
+      return false;
+    }
+
+    var dataReceived = JSON.parse(req.body);
+
+    console.log(dataReceived[0]);
+
+    /**
+     * 
+{
+    "WladislawKusnezow": {
+        "2022-11-02": {
+            "zwXPQTUx3PJCPx8h24xC": {
+                  "color": "blue"
+                , "date": "2022-11-02"
+                , "descriptionv": "oh boy\n"
+                , "end": "21:27"
+                , "id": "zwXPQTUx3PJCPx8h24xC"
+                , "prevDate": "2022-11-01"
+                , "start": "03:00"
+                , "title": "Wladi 2022-11-02"
+            }
+        }
+      }
+    }
+     */
+
+   /* if( req.query.userid == null ||  req.query.start == null ||  req.query.end == null ||  req.query.title == null ||  req.query.describtion == null ||  req.query.color == null){
       res.send('Some required data not included')
       return false;
     }
@@ -86,8 +133,9 @@ app.get('/', (req, res) => {
     let title = req.query.title;
     let describtion = req.query.describtion;
     let color = req.query.color;
+    */
 
-    calenderevent.AddCalenderEvent(userid,start,end,title,describtion,color);
+   // calenderevent.AddCalenderEvent(userid,start,end,title,describtion,color);
 
     res.send('Event created')
   })
@@ -118,7 +166,11 @@ app.get('/', (req, res) => {
   app.put('/api/settings', (req, res) => {
     res.send('Settings updated')
   })
-
+  https.createServer({
+    key: fs.readFileSync('./ssl/key.pem'),
+    cert: fs.readFileSync('./ssl/cert.pem'),
+    passphrase: 'd§$Fsdftr34rwefefdegfdwf'
+  }, app).listen(port);
 app.listen(port, () => {
   logger.writeLog(`[SYSTEM] listening on port ${port}`)
 })
