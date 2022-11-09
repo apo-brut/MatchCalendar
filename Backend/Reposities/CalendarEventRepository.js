@@ -41,10 +41,33 @@ const connection = mysql.createConnection({
 
 class CalenderEventRepository {
 
-  async AddCalenderEvent(userid,start,end,title,describtion,color){
-    
+  async GetCalendarEvents(UserId) {
 
-    connection.query("INSERT INTO `save`(`UserId`, `Start`, `End`, `Title`, `Description`, `Color`) VALUES (?, ?, ?, ?, ?, ? )",
+
+     //Get app name by applicationID
+      const CalenderEvents = await new Promise((resolve, reject) => {
+        connection.query("SELECT * FROM `save` WHERE UserId = ?",
+          [UserId],
+          function (err, results, fields) {
+            try {
+              resolve(results);
+            } catch {
+              logger.writeErrorLog("[getCalenderEvents] Cannot get events from db | " + err)
+              resolve("");
+            }
+          }
+        );
+      });
+
+      console.log(CalenderEvents);
+      
+    return CalenderEvents;
+   }
+
+  async AddCalenderEvent(userid,start,end,title,describtion,color){
+  
+
+   connection.query("INSERT INTO `save`(`UserId`, `Start`, `End`, `Title`, `Description`, `Color`) VALUES (?, ?, ?, ?, ?, ? )",
     [userid,start,end,title,describtion,color],
     function (err, results, fields) {
       console.log(err);
@@ -53,9 +76,9 @@ class CalenderEventRepository {
  }
 
 async DeleteCalenderEvent(Id) {
-  connection.query("DELETE FROM `save` WHERE Id) VALUES(?, ?, ?, ?, ? ,?)",
+  connection.query("DELETE * FROM `save` WHERE Id = ?",
 
-    [Id,username,password,firstname,lastname,entry],
+    [Id],
     function (err, results, fields) {
    //   console.log(err);
     }
