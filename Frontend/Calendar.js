@@ -331,7 +331,6 @@ export class Calendar {
             this.event = {};
 
             Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
-                var test = lstAllCalendarEntriesByUser[key]["events"];
                 Object.keys(lstAllCalendarEntriesByUser[key]["events"]).forEach(innerKey => {
                     this.events[innerKey] = lstAllCalendarEntriesByUser[key]["events"][innerKey];
                 });
@@ -400,7 +399,7 @@ export class Calendar {
         //does not work
         Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
             var test = $('#LinkedCalendar_'+ key);
-            $('#LinkedCalendar_'+ key).onSelect = function (){
+            $('#LinkedCalendar_'+ key).click = function (){
                 CheckboxClicked(key);
             };
         });
