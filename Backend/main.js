@@ -171,6 +171,3 @@ app.get('/', (req, res) => {
     cert: fs.readFileSync('./ssl/cert.pem'),
     passphrase: 'd§$Fsdftr34rwefefdegfdwf'
   }, app).listen(port);
-app.listen(port, () => {
-  logger.writeLog(`[SYSTEM] listening on port ${port}`)
-})
