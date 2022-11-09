@@ -98,50 +98,19 @@ app.get('/', (req, res) => {
       return false;
     }
 
-    var dataReceived = JSON.parse(req.body);
 
-    console.log(dataReceived[0]);
-
-    /**
-     * 
-{
-    "WladislawKusnezow": {
-        "2022-11-02": {
-            "zwXPQTUx3PJCPx8h24xC": {
-                  "color": "blue"
-                , "date": "2022-11-02"
-                , "descriptionv": "oh boy\n"
-                , "end": "21:27"
-                , "id": "zwXPQTUx3PJCPx8h24xC"
-                , "prevDate": "2022-11-01"
-                , "start": "03:00"
-                , "title": "Wladi 2022-11-02"
-            }
-        }
-      }
-    }
-     */
-
-   /* if( req.query.userid == null ||  req.query.start == null ||  req.query.end == null ||  req.query.title == null ||  req.query.describtion == null ||  req.query.color == null){
-      res.send('Some required data not included')
-      return false;
-    }
-
-    let userid = req.query.userid;
-    let start = req.query.start;
-    let end = req.query.end;
-    let title = req.query.title;
-    let describtion = req.query.describtion;
-    let color = req.query.color;
-    */
-
-   // calenderevent.AddCalenderEvent(userid,start,end,title,describtion,color);
-
+  //  calenderevent.AddCalenderEvent(userid,start,end,title,describtion,color);
+  calenderevent.AddCalenderEvent('1','2022-12-16 07:30:00','2022-12-16 09:30:00','Versuch 3','VersuchW3','yellow');
     res.send('Event created')
   })
 
   app.get('/api/calenderevent', (req, res) => {
-    res.send('Events to work with')
+    if(req.body == null){
+      res.send('Error Body invalid');
+      return false;
+    }
+   let Clndr = calenderevent.GetCalendarEvents('1');
+    res.send('sieht events')
   })
 
   app.put('/api/calenderevent', (req, res) => {
