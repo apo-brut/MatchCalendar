@@ -51,9 +51,9 @@ loginTabBtn.onclick = function (){
    LoginForm.style.transform = "translateX(300px)";
    Indicator.style.transform = "translateX(0px)";
 }
-/* todo!!! */
-/* 
+
 var objpeople = [];
+var i = "";
         
         console.log(objpeople);
         LogInBtn.onclick = function() {
@@ -122,7 +122,7 @@ var objpeople = [];
             document.getElementById("newuser").value="";
             document.getElementById("newpassword").value="";
             document.getElementById("newemail").value="";
-        } */
+        }
 //js für form
 
      
