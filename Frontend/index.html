@@ -162,6 +162,7 @@
             objpeople = JSON.parse(localStorage.getItem("user"));
             for(i = 0; i < objpeople.length; i++) {
                 if (username == objpeople [i].username && password == objpeople[i].password) {
+                    sessionStorage.setItem("currentlooedin",username)
                     alert(username+" is logged in!!")
                     document.getElementById("myModal").style.display="none";
                     return

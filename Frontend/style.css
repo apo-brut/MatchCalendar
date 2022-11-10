@@ -24,7 +24,6 @@ body {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     color: var(--font-color);
 }
-
 input,
 textarea {
     font-family: inherit;
@@ -504,6 +503,7 @@ form .btn:focus{
     border-left: none; 
     border-top: none;
     border-bottom: none;
+<<<<<<< Updated upstream
     position: relative;
 }
 
@@ -512,3 +512,6 @@ form .btn:focus{
     bottom: 0;
     width: 100%;
 }
+=======
+}
+>>>>>>> Stashed changes
