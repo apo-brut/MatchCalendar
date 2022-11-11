@@ -39,6 +39,18 @@ var lstAllCalendarEntriesByUser = {
                     , 'start': "11:00"
                     , 'title': "test"
                 }
+            },
+            "2022-11-11": {
+                "7": {
+                    'color': "green"
+                    , 'date': "2022-11-11"
+                    , 'description': "oh boy Jolli\n"
+                    , 'end': "16:00"
+                    , 'id': "zwXPQTUx3PJCPx8h25xG"
+                    , 'prevDate': "2022-11-10"
+                    , 'start': "03:00"
+                    , 'title': "AAAAAA"
+                }
             }
         }
     },
@@ -57,18 +69,6 @@ var lstAllCalendarEntriesByUser = {
                     , 'title': "Genna 2022-11-01"
                 }
             },
-            "2022-11-11": {
-                "4": {
-                    'color': "orange"
-                    , 'date': "2022-11-11"
-                    , 'description': "oh boy Jolli\n"
-                    , 'end': "16:00"
-                    , 'id': "zwXPQTUx3PJCPx8h25xF"
-                    , 'prevDate': "2022-11-10"
-                    , 'start': "13:00"
-                    , 'title': "Genna 2022-11-04"
-                }
-            },
             "2022-11-09": {
                 "5": {
                     'color': "green"
@@ -79,6 +79,18 @@ var lstAllCalendarEntriesByUser = {
                     , 'prevDate': "2022-11-08"
                     , 'start': "3:00"
                     , 'title': "AAAAAA"
+                }
+            },
+            "2022-11-11": {
+                "4": {
+                    'color': "orange"
+                    , 'date': "2022-11-11"
+                    , 'description': "oh boy Jolli\n"
+                    , 'end': "20:00"
+                    , 'id': "zwXPQTUx3PJCPx8h25xF"
+                    , 'prevDate': "2022-11-10"
+                    , 'start': "12:00"
+                    , 'title': "Genna 2022-11-04"
                 }
             }
         }
@@ -495,9 +507,9 @@ export class Calendar {
             var day = tempDate.getDate().toString().length === 1 ? "0" + tempDate.getDate() : tempDate.getDate();
 
             if (tempDate >= currentWeekStart && tempDate <= currentWeekEnd) {
-
+                var newId = generateId();
                 if (!currentEventsDates.find(x => x === year + '-' + month + '-' + day)) {
-                    var newId = generateId();
+
 
                     generateEvents[year + '-' + month + '-' + day] = {}
                     generateEvents[year + '-' + month + '-' + day][newId] = {
@@ -524,26 +536,178 @@ export class Calendar {
 
                                     Object.keys(lstAllCalendarEntriesByUser[key]["events"][date]).forEach(innerEvent => {
                                         var event = lstAllCalendarEntriesByUser[key]["events"][date][innerEvent]
-                                        currentEventsForDate.push({ date, event });
+                                        var start = event.start;
+                                        var end = event.end;
+                                        currentEventsForDate.push({ date, start, end });
                                     });
 
                                 } else {
-                                    var event = lstAllCalendarEntriesByUser[key]["events"][date]
-                                    currentEventsForDate.push({ date, event });
+                                    var event = lstAllCalendarEntriesByUser[key]["events"][date][Object.keys(lstAllCalendarEntriesByUser[key]["events"][date])[0]];
+                                    var start = event.start;
+                                    var end = event.end;
+                                    currentEventsForDate.push({ date, start, end });
                                 }
                             }
                         });
                     });
 
-                    console.log(currentEventsForDate);
+                    if (currentEventsForDate.length > 1) {
+                        var prevEvent = {};
 
-                    currentEventsForDate.forEach((event) => {
-                        //anzahl zu generierender events für tag = anzahl der bestehenden events von tag +1
+                        //sort current Array by starting time
+                        //todo sortierung stimmt noch nicht es wird nur nach start sortiert, aber was wenn start gleich aber eins ende später
+                        var currentEventsForDate = currentEventsForDate.sort((a, b) => (a.start.localeCompare(b.start) && a.start.localeCompare(b.end))); // hier stimmt die sortiernung noch nicht
 
-                    })
+
+                        //TODO überschneidungen
+                        var minusForPrevEvent = 1;
+                        for (let i = 0; i < currentEventsForDate.length; i++) {
+                            var event = currentEventsForDate[i];
+
+                            var start = event.start;
+                            var end = event.end;
+                            var date = event.date;
+
+                            if (generateEvents[date] === undefined) generateEvents[date] = {} 
+
+                            if (i === 0) {
+                                generateEvents[date][newId] = {
+                                    "color": "grey"
+                                    , "date": date
+                                    , "description": ""
+                                    , "end": start
+                                    , "id": newId
+                                    , "prevDate": date //todo get prevDate
+                                    , "start": "00:00"
+                                    , "title": "Generated Event"
+                                }
+                            } else {
+                                newId = generateId();
+                                prevEvent = currentEventsForDate[i - minusForPrevEvent];
+
+                                if (event.date === "2022-11-9") console.log("")
+
+                                //second is timed within the first event
+                                var secondIsTimedWithinFirstEvent = false
+                                //überschneidung
+                                if (event.start >= prevEvent.start && event.end <= prevEvent.end) {
+                                    secondIsTimedWithinFirstEvent = true;
+                                    generateEvents[date][newId] = {
+                                        "color": "grey"
+                                        , "date": date
+                                        , "description": ""
+                                        , "end": "23:59"
+                                        , "id": newId
+                                        , "prevDate": date //todo get prevDate
+                                        , "start": prevEvent.end
+                                        , "title": "Generated Event"
+                                    }
+                                } else if (event.start >= prevEvent.start && event.start <= prevEvent.end && event.end > prevEvent.end) {
+                                    generateEvents[date][newId] = {
+                                        "color": "grey"
+                                        , "date": date
+                                        , "description": ""
+                                        , "end": "23:59"
+                                        , "id": newId
+                                        , "prevDate": date //todo get prevDate
+                                        , "start": end
+                                        , "title": "Generated Event"
+                                    }
+                                }
+                                else {
+                                    secondIsTimedWithinFirstEvent = false
+                                    generateEvents[date][newId] = {
+                                        "color": "grey"
+                                        , "date": date
+                                        , "description": ""
+                                        , "end": start
+                                        , "id": newId
+                                        , "prevDate": date //todo get prevDate
+                                        , "start": prevEvent.end
+                                        , "title": "Generated Event"
+                                    }
+                                }
+                            }
+
+                            if (i === currentEventsForDate.length - 1) {
+                                newId = generateId();
+
+                                if (secondIsTimedWithinFirstEvent) {
+                                    generateEvents[date][newId] = {
+                                        "color": "grey"
+                                        , "date": date
+                                        , "description": ""
+                                        , "end": "23:59"
+                                        , "id": newId
+                                        , "prevDate": date //todo get prevDate
+                                        , "start": prevEvent.end
+                                        , "title": "Generated Event"
+                                    }
+                                } else {
+                                    generateEvents[date][newId] = {
+                                        "color": "grey"
+                                        , "date": date
+                                        , "description": ""
+                                        , "end": "23:59"
+                                        , "id": newId
+                                        , "prevDate": date //todo get prevDate
+                                        , "start": end
+                                        , "title": "Generated Event"
+                                    }
+                                }
+                            }
+
+                        }
+                    } else {
+                        var event = currentEventsForDate[Object.keys(currentEventsForDate)[0]];
+                        var start = event.start;
+                        var end = event.end;
+                        var date = event.date;
+
+                        generateEvents[date] = {}
+                        generateEvents[date][newId] = {
+                            "color": "grey"
+                            , "date": date
+                            , "description": ""
+                            , "end": start
+                            , "id": newId
+                            , "prevDate": date //todo get prevDate
+                            , "start": "00:00"
+                            , "title": "Generated Event"
+                        }
+
+                        newId = generateId();
+                        generateEvents[date][newId] = {
+                            "color": "grey"
+                            , "date": date
+                            , "description": ""
+                            , "end": "23:59"
+                            , "id": newId
+                            , "prevDate": date //todo get prevDate
+                            , "start": end
+                            , "title": "Generated Event"
+                        }
+                    }
                 }
             }
         }
+
+        Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
+            Object.keys(generateEvents).forEach(date => {
+                if (lstAllCalendarEntriesByUser[key]["events"][date] === undefined) {
+                    lstAllCalendarEntriesByUser[key]["events"][date] = {};
+                    lstAllCalendarEntriesByUser[key]["events"][date] = generateEvents[date];
+                }
+                else {
+                    Object.keys(generateEvents[date]).forEach(eventId => {
+                        lstAllCalendarEntriesByUser[key]["events"][date][eventId] = {};
+                        lstAllCalendarEntriesByUser[key]["events"][date][eventId] = generateEvents[date][eventId];
+                    });
+                }
+            });
+        });
+        this.eventsLoaded = false;
+        this.loadEvents();
     }
 }
 
