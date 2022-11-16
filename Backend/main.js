@@ -310,7 +310,7 @@ app.post("/api/:token/:identifier/calenderevent", (req, res) => {
     });
   });
 
-  res.send("Event created");
+  res.send({newToken: newToken,response: "Event created"});
 });
 
 app.get("/api/:token/:identifier/calenderevent", async (req, res) => {
@@ -321,7 +321,9 @@ app.get("/api/:token/:identifier/calenderevent", async (req, res) => {
 
   const calenderEvents = await calenderevent.GetCalendarEvents(userid);
 
-  let response = {};
+  let response = {
+    newToken: newToken
+  };
 
   calenderEvents.forEach((event) => {
 
@@ -425,13 +427,13 @@ app.put("/api/:token/:identifier/calenderevent", async (req, res) => {
     });
   });
 
-  res.send("Events updated");
+  res.send({newToken: newToken,response: "Event updated"});
 });
 
 app.delete("/api/:token/:identifier/calenderevent", async (req, res) => {
   let eventID = req.query.eventID;
    await calenderevent.DeleteCalenderEvent(eventID);
-  res.send("Event deleted");
+  res.send({newToken: newToken,response: "Event deleted"});
 });
 
 /**
