@@ -1,17 +1,17 @@
 /* general stuff */
 
 :root {
-    --grid-color: #cecece;
-    --time-color: #777;
-    --slot-hover-color: #eee;
+    --grid-color: #dadce0;
+    --time-color: #000000;
+    --slot-hover-color: #BBDEFB;
     --shadow-color: rgba(0, 0, 0, 0.3);
     --font-color: #222;
-    --color-red: rgb(190, 35, 15);
-    --color-blue: rgb(54, 92, 175);
-    --color-green: rgb(21, 129, 21);
-    --color-orange: rgb(233, 153, 4);
+    --color-red: #D50000;
+    --color-blue: #42A5F5;
+    --color-green: #00C853;
+    --color-orange: #FF6D00;
     --color-grey: rgb(128,128,128);
-    --slotHeight: 30px;
+    --slotHeight: 60px;
 }
 
 * {
@@ -20,10 +20,35 @@
     padding: 0;
 }
 
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #dadce0; 
+    border-radius: 100vw;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #a6a7aa; 
+  }
+
+li{
+    list-style: none;
+}
+
 body {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     color: var(--font-color);
 }
+
 input,
 textarea {
     font-family: inherit;
@@ -41,11 +66,16 @@ textarea {
     display: flex;
     align-items: center;
     justify-content: center;
+    background: #fff; 
+  /*box-shadow: 0 1px 6px 0 rgb(32 33 36 / 28%);*/
+    z-index: 999999;
 }
 
 .header h1 {
-    color: var(--color-blue);
     font-weight: 400;
+}
+.header h1 span {
+    color: #76b9e9;
 }
 
 .header i {
@@ -78,23 +108,15 @@ textarea {
     display: inline-block;
     width: 30px;
     height: 30px;
-    border: 3px solid rgb(54, 92, 175);
     border-radius: 50%;
 }
 
 .generalControls .fa-plus {
     font-size: 20px;
-    color: rgb(54, 92, 175);
-}
-
-.generalControls .fa-user {
-    font-size: 20px;
-    color: rgb(54, 92, 175);
 }
 
 .generalControls .fa-trash-alt {
     font-size: 18px;
-    color: rgb(54, 92, 175);
 }
 
 /* calendar */
@@ -212,7 +234,8 @@ textarea {
     padding: 20px;
     width: 450px;
     min-width: 250px;
-    z-index: 1;
+    z-index: 999999999;
+    height: 90%;
 }
 
 #errors {
@@ -273,8 +296,10 @@ textarea {
     color: white;
     cursor: pointer;
     margin-right: 12px;
-    border-radius: 2px;
+    border-radius: 100vw;
     float: left;
+    margin: 10px;
+    width: calc(100% - 20px) !important;
 }
 
 #deleteButton {
@@ -337,8 +362,12 @@ textarea {
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgb(54, 92, 175); /* Black w/ opacity */
+    z-index: 9999999;
+
+    background: rgb(54 92 175 / 85%);
+    box-shadow: 0 8px 32px 0 rgb(31 38 135 / 37%);
+    backdrop-filter: blur( 4px );
+    -webkit-backdrop-filter: blur( 4px );
   }
   
   /* Modal Content */
@@ -506,11 +535,9 @@ form .btn:focus{
 
 .linkedCalendarDiv {
     height: 50%; 
-    border: 1px solid #cecece; 
     border-left: none; 
     border-top: none;
     border-bottom: none;
-
     position: relative;
 }
 
@@ -520,4 +547,74 @@ form .btn:focus{
     width: 100%;
 }
 
+.ui-widget-header{
+    color: #000000 !important;
+    background: none !important;
+/*    background-color: var(--color-blue) !important;*/
+background-color: transparent!important;
+}
+.ui-state-default{
+    background: none !important;
+    border: none;
+    color: #000000 !important;
+    border: none !important;
+    padding: 0 !important;
+    height: 28px;
+    text-align: center !important;
+    line-height: 28px;
+}
+.ui-state-active{
+    background: var(--color-blue) !important;
+    border: none;
+    border-radius: 100vw;
+    color: #ffffff !important;
+    border: none !important;
+    width: 28px;
+    padding: 0 !important;
+    height: 28px;
+    text-align: center !important;
+    line-height: 28px;
+    margin: 0 auto !important;
+}
+.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br{
+    border: none !important;
+}
+.ui-datepicker .ui-datepicker-next,.ui-datepicker .ui-datepicker-prev{
+    height: 35px !important;
+    border-radius: 100vw;
+    width: 35px !important;
+}
+.ui-datepicker .ui-datepicker-next:hover,.ui-datepicker .ui-datepicker-prev:hover{
+    background: #b8b8b826 !important;
+    cursor: pointer;
+}
 
+#ulLstLinkedCalendar label{
+    margin-left: 10px;
+}
+
+.ui-widget.ui-widget-content{
+    padding: 30px;
+    margin: -20px;
+}
+
+i#nextWeekBtn::before{
+    content: url(./images/20px.svg);
+}
+i#prevWeekBtn::before{
+    content: url(./images/20px-left.svg);
+}
+
+#weekDisplay{
+    vertical-align: top;
+}
+
+span.ui-icon.ui-icon-circle-triangle-w{
+    content: url(./images/20px-left.svg);
+    background-image: none;
+}
+
+span.ui-icon.ui-icon-circle-triangle-e{
+    content: url(./images/20px.svg);
+    background-image: none;
+}

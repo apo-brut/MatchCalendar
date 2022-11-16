@@ -13,7 +13,7 @@
 <body>
     <main>
         <header class="header">
-            <h1 class="weekControls">Calendar</h1>
+            <h1 class="weekControls"><span>Match</span>Calendar</h1>
             <div >
                 <i id="prevWeekBtn" class="fas fa-angle-double-left"></i>
                 <span id="weekDisplay">
@@ -30,17 +30,17 @@
             </div>
             
         </header>
-        <div style="display: flex">
-            <div style="width: 272; border-bottom: 1px solid #cecece; margin-left: 10px; margin-right: 10px;">
+        <div style="display: flex; position: absolute;top: 61px;right: 0;bottom: 0;left: 0;">
+        <div style="width: 289px; padding: 10px; background: #fff; padding-bottom: 20px;">
                 <div style="height: 100%;">
-                    <div style="height: 50%; border: 1px solid #cecece; border-left: none; ">
+                    <div style="height: 50%; border-left: none; ">
                         <div id="datePickerSidebar"></div>
                     </div>
                     
                     <div id="lstLinkedCalendar" class="linkedCalendarDiv"></div>
                 </div>
             </div>
-            <div style="flex: 1;">
+            <div style="flex: 1; position: fixed; right: 15px; bottom: 25px; top: 60px; left: 289px; overflow: auto; background-color: #e3f2fda1; border-radius: 16px; ">
                 <section id="calendar">
                     <div class="dayTime">
                     </div>
