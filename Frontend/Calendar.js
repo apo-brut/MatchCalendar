@@ -129,9 +129,10 @@ export class Calendar {
         $("#trashButton").click(() => this.trash());
         $("#cancelButton").click(() => this.closeModal());
         $("#cancelButtonEvent").click(() => this.closeModal());
+        $("#currentWeek").click(() => this.moveToCurrentDay());
         $(".color").click(this.changeColor);
     }
-
+    
     changeWeekWithByDatepicker = function (selectedDate) {
 
         var temp2 = new Date(selectedDate);
@@ -246,6 +247,11 @@ export class Calendar {
         } else {
             this.hideCurrentDay();
         }
+    }
+
+    moveToCurrentDay(){
+        this.calculateCurrentWeek();
+        this.showWeek();
     }
 
     showCurrentDay() {
