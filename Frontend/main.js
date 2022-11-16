@@ -1,9 +1,10 @@
 import { Calendar } from "./Calendar.js";
 
-$(() => {
+/* var calendar = $(() => {
     new Calendar().setup();
-});
-
+}); */
+var calendar = new Calendar();
+ 
 //reg-----------------------------------------------------------
 //Get Hamnurger 
 var hamburger = document.getElementById("calenderHide");
@@ -20,198 +21,111 @@ var loginTabBtn = document.getElementById("loginTabBtn");
 var registerTabBtn = document.getElementById("registerTabBtn");
 
 // When the user clicks the button, open the modal 
-btn.onclick = function() {
-  modal.style.display = "block";
+btn.onclick = function () {
+    modal.style.display = "block";
 }
 
 
 // When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
+span.onclick = function () {
+    modal.style.display = "none";
 }
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
+window.onclick = function (event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
 }
 
-var LoginForm = document.getElementById ("LoginForm");
-var RegForm = document.getElementById ("RegForm");
+var LoginForm = document.getElementById("LoginForm");
+var RegForm = document.getElementById("RegForm");
 var Indicator = document.getElementById("Indicator");
 
-registerTabBtn.onclick = function (){
-   RegForm.style.transform = "translateX(0px)";
-   LoginForm.style.transform = "translateX(0px)";
-   Indicator.style.transform = "translateX(100px)";
+registerTabBtn.onclick = function () {
+    RegForm.style.transform = "translateX(0px)";
+    LoginForm.style.transform = "translateX(0px)";
+    Indicator.style.transform = "translateX(100px)";
 }
 
-loginTabBtn.onclick = function (){
-   RegForm.style.transform = "translateX(300px)";
-   LoginForm.style.transform = "translateX(300px)";
-   Indicator.style.transform = "translateX(0px)";
+loginTabBtn.onclick = function () {
+    RegForm.style.transform = "translateX(300px)";
+    LoginForm.style.transform = "translateX(300px)";
+    Indicator.style.transform = "translateX(0px)";
 }
 
-var objpeople = [];
-var i = "";
-        
-        console.log(objpeople);
-        LogInBtn.onclick = function() {
-            var username = document.getElementById("username").value;
-            var password = document.getElementById("password").value;
-            objpeople = JSON.parse(localStorage.getItem("user"));
-            for(i = 0; i < objpeople.length; i++) {
-                if (username == objpeople [i].username && password == objpeople[i].password) {
-                    sessionStorage.setItem("currentlooedin",username)
-                    alert(username+" is logged in!!")
-                    document.getElementById("myModal").style.display="none";
-                    return
-                }
-            }
-            for(i = 0; i < objpeople.length; i++) {
-                if (username == objpeople [i].username && password == objpeople[i].password) {
-                    alert(" falscher Username oder falsches Passwort")
-                    return
-                }
-            }
+document.getElementById("email").value = "a@a.de";
+document.getElementById("password").value = "Qwertz1!";
+
+
+LogInBtn.onclick = function () {
+    var email = document.getElementById("email").value;
+    var password = document.getElementById("password").value;
+
+    $.ajax({
+        type: "GET",
+        url: "https://h2970110.stratoserver.net:3000/api/login?email=" + email + "&password=" + password,
+        data: "", 
+        contentType: "application/json",
+        dataType: "json",
+        success: function (response) {
+            document.getElementById("email").value = "";
+            document.getElementById("password").value = "";
             
+            document.getElementById("myModal").style.display="none";
+            calendar.loginSuccess(response.userID,response.token,response.identifier);
+            return
+        },
+        error: function (response, status) {
+          console.log(response);
+          window.alert("Login failed: " + response.response);
         }
-        RegistierenBtn.onclick = function() { 
-            var registeruser = document.getElementById("newuser").value
-            var registerpassword = document.getElementById("newpassword").value
-            var registeremail    = document.getElementById("newemail").value
+    });
+}
 
-            var newuser = {
-                username: registeruser,
-                email: registeremail,
-                password: registerpassword,
+RegistierenBtn.onclick = function () {
+    var registeruser = document.getElementById("newuser").value
+    var registerpassword = document.getElementById("newpassword").value
+    var registeremail = document.getElementById("newemail").value
 
+    if (registerpassword.length < 8) {
+        alert("Das Passwort muss mindestens 8 ziffern haben")
+        return
+    }
+
+    $.ajax({
+        type: "POST",
+        url: "https://h2970110.stratoserver.net:3000/api/signup?email=" + registeremail + "&password=" + registerpassword + "&username=" + registeruser,
+        data: "", 
+        contentType: "application/json",
+        dataType: "json",
+        success: function (response) {
+            console.log(response);
+            if (response.status === "false") {
+                window.alert("Registry failed: " + response.response);
             }
-            for(i = 0; i < objpeople.length; i++) {
-
-                if(registeruser == objpeople [i].username){
-                    alert("Dieser Name ist schon vorhanden, bitte wähle einen anderen Namen")
-                    return
-
-
-                }
-                    if(registeremail == objpeople[i].email){
-                        alert("Diese Email-Adresse ist bereits vorhanden, bitte wählen Sie einen anderen Namen")
-                        return
-                    }
-
-                 if (registerpassword.length < 8){
-                    alert("Das Passwort muss mindestens 8 ziffern haben")
-                    return
-                }
-                
-
+            else {
+                document.getElementById("newuser").value = "";
+                document.getElementById("newpassword").value = "";
+                document.getElementById("newemail").value = "";
+    
+                setTimeout(function () {
+                    document.getElementById("email").value = registeremail
+                    document.getElementById("password").value = registerpassword
+                    LogInBtn.onclick();
+                }, 1000); 
             }
-            if(localStorage.getItem("user")==null){
-                objpeople.push(newuser);
-                localStorage.setItem("user",JSON.stringify(objpeople));
-             }
-             else
-             {
-                objpeople = JSON.parse(localStorage.getItem("user"));
-                objpeople.push(newuser);
-                localStorage.setItem("user",JSON.stringify(objpeople));
-             }
-            console.log(objpeople)
-
-            document.getElementById("newuser").value="";
-            document.getElementById("newpassword").value="";
-            document.getElementById("newemail").value="";
+        },
+        error: function (response, status) {
+          console.log(response);
+          window.alert("Login failed: " + response.response);
         }
+    });
+}
 //js für form
 
 var abfrage = window.confirm("Schön das du da bist! Um diese Anwendung benuzen zu können musst du dich regestrieren in dem du auf (OK) klickst. Wenn du bereits einen Account bei uns hast, kannst du dich ganz einfach anmelden");
-    
-if (abfrage == true){
-    document.getElementById("myModal").style.display="block";
+
+if (abfrage == true) {
+    document.getElementById("myModal").style.display = "block";
 }
-/* Account */
-var objpeople = [];
-
-console.log(objpeople);
-function getinfo() {
-    var username = document.getElementById("username").value;
-    var password = document.getElementById("password").value;
-    objpeople = JSON.parse(localStorage.getItem("user"));
-    for(i = 0; i < objpeople.length; i++) {
-        if (username == objpeople [i].username && password == objpeople[i].password) {
-            sessionStorage.setItem("currentlooedin",username)
-            alert(username+" is logged in!!")
-            document.getElementById("myModal").style.display="none";
-            return
-        }
-    }
-    for(i = 0; i < objpeople.length; i++) {
-        if (username == objpeople [i].username && password == objpeople[i].password) {
-            alert(" falscher Username oder falsches Passwort")
-            return
-        }
-    }
-    
-}
-function registeruser(){
-    var registeruser = document.getElementById("newuser").value
-    var registerpassword = document.getElementById("newpassword").value
-    var registeremail    = document.getElementById("newemail").value
-
-    var newuser = {
-        username: registeruser,
-        email: registeremail,
-        password: registerpassword,
-
-    }
-    for(i = 0; i < objpeople.length; i++) {
-
-        if(registeruser == objpeople [i].username){
-            alert("Dieser Name ist schon vorhanden, bitte wähle einen anderen Namen")
-            return
-
-
-        }
-            if(registeremail == objpeople[i].email){
-                alert("Diese Email-Adresse ist bereits vorhanden, bitte wählen Sie einen anderen Namen")
-                return
-            }
-
-         if (registerpassword.length < 8){
-            alert("Das Passwort muss mindestens 8 ziffern haben")
-            return
-        }
-        
-
-    }
-    if(localStorage.getItem("user")==null){
-        objpeople.push(newuser);
-        localStorage.setItem("user",JSON.stringify(objpeople));
-     }
-     else
-     {
-        objpeople = JSON.parse(localStorage.getItem("user"));
-        objpeople.push(newuser);
-        localStorage.setItem("user",JSON.stringify(objpeople));
-     }
-    console.log(objpeople)
-
-    document.getElementById("newuser").value="";
-    document.getElementById("newpassword").value="";
-    document.getElementById("newemail").value="";
-}
-
-
-hamburger.onclick = function() {
-    hamburger.style.display="block";
-  }
-
-         
-
-
-
-     
-   
-
