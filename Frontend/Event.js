@@ -75,11 +75,6 @@ export class Event {
         }
 
         calendar.InsertEventsIntoMainObjectLstAllCalendarEntries(calendar.currentUserId, createdEvent);
-
-        //TODO
-        $.post(url, function (reponse){
-            console.log(reponse);
-        });
     }
 
     showIn(calendar) {

@@ -146,17 +146,32 @@ export class Calendar {
         this.identifier = newIdentfier;
 
         var tempThis = this;
-        $.get("https://h2970110.stratoserver.net:3000/api/" + this.token + "/" + this.identifier + "/calenderevent?userid=" + this.currentUserId, function (response) {
-            console.log("Get-Events-Response:")
-            console.log(response);
 
-            if (response[tempThis.currentUserId] !== undefined) {
-                lstAllCalendarEntriesByUser[currentUserId] = response[tempThis.currentUserId];
+        $.ajax({
+            type: "GET",
+            url: "https://h2970110.stratoserver.net:3000/api/" + this.token + "/" + this.identifier + "/calenderevent?userid=" + this.currentUserId,
+            data: "", 
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+
+                if (response[tempThis.currentUserId] !== undefined) {
+                    lstAllCalendarEntriesByUser[tempThis.currentUserId] = response[tempThis.currentUserId];
+                }else{
+                    lstAllCalendarEntriesByUser[tempThis.currentUserId] = {
+                        'userName': undefined
+                        , 'events': {}
+                    }
+                }
+
+                tempThis.token = response.newToken;
+                tempThis.setup();
+            },
+            error: function (response, status) {
+              console.log(response);
+              window.alert("Getting Event failed: " + response.response);
             }
-
-            tempThis.token = response.newToken;
-            tempThis.setup();
-        });
+        }); 
     }
 
     setup = function () {
@@ -420,13 +435,33 @@ export class Calendar {
             this.events = {};
 
             Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
-                if (LinkedCalendarChecked.find(x => x.userId === key).isChecked === true) {
+                if (LinkedCalendarChecked.find(x => x.userId === key).isChecked === "checked") {
                     Object.keys(lstAllCalendarEntriesByUser[key]["events"]).forEach(innerKey => {
-                        if (!this.events[innerKey])
-                            this.events[innerKey] = {};
+                        var date = this.GetFormatedDate(innerKey, false);
+                        var prevDate = this.GetFormatedDate(innerKey, true);
 
-                        Object.keys(lstAllCalendarEntriesByUser[key]["events"][innerKey]).forEach(lastKey => {
-                            this.events[innerKey][lastKey] = lstAllCalendarEntriesByUser[key]["events"][innerKey][lastKey];
+                        if (date !== innerKey){
+                            lstAllCalendarEntriesByUser[key]["events"][date] = lstAllCalendarEntriesByUser[key]["events"][innerKey];
+                            delete lstAllCalendarEntriesByUser[key]["events"][innerKey];
+                        }
+
+                        if (!this.events[date])
+                            this.events[date] = {};
+
+                        Object.keys(lstAllCalendarEntriesByUser[key]["events"][date]).forEach(lastKey => {
+                            this.events[date][lastKey] = lstAllCalendarEntriesByUser[key]["events"][date][lastKey];
+                            this.events[date][lastKey]["prevDate"] = this.GetFormatedDate(date, true);
+
+                            var start = lstAllCalendarEntriesByUser[key]["events"][date][lastKey]["start"];
+                            start = start.length > 5 ? start.substr(11, 5) : start;
+                            var end = lstAllCalendarEntriesByUser[key]["events"][date][lastKey]["end"];
+                            end = end.length > 5 ? end.substr(11, 5) : end;
+
+                            this.events[date][lastKey]["start"] = start;
+                            this.events[date][lastKey]["end"] = end;
+                            this.events[date][lastKey]["date"] = date;
+                            this.events[date][lastKey]["prevDate"] = prevDate;
+                            this.events[date][lastKey]["id"] = lstAllCalendarEntriesByUser[key]["events"][date][lastKey]["id"].toString();
                         });
                     });
                 }
@@ -481,11 +516,11 @@ export class Calendar {
         var tempThis = this;
 
         Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
-            var isChecked = key === tempThis.currentUserId.toString() ? true : false;
+            var isChecked = key === tempThis.currentUserId.toString() ? "checked" : "";
             var userName = lstAllCalendarEntriesByUser[key].userName;
 
             html = html + '<li>'
-                + '<input type="checkbox" name="LinkedCalendar_' + key + '" id="LinkedCalendar_' + key + '" >'
+                + '<input type="checkbox" name="LinkedCalendar_' + key + '" id="LinkedCalendar_' + key + '" ' + isChecked + ' >'
                 + '<label for="LinkedCalendar_' + key + '" >' + userName + '</label>'
                 + '</li>';
 
@@ -517,7 +552,7 @@ export class Calendar {
     }
 
     CheckboxClicked(elementId) {
-        var checkboxValue = $('#' + elementId).is(":checked");
+        var checkboxValue = $('#' + elementId).is(":checked") === true ? "checked" : "";
 
         var tst = LinkedCalendarChecked.filter(x => x.key === elementId);
         tst.isChecked = checkboxValue;
@@ -684,14 +719,9 @@ export class Calendar {
     }
 
     CreateEvent = function (color, date, description, end, id, start, title, calendar_Type) {
-        var tempPrevDate = new Date(date);
+        var prevDate = this.GetFormatedDate(date, true);
         var generateEvent = {};
         generateEvent[date] = {};
-
-        var tempPrevDate = new Date(tempPrevDate.setDate(tempPrevDate.getDate() - 1));
-        var year = tempPrevDate.getFullYear();
-        var month = tempPrevDate.getMonth() + 1;
-        var day = tempPrevDate.getDate().toString().length === 1 ? "0" + tempPrevDate.getDate() : tempPrevDate.getDate();
 
         return generateEvent[date][id] = {
             "color": color
@@ -699,7 +729,7 @@ export class Calendar {
             , "description": description
             , "end": end
             , "id": id
-            , "prevDate": year + '-' + month + '-' + day
+            , "prevDate": prevDate
             , "start": start
             , "title": title
             , 'calendar_type': calendar_Type
@@ -722,40 +752,68 @@ export class Calendar {
 
     InsertEventsIntoMainObjectLstAllCalendarEntriesByUser = function (key, generateEvents) {
         Object.keys(generateEvents).forEach(date => {
-            if (lstAllCalendarEntriesByUser[key]["events"][date] === undefined) {
-                lstAllCalendarEntriesByUser[key]["events"][date] = {};
-                lstAllCalendarEntriesByUser[key]["events"][date] = generateEvents[date];
-                var req = {};
-                req[key] = {
-                    "userName": ""
-                    , "events": {}
-                };
-                req[key]["events"][date] = {
-                    "zwXPQTUx3PJCPx8h24xC": {
-                        "color": generateEvents.color
-                        , "date": date
-                        , "description": generateEvents.description
-                        , "end": generateEvents.end
-                        , "id": generateEvents.id
-                        , "prevDate": generateEvents.prevDate
-                        , "start": generateEvents.start
-                        , "title": generateEvents.title
-                    }
-                };
+            Object.keys(generateEvents[date]).forEach(id => {
+                var test = lstAllCalendarEntriesByUser[key];
+                if (lstAllCalendarEntriesByUser[key]["events"] === {} || lstAllCalendarEntriesByUser[key]["events"][date] === undefined) {
+                    lstAllCalendarEntriesByUser[key]["events"][date] = {};
+                    lstAllCalendarEntriesByUser[key]["events"][date] = generateEvents[date];
+                    var req = {};
+                    req[key] = {
+                        "userName": ""
+                        , "events": {}
+                    };
+                    req[key]["events"][date] = {
+                        "zwXPQTUx3PJCPx8h24xC": {
+                            "color": generateEvents[date][id].color
+                            , "date": date
+                            , "description": generateEvents[date][id].description
+                            , "end": generateEvents[date][id].end
+                            , "id": id
+                            , "prevDate": generateEvents[date][id].prevDate
+                            , "start": generateEvents[date][id].start
+                            , "title": generateEvents[date][id].title
+                        }
+                    };
 
-                console.log(req);
-            }
-            else {
-                Object.keys(generateEvents[date]).forEach(eventId => {
-                    lstAllCalendarEntriesByUser[key]["events"][date][eventId] = {};
-                    lstAllCalendarEntriesByUser[key]["events"][date][eventId] = generateEvents[date][eventId];
-                });
-            }
+                    var jsonReq = JSON.stringify(req);
+
+                    var tempThis = this;
+                    $.ajax({
+                        type: "POST",
+                        url: "https://h2970110.stratoserver.net:3000/api/" + this.token + "/" + this.identifier + "/calenderevent",
+                        data: jsonReq, 
+                        contentType: "application/json",
+                        dataType: "json",
+                        success: function (response) {
+                            tempThis.token = response.newToken;
+                        },
+                        error: function (response, status) {
+                          console.log(response);
+                          window.alert("Creating Event failed: " + response.response);
+                        }
+                    }); 
+                }
+                else {
+                    lstAllCalendarEntriesByUser[key]["events"][date][id] = {};
+                    lstAllCalendarEntriesByUser[key]["events"][date][id] = generateEvents[date][id];
+                }
+            });
         });
     }
 
     DeleteEventFromLstAllCalendarEntriesByUser = function (userId, date, id) {
         delete lstAllCalendarEntriesByUser[userId]["events"][date][id];
+    }
+
+    GetFormatedDate = function (date, prev) {
+        var newTempDate = new Date(date);
+
+        var newDate = prev ? new Date(newTempDate.setDate(newTempDate.getDate() - 1)) : new Date(newTempDate.setDate(newTempDate.getDate()));
+        var year = newDate.getFullYear().toString();
+        var month = (newDate.getMonth() + 1).toString();
+        var day = newDate.getDate().toString().length === 1 ? "0" + newDate.getDate().toString() : newDate.getDate().toString();
+
+        return year + '-' + month + '-' + day;
     }
 }
 

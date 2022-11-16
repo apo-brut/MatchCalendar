@@ -61,23 +61,23 @@ LogInBtn.onclick = function () {
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
 
-    $.get("https://h2970110.stratoserver.net:3000/api/login?email=" + email + "&password=" + password, function (response) {
-        console.log("Login-Get-Response:")
-        console.log(response);
-        if (response.status === "false") {
-            window.alert("Login failed: " + response.response);
-        }
-        else {
+    $.ajax({
+        type: "GET",
+        url: "https://h2970110.stratoserver.net:3000/api/login?email=" + email + "&password=" + password,
+        data: "", 
+        contentType: "application/json",
+        dataType: "json",
+        success: function (response) {
             document.getElementById("email").value = "";
             document.getElementById("password").value = "";
-
-/*             calendar.currentUserId = response.userID;
-            calendar.token = response.token;;
-            calendar.identifier = response.identifier; */
             
             document.getElementById("myModal").style.display="none";
             calendar.loginSuccess(response.userID,response.token,response.identifier);
             return
+        },
+        error: function (response, status) {
+          console.log(response);
+          window.alert("Login failed: " + response.response);
         }
     });
 }
@@ -92,21 +92,32 @@ RegistierenBtn.onclick = function () {
         return
     }
 
-    $.post("https://h2970110.stratoserver.net:3000/api/signup?email=" + registeremail + "&password=" + registerpassword + "&username=" + registeruser, function (response) {
-        console.log(response)
-        if (response.status === "false") {
-            window.alert("Registry failed: " + response.response);
-        }
-        else {
-            document.getElementById("newuser").value = "";
-            document.getElementById("newpassword").value = "";
-            document.getElementById("newemail").value = "";
-
-            /* setTimeout(function () {
-                document.getElementById("email").value = registeremail
-                document.getElementById("password").value = registerpassword
-                LogInBtn.onclick();
-            }, 1000); */
+    $.ajax({
+        type: "POST",
+        url: "https://h2970110.stratoserver.net:3000/api/signup?email=" + registeremail + "&password=" + registerpassword + "&username=" + registeruser,
+        data: "", 
+        contentType: "application/json",
+        dataType: "json",
+        success: function (response) {
+            console.log(response);
+            if (response.status === "false") {
+                window.alert("Registry failed: " + response.response);
+            }
+            else {
+                document.getElementById("newuser").value = "";
+                document.getElementById("newpassword").value = "";
+                document.getElementById("newemail").value = "";
+    
+                setTimeout(function () {
+                    document.getElementById("email").value = registeremail
+                    document.getElementById("password").value = registerpassword
+                    LogInBtn.onclick();
+                }, 1000); 
+            }
+        },
+        error: function (response, status) {
+          console.log(response);
+          window.alert("Login failed: " + response.response);
         }
     });
 }
