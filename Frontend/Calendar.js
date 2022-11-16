@@ -125,6 +125,7 @@ var lstAllCalendarEntriesByUser = {
 
 
 export class Calendar {
+    currentUserId = "1" // TODO getuserID
 
     constructor() {
         this.mode = MODE.VIEW;
@@ -625,7 +626,6 @@ export class Calendar {
                                     generateEvents[date][newId] = this.CreateEvent("grey", date, "", "24:00", newId, end, "Generated Event", 1);
                                 }
                             }
-
                         }
                     } else {
                         var event = currentEventsForDate[Object.keys(currentEventsForDate)[0]];
@@ -644,20 +644,7 @@ export class Calendar {
         }
 
         if (Object.keys(generateEvents).length > 0) {
-            Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
-                Object.keys(generateEvents).forEach(date => {
-                    if (lstAllCalendarEntriesByUser[key]["events"][date] === undefined) {
-                        lstAllCalendarEntriesByUser[key]["events"][date] = {};
-                        lstAllCalendarEntriesByUser[key]["events"][date] = generateEvents[date];
-                    }
-                    else {
-                        Object.keys(generateEvents[date]).forEach(eventId => {
-                            lstAllCalendarEntriesByUser[key]["events"][date][eventId] = {};
-                            lstAllCalendarEntriesByUser[key]["events"][date][eventId] = generateEvents[date][eventId];
-                        });
-                    }
-                });
-            });
+            this.InsertEventsIntoMainObjectLstAllCalendarEntries(undefined, generateEvents);
             window.alert("Termine wurden angelegt.");
         } else {
             window.alert("Es wurden keine Termine angelegt, da es keinen freien Zeitraum gab.");
@@ -689,6 +676,38 @@ export class Calendar {
             , 'calendar_type': calendar_Type
             , 'matchID': "0"
         }
+    }
+
+    InsertEventsIntoMainObjectLstAllCalendarEntries = function (userId, generateEvents) {
+
+        console.log("hallo: " + this.currentUserId);
+        if (userId === undefined){
+            Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
+                this.InsertEventsIntoMainObjectLstAllCalendarEntriesByUser(key, generateEvents);
+            });
+        }
+        else{
+            this.InsertEventsIntoMainObjectLstAllCalendarEntriesByUser(userId, generateEvents); // TODO:  1 = userId
+        }
+    }
+
+    InsertEventsIntoMainObjectLstAllCalendarEntriesByUser = function (key, generateEvents){
+        Object.keys(generateEvents).forEach(date => {
+            if (lstAllCalendarEntriesByUser[key]["events"][date] === undefined) {
+                lstAllCalendarEntriesByUser[key]["events"][date] = {};
+                lstAllCalendarEntriesByUser[key]["events"][date] = generateEvents[date];
+            }
+            else {
+                Object.keys(generateEvents[date]).forEach(eventId => {
+                    lstAllCalendarEntriesByUser[key]["events"][date][eventId] = {};
+                    lstAllCalendarEntriesByUser[key]["events"][date][eventId] = generateEvents[date][eventId];
+                });
+            }
+        });
+    }
+
+    DeleteEventFromLstAllCalendarEntriesByUser = function (userId, date, id){
+        delete lstAllCalendarEntriesByUser[userId]["events"][date][id];
     }
 }
 
