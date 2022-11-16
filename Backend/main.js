@@ -308,8 +308,8 @@ app.put("/api/calenderevent", (req, res) => {
 });
 
 app.delete("/api/calenderevent", async (req, res) => {
-  let userid = req.query.eventID;
-  const calenderEvents = await calenderevent.DeleteCalenderEvent(eventID);
+  let eventID = req.query.eventID;
+   await calenderevent.DeleteCalenderEvent(eventID);
   res.send("Event deleted");
 });
 
