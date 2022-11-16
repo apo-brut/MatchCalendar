@@ -72,7 +72,7 @@ class CalendarPersonRepository {
         );
  }
  async getUsernameByUserId(Id, username) {
-  connection.query("SELECT Id FROM `person` WHERE Username = mb ",
+  connection.query("SELECT Id FROM `person` WHERE Username = ?",
     [Id,username],
     function(err, results, fields) {
      // console.log(err);
