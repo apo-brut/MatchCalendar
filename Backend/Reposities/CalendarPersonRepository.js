@@ -62,8 +62,6 @@ class CalendarPersonRepository {
     );
 }
 
-
-
     async UpdateCalenderPerson(Id) {
         connection.query("UPDATE `person` SET ,`Username`= ? ,`Password` = ?,`Firstname`= ? ,`Lastname` = ? ,`Entry` = ? WHERE ID = ?",
     
@@ -72,8 +70,14 @@ class CalendarPersonRepository {
        //   console.log(err);
         }
         );
-
-
+ }
+ async getUsernameByUserId(Id, username) {
+  connection.query("SELECT Id FROM `person` WHERE Username = mb ",
+    [Id,username],
+    function(err, results, fields) {
+     // console.log(err);
+    }
+  );
  }
 }
     
