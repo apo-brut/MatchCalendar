@@ -59,9 +59,25 @@ export class Event {
         calendar.events[this.date][this.id] = this;
         calendar.saveEvents();
 
+        var createdEvent = {};
+        createdEvent[this.date] = {};
+        createdEvent[this.date][this.id] = {
+            "color": this.color
+            , "date": this.date
+            , "description": this.description
+            , "end": this.end
+            , "id": this.id
+            , "prevDate": this.prevDate
+            , "start": this.start
+            , "title": this.title
+            , 'calendar_type': "0"
+            , 'matchID': "0"
+        }
+
+        calendar.InsertEventsIntoMainObjectLstAllCalendarEntries(calendar.currentUserId, createdEvent);
+
         // hier sind bislnag nur dummyDaten drin
         var url = "http://h2970110.stratoserver.net:3000/api/calenderevent?userid=99&start="+this.start+"&end="+this.end+"&title="+this.title+"&describtion="+this.description+"&color="+this.color+"";
-
         //TODO
         $.post(url, function (reponse){
             console.log(reponse);
@@ -118,7 +134,25 @@ export class Event {
         this.description = $("#eventDescription").val();
         this.color = $(".color.active").attr("data-color");
         this.saveIn(calendar);
-        this.showIn(calendar);
+        //this.showIn(calendar);
+        calendar.loadEvents();
+
+        var createdEvent = {};
+        createdEvent[this.date] = {};
+        createdEvent[this.date][this.id] = {
+            "color": this.color
+            , "date": this.date
+            , "description": this.description
+            , "end": this.end
+            , "id": this.id
+            , "prevDate": this.prevDate
+            , "start": this.start
+            , "title": this.title
+            , 'calendar_type': "0"
+            , 'matchID': "0"
+        }
+
+        calendar.InsertEventsIntoMainObjectLstAllCalendarEntries(calendar.currentUserId, createdEvent);
     }
 
     copyIn(calendar) {
@@ -139,6 +173,7 @@ export class Event {
     deleteIn(calendar) {
         calendar.closeModal();
         $(`#${this.id}`).remove();
+        calendar.DeleteEventFromLstAllCalendarEntriesByUser(calendar.currentUserId, this.date, this.id);
         delete calendar.events[this.date][this.id];
         if (Object.values(calendar.events[this.date]).length == 0) {
             delete calendar.events[this.date];
