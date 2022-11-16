@@ -82,8 +82,15 @@ async DeleteCalenderEvent(Id) {
     }
     );
 }
+async UpdateCalenderEvent(Id){
+  connection.query("UPDATE 'Date', 'Start', 'End', 'Title', 'Description', 'Color' FROM 'save' WHERE Id = ?",
+    [Id, Date, Start, End, Title, Description, Color],
+    function(err, results,fields) {
+      // console.log(err);
+    }
+  )
 
-
+}
 }
 
     
