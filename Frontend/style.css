@@ -78,16 +78,23 @@ textarea {
     display: inline-block;
     width: 30px;
     height: 30px;
-    border: 3px solid var(--time-color);
+    border: 3px solid rgb(54, 92, 175);
     border-radius: 50%;
 }
 
 .generalControls .fa-plus {
     font-size: 20px;
+    color: rgb(54, 92, 175);
+}
+
+.generalControls .fa-user {
+    font-size: 20px;
+    color: rgb(54, 92, 175);
 }
 
 .generalControls .fa-trash-alt {
     font-size: 18px;
+    color: rgb(54, 92, 175);
 }
 
 /* calendar */
