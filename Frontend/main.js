@@ -5,7 +5,8 @@ $(() => {
 });
 
 //reg-----------------------------------------------------------
-
+//Get Hamnurger 
+var hamburger = document.getElementById("calenderHide");
 // Get the modal
 var modal = document.getElementById("myModal");
 
@@ -202,7 +203,11 @@ function registeruser(){
     document.getElementById("newemail").value="";
 }
 
-     
+
+hamburger.onclick = function() {
+    hamburger.style.display="block";
+  }
+
          
 
 

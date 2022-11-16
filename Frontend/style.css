@@ -618,3 +618,20 @@ span.ui-icon.ui-icon-circle-triangle-e{
     content: url(./images/20px.svg);
     background-image: none;
 }
+
+@media screen and (min-width: 400px) {
+    #hamburger {
+      display: none;
+    }
+    #calenderHide {
+        display: block;
+    }
+  }
+  @media screen and (max-width: 400px) {
+    #hamburger {
+      display: block;
+    }
+    #calenderHide {
+        display: none;
+    }
+  }

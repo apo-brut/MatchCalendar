@@ -27,16 +27,18 @@
             </div>
             
                 
-            
+
             <div class="generalControls">
                 <i id="addButton" class="fas fa-plus"></i>
                 <i id="trashButton" class="fas fa-trash-alt"></i>
                 <i id="addUserButton" class="fas fa-user"></i>
+                <i class="fa fa- fa-hamburger" id="hamburger"></i>
+                
             </div>
+
         </header>
-        
-        <div style="display: flex; position: absolute;top: 61px;right: 0;bottom: 0;left: 0;">
-        <div style="width: 289px; padding: 10px; background: #fff; padding-bottom: 20px;">
+        <div style="display: flex; position: absolute; top: 61px;right: 0;bottom: 0;left: 0;">
+        <div style="width: 289px; padding: 10px; background: #fff; padding-bottom: 20px;" id="calenderHide">
                 <div style="height: 100%;">
                     <div style="height: 50%; border-left: none; ">
                         <div id="datePickerSidebar"></div>
@@ -45,7 +47,9 @@
                 </div>
                 
             </div>
-            <div style="flex: 1; position: fixed; right: 15px; bottom: 25px; top: 60px; left: 289px; overflow: auto; background-color: #e3f2fda1; border-radius: 16px; ">
+            
+            <div style="flex: 1; right: 15px; bottom: 25px; top: 60px; left: 289px; overflow: auto; background-color: #e3f2fda1; border-radius: 16px; ">
+                <input type="button" value="today" class="button" id="currentWeek">
                 <section id="calendar">
                     <div class="dayTime">
                     </div>
@@ -66,7 +70,6 @@
                 </section>
             </div>
         </div>
-    
         <form id="eventModal" class="modal">
             <span class="close" id="cancelButtonEvent">&times;</span>
             <h2 id="modalTitle">
