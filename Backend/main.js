@@ -394,12 +394,11 @@ app.delete("/api/calenderevent", async (req, res) => {
 
 //API Matching
 
-app.get("/api/userSearch", (req, res) => {
+app.get("/api/userSearch", async (req, res) => {
   let username = req.query.username;
-
-  
-  
-  res.send("user123");
+  // get userID by username
+  let userID = await person.getUserIdByUserName(username);
+  res.send(userID);
 });
 
 /*
