@@ -9,7 +9,7 @@
         "user":"root",
         "password":"",
         "host":"127.0.0.1",
-        "database":"calendar_db"
+        "database":"calendar"
     },
     "sqlLIVE": {
         "user":"",
