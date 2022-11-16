@@ -91,7 +91,7 @@ class AccountRepository {
     let userID = await this.GetUserIDByEmail(email);
 
     if (userID == undefined) {
-      return ["", ""];
+      return ["", "", userID];
     }
 
     let token_hash = await utils.genHash(token);
@@ -105,7 +105,7 @@ class AccountRepository {
       }
     );
 
-    return [token, identifier];
+    return [token, identifier, userID];
   }
 
   async VerifyLoginToken(token, identifier) {

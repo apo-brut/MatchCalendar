@@ -114,7 +114,7 @@ app.get("/api/login", async (req, res) => {
   let email = utils.XSS(req.query.email);
 
   //check if account already exsist
-  let [token, identifier] = await account.Login(email, req.query.password);
+  let [token, identifier, userID] = await account.Login(email, req.query.password);
 
   if (token == "") {
     res.send({
@@ -128,6 +128,7 @@ app.get("/api/login", async (req, res) => {
     status: "true",
     response: "successfull loged in",
     token: token,
+    userID: userID,
     identifier: identifier,
   });
 });
@@ -205,7 +206,48 @@ app.post("/api/signup", async (req, res) => {
   res.send({ status: "true", response: "Account is created" });
 });
 
-app.post("/api/calenderevent", (req, res) => {
+//API Matching
+
+app.get("/api/userSearch", async (req, res) => {
+  let username = req.query.username;
+  // get userID by username
+  let userID = await person.getUserIdByUserName(username);
+  res.send(userID);
+});
+
+/*
+ *
+ * API Auth Middleware
+ *
+ */
+
+app.use("/api/:token/:identifier/*", async (req, res, next) => {
+  if (!res.headersSent) {
+
+    let token = utils.XSS(req.params.token);
+    let identifier = utils.XSS(req.params.identifier);
+
+    const isAuthTokenValid = await account.VerifyLoginToken(token,identifier);
+
+    if (!isAuthTokenValid) {
+      res.send({ status: "false", response: "invalid API Token" });
+      return false;
+    }
+
+    newToken = await account.UpdateAuthToken(identifier);
+
+
+    next();
+  }
+});
+
+app.get("/api/:token/:identifier/test", async (req, res) => {
+
+
+  res.send({newToken: newToken});
+});
+
+app.post("/api/:token/:identifier/calenderevent", (req, res) => {
   if (req.body == null) {
     res.send("Error Body invalid");
     return false;
@@ -271,7 +313,7 @@ app.post("/api/calenderevent", (req, res) => {
   res.send("Event created");
 });
 
-app.get("/api/calenderevent", async (req, res) => {
+app.get("/api/:token/:identifier/calenderevent", async (req, res) => {
   let userid = req.query.userid;
 
   // get username by userID
@@ -323,7 +365,7 @@ app.get("/api/calenderevent", async (req, res) => {
   res.send(response);
 });
 
-app.put("/api/calenderevent", async (req, res) => {
+app.put("/api/:token/:identifier/calenderevent", async (req, res) => {
   await calenderevent.UpdateCalenderEvent();
   if (req.body == null) {
     res.send("Error Body invalid");
@@ -386,51 +428,10 @@ app.put("/api/calenderevent", async (req, res) => {
   res.send("Events updated");
 });
 
-app.delete("/api/calenderevent", async (req, res) => {
+app.delete("/api/:token/:identifier/calenderevent", async (req, res) => {
   let eventID = req.query.eventID;
    await calenderevent.DeleteCalenderEvent(eventID);
   res.send("Event deleted");
-});
-
-//API Matching
-
-app.get("/api/userSearch", async (req, res) => {
-  let username = req.query.username;
-  // get userID by username
-  let userID = await person.getUserIdByUserName(username);
-  res.send(userID);
-});
-
-/*
- *
- * API Auth Middleware
- *
- */
-
-app.use("/api/:token/:identifier/*", async (req, res, next) => {
-  if (!res.headersSent) {
-
-    let token = utils.XSS(req.params.token);
-    let identifier = utils.XSS(req.params.identifier);
-
-    const isAuthTokenValid = await account.VerifyLoginToken(token,identifier);
-
-    if (!isAuthTokenValid) {
-      res.send({ status: "false", response: "invalid API Token" });
-      return false;
-    }
-
-    newToken = await account.UpdateAuthToken(identifier);
-
-
-    next();
-  }
-});
-
-app.get("/api/:token/:identifier/test", async (req, res) => {
-
-
-  res.send({newToken: newToken});
 });
 
 /**
