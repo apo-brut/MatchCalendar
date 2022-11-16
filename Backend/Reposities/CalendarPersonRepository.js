@@ -43,8 +43,8 @@ class CalendarPersonRepository {
 
   async AddCalenderPerson(Id,username,password,firstname,lastname,entry){
 
-    connection.query("INSERT INTO `person`(`Username`, `Password`, `Firstname`, `Lastname`, `Entry`) VALUES (?, ?, ?, ?, ? )",
-    [Id,username,password,firstname,lastname,entry],
+    connection.query("INSERT INTO `person`(`Username`, `Email`, `Password`, `Firstname`, `Lastname`, `Entry`) VALUES (?, ?, ?, ?, ? )",
+    [Id,username,email,password,firstname,lastname,entry],
     function (err, results, fields) {
       console.log(err);
     }
@@ -65,7 +65,7 @@ class CalendarPersonRepository {
 
 
     async UpdateCalenderPerson(Id) {
-        connection.query("UPDATE `person` SET `ID`='[value-1]',`Username`='',`Password`='',`Firstname`='',`Lastname`='',`Entry`='' WHERE ID = ?",
+        connection.query("UPDATE `person` SET ,`Username`= ? ,`Password` = ?,`Firstname`= ? ,`Lastname` = ? ,`Entry` = ? WHERE ID = ?",
     
         [Id,username,password,firstname,lastname,entry],
         function (err, results, fields) {

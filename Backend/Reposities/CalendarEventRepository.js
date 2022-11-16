@@ -66,7 +66,7 @@ class CalenderEventRepository {
   
 
    connection.query("INSERT INTO `save`(`UserId`, `Date`, `Start`, `End`, `Title`, `Description`, `Color`, `calender_type`, `matchID`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? )",
-    [userid,date,start,end,title,describtion,color],
+    [userid,date,start,end,title,describtion,color,calender_type,matchID],
     function (err, results, fields) {
       console.log(err);
     }
@@ -84,7 +84,7 @@ async DeleteCalenderEvent(Id) {
 }
 async UpdateCalenderEvent(Id){
   connection.query("UPDATE `save` SET `Date` = ?, `Start` = ?, `End` = ?, `Title` = ?, `Description` = ?, `Color`= ?, `calender_type` = ?  WHERE Id = ?",
-    [Id, Date, Start, End, Title, Description, Color],
+    [Id, Date, Start, End, Title, Description, Color,calender_type,matchID],
     function(err, results,fields) {
       // console.log(err);
     }
