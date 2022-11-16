@@ -38,7 +38,7 @@ app.use(express.json());
 
 //Regex for pw and mail validation
 const passwordRequirements =
-  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,800000}$/;
+  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,60}$/;
 const emailRequirements =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -217,13 +217,16 @@ app.post("/api/calenderevent", (req, res) => {
     let date = "blue";
     let description = "oh boy Jolli\n";
     let end = "16:00";
-    let id = "0";
     let start = "13:00";
     let title = "Title";
+    let matchID = "";
+
+    let uuid = "";
 
     userID = key;
 
     Object.keys(body[key]["events"]).forEach((dateKey) => {
+      uuid = "rfregreg";
       Object.keys(body[key]["events"][dateKey]).forEach((eventID) => {
         let event = body[key]["events"][dateKey][eventID];
 
@@ -231,11 +234,23 @@ app.post("/api/calenderevent", (req, res) => {
         date = event["date"];
         description = event["description"];
         end = date + " " + event["end"] + ":00";
-        id = event["id"];
         start = date + " " + event["start"] + ":00";
         title = event["title"];
 
-        //Add event
+        if(matchID.length > 0){
+          //Add event with matchID
+          calenderevent.AddCalenderEvent(
+            userID,
+            start,
+            end,
+            title,
+            description,
+            color,
+            date,
+            uuid
+          );
+        }else{
+        //Add event without matchID
         calenderevent.AddCalenderEvent(
           userID,
           start,
@@ -243,8 +258,10 @@ app.post("/api/calenderevent", (req, res) => {
           title,
           description,
           color,
-          date
+          date,
+          ""
         );
+        }
       });
     });
   });
@@ -255,6 +272,7 @@ app.post("/api/calenderevent", (req, res) => {
 app.get("/api/calenderevent", async (req, res) => {
   let userid = req.query.userid;
 
+  //TODO: get username by id
   let username = "Wladislaw Kusnezow";
 
   const calenderEvents = await calenderevent.GetCalendarEvents(userid);

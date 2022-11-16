@@ -91,10 +91,10 @@ CREATE TABLE `save` (
   `Start` datetime DEFAULT NULL,
   `End` datetime DEFAULT NULL,
   `Title` varchar(30) DEFAULT NULL,
-  `Description` varchar(30) DEFAULT NULL,
+  `Description` varchar(200) DEFAULT NULL,
   `Color` varchar(30) DEFAULT NULL,
   `calendar_type` int(11) NOT NULL,
-  `matchID` int(11) NOT NULL
+  `matchID` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
