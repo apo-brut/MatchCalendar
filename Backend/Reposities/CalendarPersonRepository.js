@@ -71,22 +71,41 @@ class CalendarPersonRepository {
         }
         );
  }
- async getUsernameByUserId(Id, username) {
-  connection.query("SELECT Username FROM `person` WHERE Id = ?",
-    [Id,username],
-    function(err, results, fields) {
-     // console.log(err);
-    }
-  );
+ 
+ async getUsernameByUserId(Id) {
+  return await new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT Username FROM `person` WHERE ID = ?",
+      [Id],
+      function (err, results, fields) {
+        try {
+          resolve(results[0]["ID"]);
+        } catch {
+          logger.error("[CalendarPersonRepository->getUsernameByUserId()] " + err);
+          resolve("");
+        }
+      }
+    );
+  });
  }
+
  async getUserIdByUserName(username) {
-  connection.query("SELECT Id FROM `person` WHERE username = ?",
-    [Id,username],
-    function(err, results, fields) {
-     // console.log(err);
-    }
-  );
+  return await new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT Id FROM `person` WHERE username = ?",
+      [username],
+      function (err, results, fields) {
+        try {
+          resolve(results[0]["ID"]);
+        } catch {
+          logger.error("[CalendarPersonRepository->getUserIdByUserName()] " + err);
+          resolve("");
+        }
+      }
+    );
+  });
  }
+
 }
     
 
