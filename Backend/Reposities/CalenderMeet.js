@@ -42,15 +42,15 @@ class CalenderMeet {
 
     async AddCalenderMeet (ID, userId1, userId2) {
      connection.query ("INSERT INTO `meet`(`ID`, `UserId1`, `UserId2`) VALUES (?, ?, ?)",
-     [ID,UserId1,UserId2],
+     [ID,userId1,userId2],
      function (err, results, fields) {
     //   console.log(err);
      });
     }
 
     async DeleteCalenderMeet (ID, userId1, userId2) {
-     connection.query ("DELETE FROM `meet` WHERE ID) VALUES(?, ?, ?, ?, ? ,?)"
-     [ID, userId1, userId2],
+     connection.query ("DELETE * FROM `meet` WHERE ID = ?",
+     [ID],
      function (err, results, fields) {
     //   console.log(err);
      });
