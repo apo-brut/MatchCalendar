@@ -8,6 +8,18 @@
 	"item": [
 		{
 			"name": "calenderevent",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = JSON.parse(responseBody);\r",
+							"pm.collectionVariables.set(\"auth_token\", data.newToken);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -21,7 +33,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://h2970110.stratoserver.net:3000/api/calenderevent",
+					"raw": "https://h2970110.stratoserver.net:3000/api/{{auth_token}}/{{identifier}}/calenderevent",
 					"protocol": "https",
 					"host": [
 						"h2970110",
@@ -31,6 +43,8 @@
 					"port": "3000",
 					"path": [
 						"api",
+						"{{auth_token}}",
+						"{{identifier}}",
 						"calenderevent"
 					],
 					"query": [
@@ -107,6 +121,19 @@
 		},
 		{
 			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = JSON.parse(responseBody);\r",
+							"pm.collectionVariables.set(\"auth_token\", data.token);\r",
+							"pm.collectionVariables.set(\"identifier\", data.identifier);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -138,12 +165,24 @@
 			"response": []
 		},
 		{
-			"name": "auth token and identifier test",
+			"name": "test",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = JSON.parse(responseBody);\r",
+							"pm.collectionVariables.set(\"auth_token\", data.newToken);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://h2970110.stratoserver.net:3000/api/:token/:identifier/test",
+					"raw": "https://h2970110.stratoserver.net:3000/api/{{auth_token}}/{{identifier}}/test",
 					"protocol": "https",
 					"host": [
 						"h2970110",
@@ -153,19 +192,9 @@
 					"port": "3000",
 					"path": [
 						"api",
-						":token",
-						":identifier",
+						"{{auth_token}}",
+						"{{identifier}}",
 						"test"
-					],
-					"variable": [
-						{
-							"key": "token",
-							"value": "715730d830aa5c3f983842e9b2d7b50069682488b49b102fa51b84f1cbe64c3515ab082e2b587cd1eccf53caa9c2c525b95c32a809acf9f4310a4ddfe78a591607ee96b8d0affd5f3e01bf37bff720a0251ab2ea9a5fff2377400f7844f70af7d92cb3ba5b5f72bc0f6e989f61d78941c6447dc2f91b81f15450b474ba7d9a"
-						},
-						{
-							"key": "identifier",
-							"value": "783012105c63cdb643bc556cc5fa3f76a138cd59475ee692e1c45727dcb883b1a6a08eb8f470757aca1745197495ef345c616e4b3420df4afeecaaa6ecb6d2bc58f35c5d4b84c9ff9a911375a28b2fd3ffc31e7a95addb86ee2fccb75d04490a7d2192d3a0543036f8b4d37c7fdadb8df68b1571d90d97ece81964bff53b83"
-						}
 					]
 				}
 			},
@@ -173,11 +202,23 @@
 		},
 		{
 			"name": "calenderevent",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = JSON.parse(responseBody);\r",
+							"pm.collectionVariables.set(\"auth_token\", data.newToken);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://h2970110.stratoserver.net:3000/api/calenderevent?userid=1",
+					"raw": "https://h2970110.stratoserver.net:3000/api/{{auth_token}}/{{identifier}}/calenderevent?userid=1",
 					"protocol": "https",
 					"host": [
 						"h2970110",
@@ -187,6 +228,8 @@
 					"port": "3000",
 					"path": [
 						"api",
+						"{{auth_token}}",
+						"{{identifier}}",
 						"calenderevent"
 					],
 					"query": [
@@ -200,12 +243,33 @@
 			"response": []
 		},
 		{
-			"name": "calenderevent Copy",
+			"name": "calenderevent",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = JSON.parse(responseBody);\r",
+							"pm.collectionVariables.set(\"auth_token\", data.newToken);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
-				"method": "DELETE",
+				"method": "PUT",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"1\": {\r\n        \"userName\": \"mb\"\r\n        , \"events\": {\r\n            \"2022-11-02\": {\r\n                \"zwXPQTUx3PJCPx8h24xC\": {\r\n                    \"color\": \"blue\"\r\n                    , \"date\": \"2022-11-02\"\r\n                    , \"description\": \"oh boy\\n\"\r\n                    , \"end\": \"21:27\"\r\n                    , \"id\": \"zwXPQTUx3PJCPx8h24xC\"\r\n                    , \"prevDate\": \"2022-11-01\"\r\n                    , \"start\": \"03:00\"\r\n                    , \"title\": \"Wladi 2022-11-02\"\r\n                },\r\n                \"zwXPQTUx3PJCPx8h25fdd\": {\r\n                    \"color\": \"green\"\r\n                    , \"date\": \"2022-11-03\"\r\n                    , \"description\": \"oh boy Jolli\\n\"\r\n                    , \"end\": \"16:00\"\r\n                    , \"id\": \"zwXPQTUx3PJCPx8h25xD\"\r\n                    , \"prevDate\": \"2022-11-02\"\r\n                    , \"start\": \"13:00\"\r\n                    , \"title\": \"Wladi 2022-11-03\"\r\n                }\r\n            },\r\n            \"2022-11-03\": {\r\n                \"zwXPQTUx3PJCPx8h25xD\": {\r\n                    \"color\": \"green\"\r\n                    , \"date\": \"2022-11-03\"\r\n                    , \"description\": \"oh boy Jolli\\n\"\r\n                    , \"end\": \"16:00\"\r\n                    , \"id\": \"zwXPQTUx3PJCPx8h25xD\"\r\n                    , \"prevDate\": \"2022-11-02\"\r\n                    , \"start\": \"13:00\"\r\n                    , \"title\": \"Wladi 2022-11-03\"\r\n                }\r\n            }\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "https://h2970110.stratoserver.net:3000/api/calenderevent?eventID=1",
+					"raw": "https://h2970110.stratoserver.net:3000/api/{{auth_token}}/{{identifier}}/calenderevent?userid=1",
 					"protocol": "https",
 					"host": [
 						"h2970110",
@@ -215,6 +279,50 @@
 					"port": "3000",
 					"path": [
 						"api",
+						"{{auth_token}}",
+						"{{identifier}}",
+						"calenderevent"
+					],
+					"query": [
+						{
+							"key": "userid",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "calenderevent",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = JSON.parse(responseBody);\r",
+							"pm.collectionVariables.set(\"auth_token\", data.newToken);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://h2970110.stratoserver.net:3000/api/{{auth_token}}/{{identifier}}/calenderevent?eventID=1",
+					"protocol": "https",
+					"host": [
+						"h2970110",
+						"stratoserver",
+						"net"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"{{auth_token}}",
+						"{{identifier}}",
 						"calenderevent"
 					],
 					"query": [
@@ -226,6 +334,38 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "auth_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "identifier",
+			"value": "",
+			"type": "string"
 		}
 	]
 }

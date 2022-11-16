@@ -72,7 +72,7 @@ let newToken = "";
 //Middleware
 
 app.use((req, res, next) => {
-  logger.writeLog(`[API_CALL] Time: ` + Date.now());
+  logger.writeLog(`[API_CALL] Time: ` + Date.now() + " " + req.originalUrl);
   next();
 });
 
