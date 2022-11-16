@@ -16,6 +16,8 @@ var lstAllCalendarEntriesByUser = {
                     , 'prevDate': "2022-11-08"
                     , 'start': "03:00"
                     , 'title': "Wladi 2022-11-02"
+                    , 'calendar_type': "0"
+                    , 'matchID': "0"
                 }
             },
             "2022-11-10": {
@@ -28,6 +30,8 @@ var lstAllCalendarEntriesByUser = {
                     , 'prevDate': "2022-11-09"
                     , 'start': "13:00"
                     , 'title': "Wladi 2022-11-09"
+                    , 'calendar_type': "0"
+                    , 'matchID': "0"
                 },
                 "6": {
                     'color': "green"
@@ -38,6 +42,8 @@ var lstAllCalendarEntriesByUser = {
                     , 'prevDate': "2022-11-09"
                     , 'start': "11:00"
                     , 'title': "test"
+                    , 'calendar_type': "0"
+                    , 'matchID': "0"
                 },
                 "8": {
                     'color': "green"
@@ -48,6 +54,8 @@ var lstAllCalendarEntriesByUser = {
                     , 'prevDate': "2022-11-09"
                     , 'start': "18:00"
                     , 'title': "test"
+                    , 'calendar_type': "0"
+                    , 'matchID': "0"
                 }
             },
             "2022-11-11": {
@@ -60,6 +68,8 @@ var lstAllCalendarEntriesByUser = {
                     , 'prevDate': "2022-11-10"
                     , 'start': "03:00"
                     , 'title': "AAAAAA"
+                    , 'calendar_type': "0"
+                    , 'matchID': "0"
                 }
             }
         }
@@ -77,6 +87,8 @@ var lstAllCalendarEntriesByUser = {
                     , 'prevDate': "2022-11-07"
                     , 'start': "03:00"
                     , 'title': "Genna 2022-11-01"
+                    , 'calendar_type': "0"
+                    , 'matchID': "0"
                 }
             },
             "2022-11-09": {
@@ -89,6 +101,8 @@ var lstAllCalendarEntriesByUser = {
                     , 'prevDate': "2022-11-08"
                     , 'start': "3:00"
                     , 'title': "AAAAAA"
+                    , 'calendar_type': "0"
+                    , 'matchID': "0"
                 }
             },
             "2022-11-11": {
@@ -101,6 +115,8 @@ var lstAllCalendarEntriesByUser = {
                     , 'prevDate': "2022-11-10"
                     , 'start': "12:00"
                     , 'title': "Genna 2022-11-04"
+                    , 'calendar_type': "0"
+                    , 'matchID': "0"
                 }
             }
         }
@@ -511,9 +527,12 @@ export class Calendar {
         var tempDate = new Date(currentWeekStart);
         //get days without event and create event from 00:00 - 24:00
         for (let i = 0; i < 7; i++) {
-            tempDate.setDate(currentWeekStart.getDate() + i);
+            //tempDate.setDate(currentWeekStart.getDate() + i);
+            tempDate = new Date(currentWeekStart);
+            tempDate = new Date(tempDate.setDate(tempDate.getDate() + i));
+
             var year = tempDate.getFullYear();
-            var month = tempDate.getMonth() + 1;
+            var month = (tempDate.getMonth() + 1).toString().length === 1 ? "0" + (parseInt(tempDate.getMonth()) + 1) : parseInt(tempDate.getMonth()) + 1;
             var day = tempDate.getDate().toString().length === 1 ? "0" + tempDate.getDate() : tempDate.getDate();
 
             if (tempDate >= currentWeekStart && tempDate <= currentWeekEnd) {
@@ -549,12 +568,10 @@ export class Calendar {
                         });
                     });
 
-                    var start1 = currentEventsForDate.find(x=> x.start === "00:00");
-                    var end1 = currentEventsForDate.find(x=> x.end === "24:00");
+                    var start1 = currentEventsForDate.find(x => x.start === "00:00");
+                    var end1 = currentEventsForDate.find(x => x.end === "24:00");
                     //if (currentEventsForDate.find(x=> x.start === "00:00") !== undefined && currentEventsForDate.find(x=> x.end === "24:00") !== undefined ){
-                    if (start1 !== undefined && end1 !== undefined ){
-                        //window.alert("");
-                        //
+                    if (currentEventsForDate.length > 1 && start1 !== undefined && end1 !== undefined) {
                         continue;
                     }
 
@@ -574,10 +591,10 @@ export class Calendar {
                             var end = event.end;
                             var date = event.date;
 
-                            if (generateEvents[date] === undefined) generateEvents[date] = {} 
+                            if (generateEvents[date] === undefined) generateEvents[date] = {}
 
                             if (i === 0) {
-                                generateEvents[date][newId] = this.CreateEvent("grey", date, "", start, newId, "00:00", "Generated Event");
+                                generateEvents[date][newId] = this.CreateEvent("grey", date, "", start, newId, "00:00", "Generated Event", 1);
                             } else {
                                 newId = generateId();
                                 prevEvent = currentEventsForDate[i - minusForPrevEvent];
@@ -589,13 +606,13 @@ export class Calendar {
                                 //überschneidung
                                 if (event.start >= prevEvent.start && event.end <= prevEvent.end) {
                                     secondIsTimedWithinFirstEvent = true;
-                                    generateEvents[date][newId] = this.CreateEvent("grey", date, "", "24:00", newId, prevEvent.end, "Generated Event");
+                                    generateEvents[date][newId] = this.CreateEvent("grey", date, "", "24:00", newId, prevEvent.end, "Generated Event", 1);
                                 } else if (event.start >= prevEvent.start && event.start <= prevEvent.end && event.end > prevEvent.end) {
                                     generateEvents[date][newId] = this.CreateEvent("grey", date, "", "24:00", newId, end, "Generated Event");
                                 }
                                 else {
                                     secondIsTimedWithinFirstEvent = false
-                                    generateEvents[date][newId] = this.CreateEvent("grey", date, "", start, newId, prevEvent.end, "Generated Event");
+                                    generateEvents[date][newId] = this.CreateEvent("grey", date, "", start, newId, prevEvent.end, "Generated Event", 1);
                                 }
                             }
 
@@ -603,9 +620,9 @@ export class Calendar {
                                 newId = generateId();
 
                                 if (secondIsTimedWithinFirstEvent) {
-                                    generateEvents[date][newId] = this.CreateEvent("grey", date, "", "24:00", newId, prevEvent.end, "Generated Event");
+                                    generateEvents[date][newId] = this.CreateEvent("grey", date, "", "24:00", newId, prevEvent.end, "Generated Event", 1);
                                 } else {
-                                    generateEvents[date][newId] = this.CreateEvent("grey", date, "", "24:00", newId, end, "Generated Event");
+                                    generateEvents[date][newId] = this.CreateEvent("grey", date, "", "24:00", newId, end, "Generated Event", 1);
                                 }
                             }
 
@@ -617,16 +634,16 @@ export class Calendar {
                         var date = event.date;
 
                         generateEvents[date] = {}
-                        generateEvents[date][newId] = this.CreateEvent("grey", date, "", start, newId, "00:00", "Generated Event");
+                        generateEvents[date][newId] = this.CreateEvent("grey", date, "", start, newId, "00:00", "Generated Event", 1);
 
                         newId = generateId();
-                        generateEvents[date][newId] = this.CreateEvent("grey", date, "", "24:00", newId, end, "Generated Event");
+                        generateEvents[date][newId] = this.CreateEvent("grey", date, "", "24:00", newId, end, "Generated Event", 1);
                     }
                 }
             }
         }
 
-        if (Object.keys(generateEvents).length > 0){
+        if (Object.keys(generateEvents).length > 0) {
             Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
                 Object.keys(generateEvents).forEach(date => {
                     if (lstAllCalendarEntriesByUser[key]["events"][date] === undefined) {
@@ -642,17 +659,23 @@ export class Calendar {
                 });
             });
             window.alert("Termine wurden angelegt.");
-        }else{
+        } else {
             window.alert("Es wurden keine Termine angelegt, da es keinen freien Zeitraum gab.");
         }
-        
+
         this.eventsLoaded = false;
         this.loadEvents();
     }
 
-    CreateEvent = function (color, date, description, end, id, start, title){
+    CreateEvent = function (color, date, description, end, id, start, title, calendar_Type) {
+        var tempPrevDate = new Date(date);
         var generateEvent = {};
         generateEvent[date] = {};
+
+        var tempPrevDate = new Date(tempPrevDate.setDate(tempPrevDate.getDate() - 1));
+        var year = tempPrevDate.getFullYear();
+        var month = tempPrevDate.getMonth() + 1;
+        var day = tempPrevDate.getDate().toString().length === 1 ? "0" + tempPrevDate.getDate() : tempPrevDate.getDate();
 
         return generateEvent[date][id] = {
             "color": color
@@ -660,9 +683,11 @@ export class Calendar {
             , "description": description
             , "end": end
             , "id": id
-            , "prevDate": date //todo get prevDate
+            , "prevDate": year + '-' + month + '-' + day
             , "start": start
             , "title": title
+            , 'calendar_type': calendar_Type
+            , 'matchID': "0"
         }
     }
 }
