@@ -1,6 +1,7 @@
 const mysql = require('mysql2');
 var nconf = require('nconf');
 const Logger = require("../Logger.js");
+const Utils = require("../utils.js");
 
 let user = "root";
 let password = "";
@@ -9,6 +10,9 @@ let database = "";
 
 // Node logger
 const logger = new Logger();
+
+// Node Utils
+const utils = new Utils();
 
 // First consider commandline arguments and environment variables, respectively.
 nconf.argv().env();
@@ -62,11 +66,11 @@ class CalenderEventRepository {
     return CalenderEvents;
    }
 
-  async AddCalenderEvent(userid,start,end,title,describtion,color,date){
+  async AddCalenderEvent(userid,start,end,title,describtion,color,date,matchID){
   
 
-   connection.query("INSERT INTO `save`(`UserId`, `Date`, `Start`, `End`, `Title`, `Description`, `Color`) VALUES (?, ?, ?, ?, ?, ?, ? )",
-    [userid,date,start,end,title,describtion,color],
+   connection.query("INSERT INTO `save`(`UserId`, `Date`, `Start`, `End`, `Title`, `Description`, `Color`, `calender_type`, `matchID`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? )",
+    [userid,date,start,end,title,describtion,color,0,matchID],
     function (err, results, fields) {
       console.log(err);
     }
@@ -82,8 +86,15 @@ async DeleteCalenderEvent(Id) {
     }
     );
 }
+async UpdateCalenderEvent(Id,start,end,title,describtion,color,calender_type,matchID){
+  connection.query("UPDATE `save` SET `Date` = ?, `Start` = ?, `End` = ?, `Title` = ?, `Description` = ?, `Color`= ?, `calender_type` = ?  WHERE Id = ?",
+    [Id, utils.getCurrentDate(), start, end, title, description,color,0,matchID],
+    function(err, results,fields) {
+      // console.log(err);
+    }
+  )
 
-
+}
 }
 
     

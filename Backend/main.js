@@ -20,6 +20,8 @@ const CalendarEventRepository = require("./Reposities/CalendarEventRepository.js
 const calenderevent = new CalendarEventRepository();
 const AccountRepository = require("./Reposities/AccountRepository.js");
 const account = new AccountRepository();
+const CalendarPersonRepository = require("./Reposities/CalendarPersonRepository.js");
+const person = new CalendarPersonRepository();
 
 // First consider commandline arguments and environment variables, respectively.
 nconf.argv().env();
@@ -38,7 +40,7 @@ app.use(express.json());
 
 //Regex for pw and mail validation
 const passwordRequirements =
-  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,800000}$/;
+  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,60}$/;
 const emailRequirements =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -217,13 +219,16 @@ app.post("/api/calenderevent", (req, res) => {
     let date = "blue";
     let description = "oh boy Jolli\n";
     let end = "16:00";
-    let id = "0";
     let start = "13:00";
     let title = "Title";
+    let matchID = "";
+
+    let uuid = "";
 
     userID = key;
 
     Object.keys(body[key]["events"]).forEach((dateKey) => {
+      uuid = "rfregreg";
       Object.keys(body[key]["events"][dateKey]).forEach((eventID) => {
         let event = body[key]["events"][dateKey][eventID];
 
@@ -231,11 +236,23 @@ app.post("/api/calenderevent", (req, res) => {
         date = event["date"];
         description = event["description"];
         end = date + " " + event["end"] + ":00";
-        id = event["id"];
         start = date + " " + event["start"] + ":00";
         title = event["title"];
 
-        //Add event
+        if(matchID.length > 0){
+          //Add event with matchID
+          calenderevent.AddCalenderEvent(
+            userID,
+            start,
+            end,
+            title,
+            description,
+            color,
+            date,
+            uuid
+          );
+        }else{
+        //Add event without matchID
         calenderevent.AddCalenderEvent(
           userID,
           start,
@@ -243,8 +260,10 @@ app.post("/api/calenderevent", (req, res) => {
           title,
           description,
           color,
-          date
+          date,
+          ""
         );
+        }
       });
     });
   });
@@ -255,7 +274,8 @@ app.post("/api/calenderevent", (req, res) => {
 app.get("/api/calenderevent", async (req, res) => {
   let userid = req.query.userid;
 
-  let username = "Wladislaw Kusnezow";
+  // get username by userID
+  let username = await person.getUsernameByUserId(userid);
 
   const calenderEvents = await calenderevent.GetCalendarEvents(userid);
 
@@ -303,29 +323,83 @@ app.get("/api/calenderevent", async (req, res) => {
   res.send(response);
 });
 
-app.put("/api/calenderevent", (req, res) => {
-  res.send("Event updated");
+app.put("/api/calenderevent", async (req, res) => {
+  await calenderevent.UpdateCalenderEvent();
+  if (req.body == null) {
+    res.send("Error Body invalid");
+    return false;
+  }
+
+  let body = req.body;
+
+  Object.keys(body).forEach((key) => {
+    let userID = 0;
+    let color = "blue";
+    let date = "blue";
+    let description = "oh boy Jolli\n";
+    let end = "16:00";
+    let start = "13:00";
+    let title = "Title";
+    let matchID = "";
+
+    let uuid = "";
+
+    userID = key;
+
+    Object.keys(body[key]["events"]).forEach((dateKey) => {
+      uuid = "rfregreg";
+      Object.keys(body[key]["events"][dateKey]).forEach((eventID) => {
+        let event = body[key]["events"][dateKey][eventID];
+
+        color = event["color"];
+        date = event["date"];
+        description = event["description"];
+        end = date + " " + event["end"] + ":00";
+        start = date + " " + event["start"] + ":00";
+        title = event["title"];
+
+        if(matchID.length > 0){
+          //updatr event with matchID
+          calenderevent.UpdateCalenderEvent(
+            start,
+            end,
+            title,
+            description,
+            color,
+            date
+          );
+        }else{
+        //update event without matchID
+        calenderevent.UpdateCalenderEvent(
+          start,
+          end,
+          title,
+          description,
+          color,
+          date
+        );
+        }
+      });
+    });
+  });
+
+  res.send("Events updated");
 });
 
 app.delete("/api/calenderevent", async (req, res) => {
-  let userid = req.query.eventID;
-  const calenderEvents = await calenderevent.DeleteCalenderEvent(eventID);
+  let eventID = req.query.eventID;
+   await calenderevent.DeleteCalenderEvent(eventID);
   res.send("Event deleted");
 });
 
 //API Matching
 
 app.get("/api/userSearch", (req, res) => {
+  let username = req.query.username;
+
+  
+  
   res.send("user123");
-});
-
-app.post("/api/match", (req, res) => {
-  res.send("User added");
-});
-
-//Settings API
-app.put("/api/settings", (req, res) => {
-  res.send("Settings updated");
 });
 
 /*

@@ -43,8 +43,8 @@ class CalendarPersonRepository {
 
   async AddCalenderPerson(Id,username,password,firstname,lastname,entry){
 
-    connection.query("INSERT INTO `person`(`Username`, `Password`, `Firstname`, `Lastname`, `Entry`) VALUES (?, ?, ?, ?, ? )",
-    [Id,username,password,firstname,lastname,entry],
+    connection.query("INSERT INTO `person`(`Username`, `Email`, `Password`, `Firstname`, `Lastname`, `Entry`) VALUES (?, ?, ?, ?, ? )",
+    [Id,username,email,password,firstname,lastname,entry],
     function (err, results, fields) {
       console.log(err);
     }
@@ -62,19 +62,50 @@ class CalendarPersonRepository {
     );
 }
 
-
-
     async UpdateCalenderPerson(Id) {
-        connection.query("UPDATE `person` SET `ID`='[value-1]',`Username`='',`Password`='',`Firstname`='',`Lastname`='',`Entry`='' WHERE ID = ?",
+        connection.query("UPDATE `person` SET ,`Username`= ? ,`Password` = ?,`Firstname`= ? ,`Lastname` = ? ,`Entry` = ? WHERE ID = ?",
     
         [Id,username,password,firstname,lastname,entry],
         function (err, results, fields) {
        //   console.log(err);
         }
         );
-
-
  }
+ 
+ async getUsernameByUserId(Id) {
+  return await new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT Username FROM `person` WHERE ID = ?",
+      [Id],
+      function (err, results, fields) {
+        try {
+          resolve(results[0]["ID"]);
+        } catch {
+          logger.error("[CalendarPersonRepository->getUsernameByUserId()] " + err);
+          resolve("");
+        }
+      }
+    );
+  });
+ }
+
+ async getUserIdByUserName(username) {
+  return await new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT Id FROM `person` WHERE username = ?",
+      [username],
+      function (err, results, fields) {
+        try {
+          resolve(results[0]["ID"]);
+        } catch {
+          logger.error("[CalendarPersonRepository->getUserIdByUserName()] " + err);
+          resolve("");
+        }
+      }
+    );
+  });
+ }
+
 }
     
 
