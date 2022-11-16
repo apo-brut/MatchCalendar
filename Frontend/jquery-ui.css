@@ -929,7 +929,7 @@ works properly when clicked or hovered */
 html .ui-button.ui-state-disabled:hover,
 html .ui-button.ui-state-disabled:active {
 	border: 1px solid #d3d3d3;
-	background: rgb(54, 92, 175);
+	background: rgb(91, 135, 231);
 	font-weight: normal;
 	color: white;
 }
