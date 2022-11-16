@@ -132,7 +132,7 @@ export class Calendar {
         this.events = {};
         this.weekOffset = 0;
         this.readyToTrash = false;
-        this.slotHeight = 30;
+        this.slotHeight = 60;
         this.weekStart = null;
         this.weekEnd = null;
         this.eventsLoaded = false;
