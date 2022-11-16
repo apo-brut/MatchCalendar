@@ -79,6 +79,14 @@ class CalendarPersonRepository {
     }
   );
  }
+ async getUserIdByUserName(username) {
+  connection.query("SELECT Id FROM `person` WHERE username = ?",
+    [Id,username],
+    function(err, results, fields) {
+     // console.log(err);
+    }
+  );
+ }
 }
     
 
