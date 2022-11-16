@@ -28,8 +28,8 @@ var lstAllCalendarEntriesByUser = {
                     , 'prevDate': "2022-11-09"
                     , 'start': "13:00"
                     , 'title': "Wladi 2022-11-09"
-                }
-                , "6": {
+                },
+                "6": {
                     'color': "green"
                     , 'date': "2022-11-10"
                     , 'description': "oh boy Jolli\n"
@@ -37,6 +37,16 @@ var lstAllCalendarEntriesByUser = {
                     , 'id': "zwXPQTUx3PJCPx8h25xL"
                     , 'prevDate': "2022-11-09"
                     , 'start': "11:00"
+                    , 'title': "test"
+                },
+                "8": {
+                    'color': "green"
+                    , 'date': "2022-11-10"
+                    , 'description': "oh boy Jolli\n"
+                    , 'end': "19:00"
+                    , 'id': "zwXPQTUx3PJCPx8h25xO"
+                    , 'prevDate': "2022-11-09"
+                    , 'start': "18:00"
                     , 'title': "test"
                 }
             },
@@ -499,7 +509,7 @@ export class Calendar {
         currentWeekEnd.setHours(23, 59, 59, 999);
 
         var tempDate = new Date(currentWeekStart);
-        //get days without event and create event from 00:00 - 23:59
+        //get days without event and create event from 00:00 - 24:00
         for (let i = 0; i < 7; i++) {
             tempDate.setDate(currentWeekStart.getDate() + i);
             var year = tempDate.getFullYear();
@@ -509,23 +519,11 @@ export class Calendar {
             if (tempDate >= currentWeekStart && tempDate <= currentWeekEnd) {
                 var newId = generateId();
                 if (!currentEventsDates.find(x => x === year + '-' + month + '-' + day)) {
-
-
                     generateEvents[year + '-' + month + '-' + day] = {}
-                    generateEvents[year + '-' + month + '-' + day][newId] = {
-                        "color": "grey"
-                        , "date": year + '-' + month + '-' + day
-                        , "description": ""
-                        , "end": "23:59"
-                        , "id": newId
-                        , "prevDate": year + '-' + month + '-' + day //todo get prevDate
-                        , "start": "00:00"
-                        , "title": "Generated Event"
-                    }
-
+                    generateEvents[year + '-' + month + '-' + day][newId] = this.CreateEvent("grey", year + '-' + month + '-' + day, "", "24:00", newId, "00:00", "Generated Event");
                 } else {
                     var currentEventsForDate = [];
-                    //console.log(lstAllCalendarEntriesByUser);
+
                     // get time between events on day with events
                     //first get events for current date in loop
                     Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
@@ -551,13 +549,21 @@ export class Calendar {
                         });
                     });
 
+                    var start1 = currentEventsForDate.find(x=> x.start === "00:00");
+                    var end1 = currentEventsForDate.find(x=> x.end === "24:00");
+                    //if (currentEventsForDate.find(x=> x.start === "00:00") !== undefined && currentEventsForDate.find(x=> x.end === "24:00") !== undefined ){
+                    if (start1 !== undefined && end1 !== undefined ){
+                        //window.alert("");
+                        //
+                        continue;
+                    }
+
                     if (currentEventsForDate.length > 1) {
                         var prevEvent = {};
 
                         //sort current Array by starting time
                         //todo sortierung stimmt noch nicht es wird nur nach start sortiert, aber was wenn start gleich aber eins ende später
-                        var currentEventsForDate = currentEventsForDate.sort((a, b) => (a.start.localeCompare(b.start) && a.start.localeCompare(b.end))); // hier stimmt die sortiernung noch nicht
-
+                        var currentEventsForDate = currentEventsForDate.sort((a, b) => (a.start.localeCompare(b.start) && a.end.localeCompare(b.end))); // hier stimmt die sortiernung noch nicht
 
                         //TODO überschneidungen
                         var minusForPrevEvent = 1;
@@ -571,16 +577,7 @@ export class Calendar {
                             if (generateEvents[date] === undefined) generateEvents[date] = {} 
 
                             if (i === 0) {
-                                generateEvents[date][newId] = {
-                                    "color": "grey"
-                                    , "date": date
-                                    , "description": ""
-                                    , "end": start
-                                    , "id": newId
-                                    , "prevDate": date //todo get prevDate
-                                    , "start": "00:00"
-                                    , "title": "Generated Event"
-                                }
+                                generateEvents[date][newId] = this.CreateEvent("grey", date, "", start, newId, "00:00", "Generated Event");
                             } else {
                                 newId = generateId();
                                 prevEvent = currentEventsForDate[i - minusForPrevEvent];
@@ -592,40 +589,13 @@ export class Calendar {
                                 //überschneidung
                                 if (event.start >= prevEvent.start && event.end <= prevEvent.end) {
                                     secondIsTimedWithinFirstEvent = true;
-                                    generateEvents[date][newId] = {
-                                        "color": "grey"
-                                        , "date": date
-                                        , "description": ""
-                                        , "end": "23:59"
-                                        , "id": newId
-                                        , "prevDate": date //todo get prevDate
-                                        , "start": prevEvent.end
-                                        , "title": "Generated Event"
-                                    }
+                                    generateEvents[date][newId] = this.CreateEvent("grey", date, "", "24:00", newId, prevEvent.end, "Generated Event");
                                 } else if (event.start >= prevEvent.start && event.start <= prevEvent.end && event.end > prevEvent.end) {
-                                    generateEvents[date][newId] = {
-                                        "color": "grey"
-                                        , "date": date
-                                        , "description": ""
-                                        , "end": "23:59"
-                                        , "id": newId
-                                        , "prevDate": date //todo get prevDate
-                                        , "start": end
-                                        , "title": "Generated Event"
-                                    }
+                                    generateEvents[date][newId] = this.CreateEvent("grey", date, "", "24:00", newId, end, "Generated Event");
                                 }
                                 else {
                                     secondIsTimedWithinFirstEvent = false
-                                    generateEvents[date][newId] = {
-                                        "color": "grey"
-                                        , "date": date
-                                        , "description": ""
-                                        , "end": start
-                                        , "id": newId
-                                        , "prevDate": date //todo get prevDate
-                                        , "start": prevEvent.end
-                                        , "title": "Generated Event"
-                                    }
+                                    generateEvents[date][newId] = this.CreateEvent("grey", date, "", start, newId, prevEvent.end, "Generated Event");
                                 }
                             }
 
@@ -633,27 +603,9 @@ export class Calendar {
                                 newId = generateId();
 
                                 if (secondIsTimedWithinFirstEvent) {
-                                    generateEvents[date][newId] = {
-                                        "color": "grey"
-                                        , "date": date
-                                        , "description": ""
-                                        , "end": "23:59"
-                                        , "id": newId
-                                        , "prevDate": date //todo get prevDate
-                                        , "start": prevEvent.end
-                                        , "title": "Generated Event"
-                                    }
+                                    generateEvents[date][newId] = this.CreateEvent("grey", date, "", "24:00", newId, prevEvent.end, "Generated Event");
                                 } else {
-                                    generateEvents[date][newId] = {
-                                        "color": "grey"
-                                        , "date": date
-                                        , "description": ""
-                                        , "end": "23:59"
-                                        , "id": newId
-                                        , "prevDate": date //todo get prevDate
-                                        , "start": end
-                                        , "title": "Generated Event"
-                                    }
+                                    generateEvents[date][newId] = this.CreateEvent("grey", date, "", "24:00", newId, end, "Generated Event");
                                 }
                             }
 
@@ -665,49 +617,53 @@ export class Calendar {
                         var date = event.date;
 
                         generateEvents[date] = {}
-                        generateEvents[date][newId] = {
-                            "color": "grey"
-                            , "date": date
-                            , "description": ""
-                            , "end": start
-                            , "id": newId
-                            , "prevDate": date //todo get prevDate
-                            , "start": "00:00"
-                            , "title": "Generated Event"
-                        }
+                        generateEvents[date][newId] = this.CreateEvent("grey", date, "", start, newId, "00:00", "Generated Event");
 
                         newId = generateId();
-                        generateEvents[date][newId] = {
-                            "color": "grey"
-                            , "date": date
-                            , "description": ""
-                            , "end": "23:59"
-                            , "id": newId
-                            , "prevDate": date //todo get prevDate
-                            , "start": end
-                            , "title": "Generated Event"
-                        }
+                        generateEvents[date][newId] = this.CreateEvent("grey", date, "", "24:00", newId, end, "Generated Event");
                     }
                 }
             }
         }
 
-        Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
-            Object.keys(generateEvents).forEach(date => {
-                if (lstAllCalendarEntriesByUser[key]["events"][date] === undefined) {
-                    lstAllCalendarEntriesByUser[key]["events"][date] = {};
-                    lstAllCalendarEntriesByUser[key]["events"][date] = generateEvents[date];
-                }
-                else {
-                    Object.keys(generateEvents[date]).forEach(eventId => {
-                        lstAllCalendarEntriesByUser[key]["events"][date][eventId] = {};
-                        lstAllCalendarEntriesByUser[key]["events"][date][eventId] = generateEvents[date][eventId];
-                    });
-                }
+        if (Object.keys(generateEvents).length > 0){
+            Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
+                Object.keys(generateEvents).forEach(date => {
+                    if (lstAllCalendarEntriesByUser[key]["events"][date] === undefined) {
+                        lstAllCalendarEntriesByUser[key]["events"][date] = {};
+                        lstAllCalendarEntriesByUser[key]["events"][date] = generateEvents[date];
+                    }
+                    else {
+                        Object.keys(generateEvents[date]).forEach(eventId => {
+                            lstAllCalendarEntriesByUser[key]["events"][date][eventId] = {};
+                            lstAllCalendarEntriesByUser[key]["events"][date][eventId] = generateEvents[date][eventId];
+                        });
+                    }
+                });
             });
-        });
+            window.alert("Termine wurden angelegt.");
+        }else{
+            window.alert("Es wurden keine Termine angelegt, da es keinen freien Zeitraum gab.");
+        }
+        
         this.eventsLoaded = false;
         this.loadEvents();
+    }
+
+    CreateEvent = function (color, date, description, end, id, start, title){
+        var generateEvent = {};
+        generateEvent[date] = {};
+
+        return generateEvent[date][id] = {
+            "color": color
+            , "date": date
+            , "description": description
+            , "end": end
+            , "id": id
+            , "prevDate": date //todo get prevDate
+            , "start": start
+            , "title": title
+        }
     }
 }
 
