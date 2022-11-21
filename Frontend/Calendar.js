@@ -6,6 +6,7 @@ var lstAllCalendarEntriesByUser = {};
 var currentUserId = "1" // TODO getuserID
 var token = "";
 var identifier = ""
+var isLogIn = false;
 
 /* var lstAllCalendarEntriesByUser = {
     '1': {
@@ -144,20 +145,23 @@ export class Calendar {
         this.currentUserId = newUserId;
         this.token = newToken;
         this.identifier = newIdentfier;
+        this.isLogIn = true;
+        this.GetEvents();
+    }
 
+    GetEvents = function () {
         var tempThis = this;
-
         $.ajax({
             type: "GET",
             url: "https://h2970110.stratoserver.net:3000/api/" + this.token + "/" + this.identifier + "/calenderevent?userid=" + this.currentUserId,
-            data: "", 
+            data: "",
             contentType: "application/json",
             dataType: "json",
             success: function (response) {
 
                 if (response[tempThis.currentUserId] !== undefined) {
                     lstAllCalendarEntriesByUser[tempThis.currentUserId] = response[tempThis.currentUserId];
-                }else{
+                } else {
                     lstAllCalendarEntriesByUser[tempThis.currentUserId] = {
                         'userName': undefined
                         , 'events': {}
@@ -165,16 +169,23 @@ export class Calendar {
                 }
 
                 tempThis.token = response.newToken;
-                tempThis.setup();
+                if (tempThis.isLogIn){
+                    tempThis.setup();
+                }
+                else{
+                    tempThis.eventsLoaded = false;
+                    tempThis.loadEvents();
+                }
             },
             error: function (response, status) {
-              console.log(response);
-              window.alert("Getting Event failed: " + response.response);
+                console.log(response);
+                window.alert("Getting Event failed: " + response.response);
             }
-        }); 
+        });
     }
 
     setup = function () {
+        this.isLogIn = false;
         this.setupTimes();
         this.setupDays();
         this.calculateCurrentWeek();
@@ -440,7 +451,7 @@ export class Calendar {
                         var date = this.GetFormatedDate(innerKey, false);
                         var prevDate = this.GetFormatedDate(innerKey, true);
 
-                        if (date !== innerKey){
+                        if (date !== innerKey) {
                             lstAllCalendarEntriesByUser[key]["events"][date] = lstAllCalendarEntriesByUser[key]["events"][innerKey];
                             delete lstAllCalendarEntriesByUser[key]["events"][innerKey];
                         }
@@ -708,7 +719,7 @@ export class Calendar {
         }
 
         if (Object.keys(generateEvents).length > 0) {
-            this.InsertEventsIntoMainObjectLstAllCalendarEntries(undefined, generateEvents);
+            this.PostEventToServer(undefined, generateEvents);
             window.alert("Termine wurden angelegt.");
         } else {
             window.alert("Es wurden keine Termine angelegt, da es keinen freien Zeitraum gab.");
@@ -737,72 +748,110 @@ export class Calendar {
         }
     }
 
-    InsertEventsIntoMainObjectLstAllCalendarEntries = function (userId, generateEvents) {
+    PostEventToServer = function (userId, generateEvents) {
         if (userId === undefined) {
             Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
-                this.InsertEventsIntoMainObjectLstAllCalendarEntriesByUser(key, generateEvents);
+                this.PostEventToServerByUserId(key, generateEvents);
             });
         }
         else {
-            this.InsertEventsIntoMainObjectLstAllCalendarEntriesByUser(userId, generateEvents); // TODO:  1 = userId
+            this.PostEventToServerByUserId(userId, generateEvents);
         }
 
         this.loadEvents();
     }
 
-    InsertEventsIntoMainObjectLstAllCalendarEntriesByUser = function (key, generateEvents) {
+    PostEventToServerByUserId = function (key, generateEvents) {
         Object.keys(generateEvents).forEach(date => {
             Object.keys(generateEvents[date]).forEach(id => {
-                var test = lstAllCalendarEntriesByUser[key];
-                if (lstAllCalendarEntriesByUser[key]["events"] === {} || lstAllCalendarEntriesByUser[key]["events"][date] === undefined) {
-                    lstAllCalendarEntriesByUser[key]["events"][date] = {};
-                    lstAllCalendarEntriesByUser[key]["events"][date] = generateEvents[date];
-                    var req = {};
-                    req[key] = {
-                        "userName": ""
-                        , "events": {}
-                    };
-                    req[key]["events"][date] = {
-                        "zwXPQTUx3PJCPx8h24xC": {
-                            "color": generateEvents[date][id].color
-                            , "date": date
-                            , "description": generateEvents[date][id].description
-                            , "end": generateEvents[date][id].end
-                            , "id": id
-                            , "prevDate": generateEvents[date][id].prevDate
-                            , "start": generateEvents[date][id].start
-                            , "title": generateEvents[date][id].title
-                        }
-                    };
+                var req = {};
+                req[key] = {
+                    "userName": ""
+                    , "events": {}
+                };
+                req[key]["events"][date] = {
+                    "zwXPQTUx3PJCPx8h24xC": {
+                        "color": generateEvents[date][id].color
+                        , "date": date
+                        , "description": generateEvents[date][id].description
+                        , "end": generateEvents[date][id].end
+                        , "id": id
+                        , "prevDate": generateEvents[date][id].prevDate
+                        , "start": generateEvents[date][id].start
+                        , "title": generateEvents[date][id].title
+                    }
+                };
 
-                    var jsonReq = JSON.stringify(req);
+                var jsonReq = JSON.stringify(req);
 
-                    var tempThis = this;
-                    $.ajax({
-                        type: "POST",
-                        url: "https://h2970110.stratoserver.net:3000/api/" + this.token + "/" + this.identifier + "/calenderevent",
-                        data: jsonReq, 
-                        contentType: "application/json",
-                        dataType: "json",
-                        success: function (response) {
-                            tempThis.token = response.newToken;
-                        },
-                        error: function (response, status) {
-                          console.log(response);
-                          window.alert("Creating Event failed: " + response.response);
-                        }
-                    }); 
-                }
-                else {
-                    lstAllCalendarEntriesByUser[key]["events"][date][id] = {};
-                    lstAllCalendarEntriesByUser[key]["events"][date][id] = generateEvents[date][id];
-                }
+                var tempThis = this;
+                $.ajax({
+                    type: "POST",
+                    url: "https://h2970110.stratoserver.net:3000/api/" + this.token + "/" + this.identifier + "/calenderevent",
+                    data: jsonReq,
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (response) {
+                        tempThis.token = response.newToken;
+                        tempThis.GetEvents();
+                    },
+                    error: function (response, status) {
+                        console.log(response);
+                        window.alert("Creating Event failed: " + response.response);
+                        tempThis.GetEvents();
+                    }
+                });
             });
         });
     }
 
-    DeleteEventFromLstAllCalendarEntriesByUser = function (userId, date, id) {
-        delete lstAllCalendarEntriesByUser[userId]["events"][date][id];
+    DeleteEvent = function (userId, date, id) {
+        //delete lstAllCalendarEntriesByUser[userId]["events"][date][id];
+        var tempThis = this;
+        var eventToDelete = lstAllCalendarEntriesByUser[userId]["events"][date][id]
+
+        var req = {};
+        req[userId] = {
+            "userName": ""
+            , "events": {}
+        };
+        req[userId]["events"][date] = {};
+        req[userId]["events"][date][id] = {};
+        req[userId]["events"][date][id] = {
+            "color": eventToDelete.color
+            , "date": date
+            , "description": eventToDelete.description
+            , "end": eventToDelete.end
+            , "id": id
+            , "prevDate": eventToDelete.prevDate
+            , "start": eventToDelete.start
+            , "title": eventToDelete.title
+
+        };
+
+        var jsonReq = JSON.stringify(req);
+
+        $.ajax({
+            type: "DELETE",
+            url: "https://h2970110.stratoserver.net:3000/api/" + this.token + "/" + this.identifier + "/calenderevent?eventID=" + userId,
+            data: jsonReq,
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+                if(response.status === "false"){
+                    window.alert("Deleting Event failed: " + response.response);
+                }else{
+                    tempThis.token = response.newToken;
+                }
+
+                tempThis.GetEvents();
+            },
+            error: function (response, status) {
+                console.log(response);
+                window.alert("Deleting Event failed: " + response.response);
+                tempThis.GetEvents();
+            }
+        });
     }
 
     GetFormatedDate = function (date, prev) {
