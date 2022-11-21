@@ -7,6 +7,7 @@ export const MODE = {
 };
 
 export class Event {
+    
     constructor(data) {
         this.id = data.id || generateId();
         this.title = data.title;
@@ -74,7 +75,7 @@ export class Event {
             , 'matchID': "0"
         }
 
-        calendar.InsertEventsIntoMainObjectLstAllCalendarEntries(calendar.currentUserId, createdEvent);
+        calendar.PostEventToServer(calendar.currentUserId, createdEvent);
     }
 
     showIn(calendar) {
@@ -145,7 +146,7 @@ export class Event {
             , 'matchID': "0"
         }
 
-        calendar.InsertEventsIntoMainObjectLstAllCalendarEntries(calendar.currentUserId, createdEvent);
+        calendar.PostEventToServer(calendar.currentUserId, createdEvent);
     }
 
     copyIn(calendar) {
@@ -165,13 +166,7 @@ export class Event {
 
     deleteIn(calendar) {
         calendar.closeModal();
-        $(`#${this.id}`).remove();
-        calendar.DeleteEventFromLstAllCalendarEntriesByUser(calendar.currentUserId, this.date, this.id);
-        delete calendar.events[this.date][this.id];
-        if (Object.values(calendar.events[this.date]).length == 0) {
-            delete calendar.events[this.date];
-        }
-        calendar.saveEvents();
+        calendar.DeleteEvent(calendar.currentUserId, this.date, this.id);
     }
 
     isValidIn(calendar) {
