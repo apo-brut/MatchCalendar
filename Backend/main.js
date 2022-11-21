@@ -432,7 +432,13 @@ app.put("/api/:token/:identifier/calenderevent", async (req, res) => {
 
 app.delete("/api/:token/:identifier/calenderevent", async (req, res) => {
   let eventID = req.query.eventID;
-   await calenderevent.DeleteCalenderEvent(eventID);
+
+  if(eventID == undefined || eventID == ""){
+    res.send({newToken: newToken,response: "Error"});
+    return false;
+  }
+
+  await calenderevent.DeleteCalenderEvent(eventID);
   res.send({newToken: newToken,response: "Event deleted"});
 });
 
