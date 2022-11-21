@@ -78,8 +78,7 @@ class CalenderEventRepository {
  }
 
 async DeleteCalenderEvent(Id) {
-  connection.query("DELETE * FROM `save` WHERE Id = ?",
-
+  connection.query("DELETE FROM `save` WHERE `ID` = ?",
     [Id],
     function (err, results, fields) {
    //   console.log(err);
