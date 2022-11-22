@@ -7,6 +7,7 @@ var nconf = require("nconf");
 var cors = require("cors");
 const Utils = require("./utils.js");
 const app = express();
+const moment = require("moment");
 const port = 3000;
 
 // Node logger
@@ -327,16 +328,7 @@ app.get("/api/:token/:identifier/calenderevent", async (req, res) => {
 
   calenderEvents.forEach((event) => {
 
-    function join(t, a, s) {
-      function format(m) {
-         let f = new Intl.DateTimeFormat('en', m);
-         return f.format(t);
-      }
-      return a.map(format).join(s);
-   }
-   
-   let a = [{year: 'numeric'}, {month: 'numeric'}, {day: 'numeric'}];
-   let date = join(Date.parse(event["Date"]), a, '-');
+    let date = moment(Date.parse(event["Date"])).format('YYYY-MM-DD');
 
     if(! response.hasOwnProperty(userid)){
       response[userid] = {
@@ -352,14 +344,18 @@ app.get("/api/:token/:identifier/calenderevent", async (req, res) => {
       response[userid]["events"][date] = {};
     }
 
+    let Start = moment(Date.parse(event["Start"])).format();
+    let End = moment(Date.parse(event["End"])).format();
+
+    logger.log(`Event Start: ${Start}`);
 
     response[userid]["events"][date][event["ID"]] = {
       color: event["Color"],
       date: date,
       description: event["Description"],
-      end: event["End"],
+      end: End,
       id: event["ID"],
-      start: event["Start"],
+      start: Start,
       title: event["Title"],
     };
   });
