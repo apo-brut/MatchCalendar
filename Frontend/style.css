@@ -69,6 +69,11 @@ textarea {
     background: #fff; 
   /*box-shadow: 0 1px 6px 0 rgb(32 33 36 / 28%);*/
     z-index: 999999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
 }
 
 .header h1 {
@@ -232,7 +237,7 @@ textarea {
     position: absolute;
     z-index: 10;
     padding: 20px;
-    width: 450px;
+    max-width: 450px;
     min-width: 250px;
     z-index: 999999999;
     height: 90%;
@@ -288,6 +293,7 @@ textarea {
 
 #eventControls {
     margin: 25px 0px 10px 0px;
+    display: contents;
 }
 
 .button {
@@ -377,7 +383,7 @@ textarea {
     border-radius: 10px;
     margin: auto;
     padding: 20px;
-    width: 450px;
+    max-width: 450px;
     z-index: 10;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
     -webkit-animation-name: animatetop;
@@ -619,19 +625,39 @@ span.ui-icon.ui-icon-circle-triangle-e{
     background-image: none;
 }
 
-@media screen and (min-width: 400px) {
-    #hamburger {
-      display: none;
-    }
+@media screen and (min-width: 500px) {
     #calenderHide {
         display: block;
     }
   }
-  @media screen and (max-width: 400px) {
-    #hamburger {
-      display: block;
-    }
+  @media screen and (max-width: 500px) {
     #calenderHide {
         display: none;
+    }
+    .removeOnMobile{
+        display: none;
+    }
+    #eventModal{
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        transform: none;
+        border-radius: 0;
+        max-width: unset;
+    }
+    .calendar-container{
+        top: 112px !important;
+    }
+    #currentWeek{
+        position: fixed;
+        top: 61px;
+        left: 0;
+        right: 0;
+        max-width: 250px;
+        margin: 0 auto;
     }
   }
