@@ -124,3 +124,10 @@ RegistierenBtn.onclick = function () {
 }
 //js für form
     document.getElementById("myModal").style.display = "block";
+
+
+    //Sidebar
+    $(".weekControls").click(function() {
+        $("#calenderHide").toggle();
+    });
+    
