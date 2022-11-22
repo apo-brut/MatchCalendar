@@ -40,7 +40,6 @@
 						"stratoserver",
 						"net"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"{{auth_token}}",
@@ -96,7 +95,6 @@
 						"stratoserver",
 						"net"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"signup"
@@ -145,7 +143,6 @@
 						"stratoserver",
 						"net"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"login"
@@ -189,7 +186,6 @@
 						"stratoserver",
 						"net"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"{{auth_token}}",
@@ -225,7 +221,6 @@
 						"stratoserver",
 						"net"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"{{auth_token}}",
@@ -276,7 +271,6 @@
 						"stratoserver",
 						"net"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"{{auth_token}}",
@@ -318,7 +312,6 @@
 						"stratoserver",
 						"net"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"{{auth_token}}",
