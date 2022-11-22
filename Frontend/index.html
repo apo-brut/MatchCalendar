@@ -15,7 +15,8 @@
         <header class="header">
             <h1 class="weekControls"><span>Match</span>Calendar</h1>
             
-            <div >
+            <div class="removeOnMobile">
+                
                 <i id="prevWeekBtn" class="fas fa-angle-double-left"></i>
                 <span id="weekDisplay">
                     <span id="weekStartDisplay"></span>
@@ -32,12 +33,11 @@
                 <i id="addButton" class="fas fa-plus"></i>
                 <!-- <i id="trashButton" class="fas fa-trash-alt"></i> -->
                 <i id="addUserButton" class="fas fa-user"></i>
-                <i class="fa fa- fa-hamburger" id="hamburger"></i>
                 
             </div>
 
         </header>
-        <div style="display: flex; position: absolute; top: 61px;right: 0;bottom: 0;left: 0;">
+        <div class="calendar-container" style="display: flex; position: absolute; top: 61px;right: 0;bottom: 0;left: 0;">
         <div style="width: 289px; padding: 10px; background: #fff; padding-bottom: 20px;" id="calenderHide">
                 <div style="height: 100%;">
                     <div style="height: 50%; border-left: none; ">
