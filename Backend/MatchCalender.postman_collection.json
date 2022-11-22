@@ -33,14 +33,13 @@
 					}
 				},
 				"url": {
-					"raw": "https://h2970110.stratoserver.net:3000/api/{{auth_token}}/{{identifier}}/calenderevent",
+					"raw": "https://h2970110.stratoserver.net/api/{{auth_token}}/{{identifier}}/calenderevent",
 					"protocol": "https",
 					"host": [
 						"h2970110",
 						"stratoserver",
 						"net"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"{{auth_token}}",
@@ -89,14 +88,13 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "https://h2970110.stratoserver.net:3000/api/signup?email=a@a.de&password=Qwertz1!&username=mb",
+					"raw": "https://h2970110.stratoserver.net/api/signup?email=a@a.de&password=Qwertz1!&username=mb",
 					"protocol": "https",
 					"host": [
 						"h2970110",
 						"stratoserver",
 						"net"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"signup"
@@ -138,14 +136,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://h2970110.stratoserver.net:3000/api/login?email=a@a.de&password=Qwertz1!",
+					"raw": "https://h2970110.stratoserver.net/api/login?email=a@a.de&password=Qwertz1!",
 					"protocol": "https",
 					"host": [
 						"h2970110",
 						"stratoserver",
 						"net"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"login"
@@ -182,14 +179,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://h2970110.stratoserver.net:3000/api/{{auth_token}}/{{identifier}}/test",
+					"raw": "https://h2970110.stratoserver.net/api/{{auth_token}}/{{identifier}}/test",
 					"protocol": "https",
 					"host": [
 						"h2970110",
 						"stratoserver",
 						"net"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"{{auth_token}}",
@@ -218,14 +214,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://h2970110.stratoserver.net:3000/api/{{auth_token}}/{{identifier}}/calenderevent?userid=1",
+					"raw": "https://h2970110.stratoserver.net/api/{{auth_token}}/{{identifier}}/calenderevent?userid=1",
 					"protocol": "https",
 					"host": [
 						"h2970110",
 						"stratoserver",
 						"net"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"{{auth_token}}",
@@ -269,14 +264,13 @@
 					}
 				},
 				"url": {
-					"raw": "https://h2970110.stratoserver.net:3000/api/{{auth_token}}/{{identifier}}/calenderevent?userid=1",
+					"raw": "https://h2970110.stratoserver.net/api/{{auth_token}}/{{identifier}}/calenderevent?userid=1",
 					"protocol": "https",
 					"host": [
 						"h2970110",
 						"stratoserver",
 						"net"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"{{auth_token}}",
@@ -311,14 +305,13 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "https://h2970110.stratoserver.net:3000/api/{{auth_token}}/{{identifier}}/calenderevent?eventID=1",
+					"raw": "https://h2970110.stratoserver.net/api/{{auth_token}}/{{identifier}}/calenderevent?eventID=1",
 					"protocol": "https",
 					"host": [
 						"h2970110",
 						"stratoserver",
 						"net"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"{{auth_token}}",
