@@ -153,7 +153,7 @@ export class Calendar {
         var tempThis = this;
         $.ajax({
             type: "GET",
-            url: "https://h2970110.stratoserver.net:3000/api/" + this.token + "/" + this.identifier + "/calenderevent?userid=" + this.currentUserId,
+            url: "https://h2970110.stratoserver.net/api/" + this.token + "/" + this.identifier + "/calenderevent?userid=" + this.currentUserId,
             data: "",
             contentType: "application/json",
             dataType: "json",
@@ -787,7 +787,7 @@ export class Calendar {
                 var tempThis = this;
                 $.ajax({
                     type: "POST",
-                    url: "https://h2970110.stratoserver.net:3000/api/" + this.token + "/" + this.identifier + "/calenderevent",
+                    url: "https://h2970110.stratoserver.net/api/" + this.token + "/" + this.identifier + "/calenderevent",
                     data: jsonReq,
                     contentType: "application/json",
                     dataType: "json",
@@ -833,7 +833,7 @@ export class Calendar {
 
         $.ajax({
             type: "DELETE",
-            url: "https://h2970110.stratoserver.net:3000/api/" + this.token + "/" + this.identifier + "/calenderevent?eventID=" + userId,
+            url: "https://h2970110.stratoserver.net/api/" + this.token + "/" + this.identifier + "/calenderevent?eventID=" + userId,
             data: jsonReq,
             contentType: "application/json",
             dataType: "json",

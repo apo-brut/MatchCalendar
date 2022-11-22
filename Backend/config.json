@@ -3,7 +3,8 @@
         "enviroment": "LOCAL",
         "version":"1.0",
         "author":"",
-        "documentation":"./documentation/"
+        "documentation":"./documentation/",
+        "port": 3000
     },
     "sqlLOCAL": {
         "user":"root",
