@@ -8,7 +8,7 @@ var cors = require("cors");
 const Utils = require("./utils.js");
 const app = express();
 const moment = require("moment");
-const port = 3000;
+let port = 3000;
 
 // Node logger
 const logger = new Logger();
@@ -31,6 +31,10 @@ nconf.argv().env();
 nconf.file({
   file: "config.json",
 });
+
+//Get port from config
+port = nconf.get("matchCalender:port")
+
 
 //Helmet security
 app.use(helmet());
@@ -346,8 +350,6 @@ app.get("/api/:token/:identifier/calenderevent", async (req, res) => {
 
     let Start = moment(Date.parse(event["Start"])).format();
     let End = moment(Date.parse(event["End"])).format();
-
-    logger.log(`Event Start: ${Start}`);
 
     response[userid]["events"][date][event["ID"]] = {
       color: event["Color"],
