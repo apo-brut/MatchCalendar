@@ -344,8 +344,8 @@ app.get("/api/:token/:identifier/calenderevent", async (req, res) => {
       response[userid]["events"][date] = {};
     }
 
-    let Start = moment(Date.parse(event["Start"])).format('YYYY-MM-DD H:mm:ss');
-    let End = moment(Date.parse(event["End"])).format('YYYY-MM-DD H:mm:ss');
+    let Start = moment(Date.parse(event["Start"])).format();
+    let End = moment(Date.parse(event["End"])).format();
 
     logger.log(`Event Start: ${Start}`);
 
