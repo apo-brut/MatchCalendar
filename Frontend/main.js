@@ -123,9 +123,4 @@ RegistierenBtn.onclick = function () {
     });
 }
 //js für form
-
-var abfrage = window.confirm("Schön das du da bist! Um diese Anwendung benuzen zu können musst du dich regestrieren in dem du auf (OK) klickst. Wenn du bereits einen Account bei uns hast, kannst du dich ganz einfach anmelden");
-
-if (abfrage == true) {
     document.getElementById("myModal").style.display = "block";
-}
