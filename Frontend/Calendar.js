@@ -291,6 +291,7 @@ export class Calendar {
     moveToCurrentDay() {
         this.calculateCurrentWeek();
         this.showWeek();
+        this.loadEvents();
     }
 
     showCurrentDay() {
@@ -375,7 +376,11 @@ export class Calendar {
 
     submitModal(event) {
         if (event.isValidIn(this)) {
-            event.updateIn(this);
+            if (this.mode === MODE.UPDATE) {
+                event.updateIn(this);
+            } else {
+                event.saveIn(this);
+            }
             this.closeModal();
         }
     }
@@ -635,6 +640,7 @@ export class Calendar {
                             if (generateEvents[date] === undefined) generateEvents[date] = {}
 
                             if (i === 0) {
+                                newId = generateId();
                                 generateEvents[date][newId] = this.CreateEvent("grey", date, "", start, newId, "00:00", "Generated Event", 1);
                             } else {
                                 newId = generateId();
@@ -713,14 +719,83 @@ export class Calendar {
         }
     }
 
+    /*     PostEventToServer = function (userId, generateEvents) {
+            if (userId === undefined) {
+                Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
+                    this.PostEventToServerByUserId(key, generateEvents);
+                });
+            }
+            else {
+                this.PostEventToServerByUserId(userId, generateEvents);
+            }
+    
+            this.loadEvents();
+        } */
+
     PostEventToServer = function (userId, generateEvents) {
-        if (userId === undefined) {
+        /* if (userId === undefined) {
             Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
                 this.PostEventToServerByUserId(key, generateEvents);
             });
         }
         else {
             this.PostEventToServerByUserId(userId, generateEvents);
+        }
+
+        this.loadEvents(); */
+
+        var req = {};
+        if (userId === undefined) {
+            Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
+                req[key] = {
+                    "userName": ""
+                    , "events": {}
+                };
+                Object.keys(generateEvents).forEach(date => {
+                    Object.keys(generateEvents[date]).forEach(id => {
+
+                        req[key]["events"][date] = {};
+                        req[key]["events"][date][id] = {};
+
+                        req[key]["events"][date][id] = {
+                            "color": generateEvents[date][id].color
+                            , "date": date
+                            , "description": generateEvents[date][id].description
+                            , "end": generateEvents[date][id].end
+                            , "id": id
+                            , "prevDate": generateEvents[date][id].prevDate
+                            , "start": generateEvents[date][id].start
+                            , "title": generateEvents[date][id].title
+                        };
+                    });
+                });
+            });
+            this.PostEventToServerByUserId(req);
+        } else {
+            req[userId] = {
+                "userName": ""
+                , "events": {}
+            };
+            Object.keys(generateEvents).forEach(date => {
+                Object.keys(generateEvents[date]).forEach(id => {
+
+                    req[userId]["events"][date] = {
+                        "zwXPQTUx3PJCPx8h24xC": {
+                            "color": generateEvents[date][id].color
+                            , "date": date
+                            , "description": generateEvents[date][id].description
+                            , "end": generateEvents[date][id].end
+                            , "id": id
+                            , "prevDate": generateEvents[date][id].prevDate
+                            , "start": generateEvents[date][id].start
+                            , "title": generateEvents[date][id].title
+                        }
+                    };
+
+                });
+            });
+
+            this.PostEventToServerByUserId(req);
         }
 
         this.loadEvents();
@@ -738,48 +813,50 @@ export class Calendar {
     }
 
     //#region API Requests
-    PostEventToServerByUserId = function (key, generateEvents) {
-        Object.keys(generateEvents).forEach(date => {
-            Object.keys(generateEvents[date]).forEach(id => {
-                var req = {};
-                req[key] = {
-                    "userName": ""
-                    , "events": {}
-                };
-                req[key]["events"][date] = {
-                    "zwXPQTUx3PJCPx8h24xC": {
-                        "color": generateEvents[date][id].color
-                        , "date": date
-                        , "description": generateEvents[date][id].description
-                        , "end": generateEvents[date][id].end
-                        , "id": id
-                        , "prevDate": generateEvents[date][id].prevDate
-                        , "start": generateEvents[date][id].start
-                        , "title": generateEvents[date][id].title
-                    }
-                };
+    PostEventToServerByUserId = function (/* key, generateEvents,  */req) {
+        /*         Object.keys(generateEvents).forEach(date => {
+                    Object.keys(generateEvents[date]).forEach(id => {
+                        var req = {};
+                        req[key] = {
+                            "userName": ""
+                            , "events": {}
+                        };
+                        req[key]["events"][date] = {
+                            "zwXPQTUx3PJCPx8h24xC": {
+                                "color": generateEvents[date][id].color
+                                , "date": date
+                                , "description": generateEvents[date][id].description
+                                , "end": generateEvents[date][id].end
+                                , "id": id
+                                , "prevDate": generateEvents[date][id].prevDate
+                                , "start": generateEvents[date][id].start
+                                , "title": generateEvents[date][id].title
+                            }
+                        }; */
 
-                var jsonReq = JSON.stringify(req);
+        var jsonReq = JSON.stringify(req);
 
-                var tempThis = this;
-                $.ajax({
-                    type: "POST",
-                    url: "https://h2970110.stratoserver.net/api/" + this.token + "/" + this.identifier + "/calenderevent",
-                    data: jsonReq,
-                    contentType: "application/json",
-                    dataType: "json",
-                    success: function (response) {
-                        tempThis.token = response.newToken;
-                        tempThis.GetEvents();
-                    },
-                    error: function (response, status) {
-                        console.log(response);
-                        window.alert("Creating Event failed: " + response.response);
-                        tempThis.GetEvents();
-                    }
-                });
-            });
+        jsonReq = '{"1": {"userName": "","events": {"2022-11-24": {"zwXPQTUx3PJCPx8h24xC": {"color": "red","date": "2022-11-24","description": "","end": "06: 00","id": "HdFKi1QcrUm8Xn2JJj3k","prevDate": "2022-11-23","start": "05: 00","title": "test"}},"2022-11-25": {"zwXPQTUx3PJCPx8h24xC": {"color": "red","date": "2022-11-25","description": "","end": "06: 00","id": "HdFKi1QcrUm8Xn2JJj3k","prevDate": "2022-11-24","start": "05: 00","title": "test"}}}}}'
+
+        var tempThis = this;
+        $.ajax({
+            type: "POST",
+            url: "https://h2970110.stratoserver.net/api/" + this.token + "/" + this.identifier + "/calenderevent",
+            data: jsonReq,
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+                tempThis.token = response.newToken;
+                tempThis.GetEvents();
+            },
+            error: function (response, status) {
+                console.log(response);
+                window.alert("Creating Event failed: " + response.response);
+                tempThis.GetEvents();
+            }
         });
+        /*             });
+                }); */
     }
 
     GetEvents = function () {
