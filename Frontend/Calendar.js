@@ -149,41 +149,6 @@ export class Calendar {
         this.GetEvents();
     }
 
-    GetEvents = function () {
-        var tempThis = this;
-        $.ajax({
-            type: "GET",
-            url: "https://h2970110.stratoserver.net/api/" + this.token + "/" + this.identifier + "/calenderevent?userid=" + this.currentUserId,
-            data: "",
-            contentType: "application/json",
-            dataType: "json",
-            success: function (response) {
-
-                if (response[tempThis.currentUserId] !== undefined) {
-                    lstAllCalendarEntriesByUser[tempThis.currentUserId] = response[tempThis.currentUserId];
-                } else {
-                    lstAllCalendarEntriesByUser[tempThis.currentUserId] = {
-                        'userName': undefined
-                        , 'events': {}
-                    }
-                }
-
-                tempThis.token = response.newToken;
-                if (tempThis.isLogIn){
-                    tempThis.setup();
-                }
-                else{
-                    tempThis.eventsLoaded = false;
-                    tempThis.loadEvents();
-                }
-            },
-            error: function (response, status) {
-                console.log(response);
-                window.alert("Getting Event failed: " + response.response);
-            }
-        });
-    }
-
     setup = function () {
         this.isLogIn = false;
         this.setupTimes();
@@ -761,6 +726,18 @@ export class Calendar {
         this.loadEvents();
     }
 
+    GetFormatedDate = function (date, prev) {
+        var newTempDate = new Date(date);
+
+        var newDate = prev ? new Date(newTempDate.setDate(newTempDate.getDate() - 1)) : new Date(newTempDate.setDate(newTempDate.getDate()));
+        var year = newDate.getFullYear().toString();
+        var month = (newDate.getMonth() + 1).toString();
+        var day = newDate.getDate().toString().length === 1 ? "0" + newDate.getDate().toString() : newDate.getDate().toString();
+
+        return year + '-' + month + '-' + day;
+    }
+
+    //#region API Requests
     PostEventToServerByUserId = function (key, generateEvents) {
         Object.keys(generateEvents).forEach(date => {
             Object.keys(generateEvents[date]).forEach(id => {
@@ -805,6 +782,75 @@ export class Calendar {
         });
     }
 
+    GetEvents = function () {
+        var tempThis = this;
+        $.ajax({
+            type: "GET",
+            url: "https://h2970110.stratoserver.net/api/" + this.token + "/" + this.identifier + "/calenderevent?userid=" + this.currentUserId,
+            data: "",
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+
+                if (response[tempThis.currentUserId] !== undefined) {
+                    lstAllCalendarEntriesByUser[tempThis.currentUserId] = response[tempThis.currentUserId];
+                } else {
+                    lstAllCalendarEntriesByUser[tempThis.currentUserId] = {
+                        'userName': undefined
+                        , 'events': {}
+                    }
+                }
+
+                tempThis.token = response.newToken;
+                if (tempThis.isLogIn) {
+                    tempThis.setup();
+                }
+                else {
+                    tempThis.eventsLoaded = false;
+                    tempThis.loadEvents();
+                }
+            },
+            error: function (response, status) {
+                console.log(response);
+                window.alert("Getting Event failed: " + response.response);
+            }
+        });
+    }
+
+    PostUpdateEventToServer = function (userId, generateEvents) {
+        var tempThis = this;
+
+        var req = {};
+        req[userId] = {
+            "userName": ""
+            , "events": generateEvents
+        };
+
+        var jsonReq = JSON.stringify(req);
+
+        $.ajax({
+            type: "PUT",
+            url: "https://h2970110.stratoserver.net/api/" + this.token + "/" + this.identifier + "/calenderevent?eventID=" + userId,
+            data: jsonReq,
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+                if (response.status === "false") {
+                    window.alert("Deleting Event failed: " + response.response);
+                } else {
+                    tempThis.token = response.newToken;
+                }
+
+                tempThis.GetEvents();
+            },
+            error: function (response, status) {
+                console.log(response);
+                window.alert("Updaeting Event failed: " + response.response);
+                tempThis.GetEvents();
+            }
+        });
+    }
+
     DeleteEvent = function (userId, date, id) {
         //delete lstAllCalendarEntriesByUser[userId]["events"][date][id];
         var tempThis = this;
@@ -833,14 +879,15 @@ export class Calendar {
 
         $.ajax({
             type: "DELETE",
-            url: "https://h2970110.stratoserver.net/api/" + this.token + "/" + this.identifier + "/calenderevent?eventID=" + userId,
+
+            url: "https://h2970110.stratoserver.net/api/" + this.token + "/" + this.identifier + "/calenderevent?eventID=" + id,
             data: jsonReq,
             contentType: "application/json",
             dataType: "json",
             success: function (response) {
-                if(response.status === "false"){
+                if (response.status === "false") {
                     window.alert("Deleting Event failed: " + response.response);
-                }else{
+                } else {
                     tempThis.token = response.newToken;
                 }
 
@@ -853,16 +900,6 @@ export class Calendar {
             }
         });
     }
-
-    GetFormatedDate = function (date, prev) {
-        var newTempDate = new Date(date);
-
-        var newDate = prev ? new Date(newTempDate.setDate(newTempDate.getDate() - 1)) : new Date(newTempDate.setDate(newTempDate.getDate()));
-        var year = newDate.getFullYear().toString();
-        var month = (newDate.getMonth() + 1).toString();
-        var day = newDate.getDate().toString().length === 1 ? "0" + newDate.getDate().toString() : newDate.getDate().toString();
-
-        return year + '-' + month + '-' + day;
-    }
+    //#region 
 }
 
