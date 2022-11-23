@@ -585,7 +585,7 @@ export class Calendar {
                 var newId = generateId();
                 if (!currentEventsDates.find(x => x === year + '-' + month + '-' + day)) {
                     generateEvents[year + '-' + month + '-' + day] = {}
-                    generateEvents[year + '-' + month + '-' + day][newId] = this.CreateEvent("grey", year + '-' + month + '-' + day, "", "24:00", newId, "00:00", "Generated Event");
+                    generateEvents[year + '-' + month + '-' + day][newId] = this.CreateEvent("grey", year + '-' + month + '-' + day, "", "23:59", newId, "00:00", "Generated Event");
                 } else {
                     var currentEventsForDate = [];
 
@@ -615,8 +615,8 @@ export class Calendar {
                     });
 
                     var start1 = currentEventsForDate.find(x => x.start === "00:00");
-                    var end1 = currentEventsForDate.find(x => x.end === "24:00");
-                    //if (currentEventsForDate.find(x=> x.start === "00:00") !== undefined && currentEventsForDate.find(x=> x.end === "24:00") !== undefined ){
+                    var end1 = currentEventsForDate.find(x => x.end === "23:59");
+                    //if (currentEventsForDate.find(x=> x.start === "00:00") !== undefined && currentEventsForDate.find(x=> x.end === "23:59") !== undefined ){
                     if (currentEventsForDate.length > 1 && start1 !== undefined && end1 !== undefined) {
                         continue;
                     }
@@ -653,9 +653,9 @@ export class Calendar {
                                 //überschneidung
                                 if (event.start >= prevEvent.start && event.end <= prevEvent.end) {
                                     secondIsTimedWithinFirstEvent = true;
-                                    generateEvents[date][newId] = this.CreateEvent("grey", date, "", "24:00", newId, prevEvent.end, "Generated Event", 1);
+                                    generateEvents[date][newId] = this.CreateEvent("grey", date, "", "23:59", newId, prevEvent.end, "Generated Event", 1);
                                 } else if (event.start >= prevEvent.start && event.start <= prevEvent.end && event.end > prevEvent.end) {
-                                    generateEvents[date][newId] = this.CreateEvent("grey", date, "", "24:00", newId, end, "Generated Event");
+                                    generateEvents[date][newId] = this.CreateEvent("grey", date, "", "23:59", newId, end, "Generated Event");
                                 }
                                 else {
                                     secondIsTimedWithinFirstEvent = false
@@ -667,9 +667,9 @@ export class Calendar {
                                 newId = generateId();
 
                                 if (secondIsTimedWithinFirstEvent) {
-                                    generateEvents[date][newId] = this.CreateEvent("grey", date, "", "24:00", newId, prevEvent.end, "Generated Event", 1);
+                                    generateEvents[date][newId] = this.CreateEvent("grey", date, "", "23:59", newId, prevEvent.end, "Generated Event", 1);
                                 } else {
-                                    generateEvents[date][newId] = this.CreateEvent("grey", date, "", "24:00", newId, end, "Generated Event", 1);
+                                    generateEvents[date][newId] = this.CreateEvent("grey", date, "", "23:59", newId, end, "Generated Event", 1);
                                 }
                             }
                         }
@@ -683,7 +683,7 @@ export class Calendar {
                         generateEvents[date][newId] = this.CreateEvent("grey", date, "", start, newId, "00:00", "Generated Event", 1);
 
                         newId = generateId();
-                        generateEvents[date][newId] = this.CreateEvent("grey", date, "", "24:00", newId, end, "Generated Event", 1);
+                        generateEvents[date][newId] = this.CreateEvent("grey", date, "", "23:59", newId, end, "Generated Event", 1);
                     }
                 }
             }
