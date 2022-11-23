@@ -339,7 +339,7 @@ app.get("/api/:token/:identifier/calenderevent", async (req, res) => {
     }
     
     if(! response[userid].hasOwnProperty('events')){
-      response[userid]["username"] = "usernameByID";
+      response[userid]["username"] = usernameByID;
       response[userid]["events"] = {};
     }
 
