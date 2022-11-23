@@ -48,6 +48,14 @@ export class Event {
     }
 
     saveIn(calendar) {
+        this.prevDate = this.date;
+        this.title = $("#eventTitle").val();
+        this.start = $("#eventStart").val();
+        this.end = $("#eventEnd").val();
+        this.date = $("#eventDate").val();
+        this.description = $("#eventDescription").val();
+        this.color = $(".color.active").attr("data-color");
+        
         if (this.prevDate && this.date != this.prevDate) {
             delete calendar.events[this.prevDate][this.id];
             if (Object.values(calendar.events[this.prevDate]).length == 0) {
@@ -127,9 +135,9 @@ export class Event {
         this.date = $("#eventDate").val();
         this.description = $("#eventDescription").val();
         this.color = $(".color.active").attr("data-color");
-        this.saveIn(calendar);
+        //this.saveIn(calendar);
         //this.showIn(calendar);
-        calendar.loadEvents();
+        //calendar.loadEvents();
 
         var createdEvent = {};
         createdEvent[this.date] = {};
