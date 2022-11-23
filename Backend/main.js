@@ -322,7 +322,7 @@ app.get("/api/:token/:identifier/calenderevent", async (req, res) => {
   let userid = req.query.userid;
 
   // get username by userID
-  let username = await person.getUsernameByUserId(userid);
+  let usernameByID = await person.getUsernameByUserId(userid);
 
   const calenderEvents = await calenderevent.GetCalendarEvents(userid);
 
@@ -330,14 +330,12 @@ app.get("/api/:token/:identifier/calenderevent", async (req, res) => {
     newToken: newToken
   };
 
-  calenderEvents.forEach((event) => {
+  await calenderEvents.forEach((event) => {
 
     let date = moment(Date.parse(event["Date"])).format('YYYY-MM-DD');
 
     if(! response.hasOwnProperty(userid)){
-      response[userid] = {
-        username: username
-      };
+      response[userid] = {};
     }
     
     if(! response[userid].hasOwnProperty('events')){
@@ -359,6 +357,7 @@ app.get("/api/:token/:identifier/calenderevent", async (req, res) => {
       id: event["ID"],
       start: Start,
       title: event["Title"],
+      username: usernameByID
     };
   });
 
