@@ -103,6 +103,11 @@ textarea {
     /*font-size: 22px;*/
 }
 
+.myUserName{
+    position: absolute;
+    font-size: 22px;
+}
+
 .generalControls {
     position: absolute;
     right: 20px;

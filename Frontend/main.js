@@ -54,8 +54,8 @@ loginTabBtn.onclick = function () {
     Indicator.style.transform = "translateX(0px)";
 }
 
-document.getElementById("email").value = "a@a.de";
-document.getElementById("password").value = "Qwertz1!";
+document.getElementById("email").value = "Abdullah@test.de";
+document.getElementById("password").value = "Ab123456!";
 
 
 LogInBtn.onclick = function () {

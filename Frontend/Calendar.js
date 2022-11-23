@@ -27,7 +27,7 @@ var isLogIn = false;
                 }
             },
             "2022-11-10": {
-                "2": {
+                "11": {
                     'color': "green"
                     , 'date': "2022-11-10"
                     , 'description': "oh boy Jolli\n"
@@ -151,6 +151,7 @@ export class Calendar {
 
     setup = function () {
         this.isLogIn = false;
+        document.getElementById("myUserName").innerHTML  = lstAllCalendarEntriesByUser[this.currentUserId].username;
         this.setupTimes();
         this.setupDays();
         this.calculateCurrentWeek();
@@ -498,7 +499,7 @@ export class Calendar {
 
         Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
             var isChecked = key === tempThis.currentUserId.toString() ? "checked" : "";
-            var userName = lstAllCalendarEntriesByUser[key].userName;
+            var userName = key === tempThis.currentUserId.toString() ? "My Calendar" : lstAllCalendarEntriesByUser[key].username;
 
             html = html + '<li>'
                 + '<input type="checkbox" name="LinkedCalendar_' + key + '" id="LinkedCalendar_' + key + '" ' + isChecked + ' >'
@@ -690,7 +691,8 @@ export class Calendar {
         }
 
         if (Object.keys(generateEvents).length > 0) {
-            this.PostEventToServer(undefined, generateEvents);
+            console.log(generateEvents);
+            //this.PostEventToServer(undefined, generateEvents);
             window.alert("Termine wurden angelegt.");
         } else {
             window.alert("Es wurden keine Termine angelegt, da es keinen freien Zeitraum gab.");
@@ -821,13 +823,73 @@ export class Calendar {
             dataType: "json",
             success: function (response) {
 
-                if (response[tempThis.currentUserId] !== undefined) {
-                    lstAllCalendarEntriesByUser[tempThis.currentUserId] = response[tempThis.currentUserId];
+                if (response.status !== "false") {
+
+                    if (response[tempThis.currentUserId] !== undefined) {
+                        lstAllCalendarEntriesByUser[tempThis.currentUserId] = response[tempThis.currentUserId];
+                        tempThis.token = response.newToken;
+
+                        if (tempThis.currentUserId === 12 || tempThis.currentUserId === 11) {
+                            tempThis.GetLinkedCalendar(tempThis);
+                        }
+                        else {
+                            if (tempThis.isLogIn) {
+                                tempThis.setup();
+                            }
+                            else {
+                                tempThis.eventsLoaded = false;
+                                tempThis.loadEvents();
+                            }
+                        }
+                    } else {
+                        tempThis.token = response.newToken;
+                        lstAllCalendarEntriesByUser[tempThis.currentUserId] = {
+                            'userName': undefined
+                            , 'events': {}
+                        }
+                        if (tempThis.isLogIn) {
+                            tempThis.setup();
+                        }
+                        else {
+                            tempThis.eventsLoaded = false;
+                            tempThis.loadEvents();
+                        }
+                    }
+                }
+
+                /* tempThis.token = response.newToken;
+                if (tempThis.isLogIn) {
+                    tempThis.setup();
+                }
+                else {
+                    tempThis.eventsLoaded = false;
+                    tempThis.loadEvents();
+                } */
+            },
+            error: function (response, status) {
+                console.log(response);
+                window.alert("Getting Event failed: " + response.response);
+            }
+        });
+    }
+
+    GetLinkedCalendar = function (tempThis) {
+        var linkedCalendarUserId = tempThis.currentUserId === 11 ? 12 : 11;
+        $.ajax({
+            type: "GET",
+            url: "https://h2970110.stratoserver.net/api/" + this.token + "/" + this.identifier + "/calenderevent?userid=" + linkedCalendarUserId,
+            data: "",
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+
+                if (response[linkedCalendarUserId] !== undefined) {
+                    lstAllCalendarEntriesByUser[linkedCalendarUserId] = response[linkedCalendarUserId];
                 } else {
-                    lstAllCalendarEntriesByUser[tempThis.currentUserId] = {
+                    lstAllCalendarEntriesByUser[linkedCalendarUserId] = {
                         'userName': undefined
                         , 'events': {}
-                    }
+                    };
                 }
 
                 tempThis.token = response.newToken;
