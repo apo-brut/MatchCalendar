@@ -64,7 +64,7 @@ LogInBtn.onclick = function () {
 
     $.ajax({
         type: "GET",
-        url: "https://h2970110.stratoserver.net:3000/api/login?email=" + email + "&password=" + password,
+        url: "https://h2970110.stratoserver.net/api/login?email=" + email + "&password=" + password,
         data: "", 
         contentType: "application/json",
         dataType: "json",
@@ -95,7 +95,7 @@ RegistierenBtn.onclick = function () {
 
     $.ajax({
         type: "POST",
-        url: "https://h2970110.stratoserver.net:3000/api/signup?email=" + registeremail + "&password=" + registerpassword + "&username=" + registeruser,
+        url: "https://h2970110.stratoserver.net/api/signup?email=" + registeremail + "&password=" + registerpassword + "&username=" + registeruser,
         data: "", 
         contentType: "application/json",
         dataType: "json",

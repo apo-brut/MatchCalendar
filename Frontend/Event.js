@@ -146,7 +146,7 @@ export class Event {
             , 'matchID': "0"
         }
 
-        calendar.PostEventToServer(calendar.currentUserId, createdEvent);
+        calendar.PostUpdateEventToServer(calendar.currentUserId, createdEvent);
     }
 
     copyIn(calendar) {
