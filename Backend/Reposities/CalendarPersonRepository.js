@@ -40,46 +40,15 @@ const connection = mysql.createConnection({
 
 
 class CalendarPersonRepository {
-
-  async AddCalenderPerson(Id,username,password,firstname,lastname,entry){
-
-    connection.query("INSERT INTO `person`(`Username`, `Email`, `Password`, `Firstname`, `Lastname`, `Entry`) VALUES (?, ?, ?, ?, ? )",
-    [Id,username,email,password,firstname,lastname,entry],
-    function (err, results, fields) {
-      console.log(err);
-    }
-  );
-
-    }
-
-  async DeleteCalenderPerson(Id) {
-    connection.query("DELETE * FROM `person` WHERE Id = ?",
-
-    [Id,username,password,firstname,lastname,entry],
-    function (err, results, fields) {
-   //   console.log(err);
-    }
-    );
-}
-
-    async UpdateCalenderPerson(Id) {
-        connection.query("UPDATE `person` SET ,`Username`= ? ,`Password` = ?,`Firstname`= ? ,`Lastname` = ? ,`Entry` = ? WHERE ID = ?",
-    
-        [Id,username,password,firstname,lastname,entry],
-        function (err, results, fields) {
-       //   console.log(err);
-        }
-        );
- }
  
  async getUsernameByUserId(Id) {
   return await new Promise((resolve, reject) => {
     connection.query(
-      "SELECT Username FROM `person` WHERE ID = ?",
+      "SELECT `Username` FROM `person` WHERE ID = ?",
       [Id],
       function (err, results, fields) {
         try {
-          resolve(results[0]["ID"]);
+          resolve(results[0]["Username"]);
         } catch {
           logger.error("[CalendarPersonRepository->getUsernameByUserId()] " + err);
           resolve("");
@@ -92,7 +61,7 @@ class CalendarPersonRepository {
  async getUserIdByUserName(username) {
   return await new Promise((resolve, reject) => {
     connection.query(
-      "SELECT Id FROM `person` WHERE username = ?",
+      "SELECT `ID` FROM `person` WHERE username = ?",
       [username],
       function (err, results, fields) {
         try {
@@ -107,10 +76,6 @@ class CalendarPersonRepository {
  }
 
 }
-    
-
-
-
 
 module.exports = CalendarPersonRepository; 
 
