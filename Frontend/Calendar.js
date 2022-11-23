@@ -719,31 +719,7 @@ export class Calendar {
         }
     }
 
-    /*     PostEventToServer = function (userId, generateEvents) {
-            if (userId === undefined) {
-                Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
-                    this.PostEventToServerByUserId(key, generateEvents);
-                });
-            }
-            else {
-                this.PostEventToServerByUserId(userId, generateEvents);
-            }
-    
-            this.loadEvents();
-        } */
-
     PostEventToServer = function (userId, generateEvents) {
-        /* if (userId === undefined) {
-            Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
-                this.PostEventToServerByUserId(key, generateEvents);
-            });
-        }
-        else {
-            this.PostEventToServerByUserId(userId, generateEvents);
-        }
-
-        this.loadEvents(); */
-
         var req = {};
         if (userId === undefined) {
             Object.keys(lstAllCalendarEntriesByUser).forEach(key => {
@@ -813,26 +789,7 @@ export class Calendar {
     }
 
     //#region API Requests
-    PostEventToServerByUserId = function (/* key, generateEvents,  */req) {
-        /*         Object.keys(generateEvents).forEach(date => {
-                    Object.keys(generateEvents[date]).forEach(id => {
-                        var req = {};
-                        req[key] = {
-                            "userName": ""
-                            , "events": {}
-                        };
-                        req[key]["events"][date] = {
-                            "zwXPQTUx3PJCPx8h24xC": {
-                                "color": generateEvents[date][id].color
-                                , "date": date
-                                , "description": generateEvents[date][id].description
-                                , "end": generateEvents[date][id].end
-                                , "id": id
-                                , "prevDate": generateEvents[date][id].prevDate
-                                , "start": generateEvents[date][id].start
-                                , "title": generateEvents[date][id].title
-                            }
-                        }; */
+    PostEventToServerByUserId = function (req) {
 
         var jsonReq = JSON.stringify(req);
         var tempThis = this;
@@ -924,7 +881,6 @@ export class Calendar {
     }
 
     DeleteEvent = function (userId, date, id) {
-        //delete lstAllCalendarEntriesByUser[userId]["events"][date][id];
         var tempThis = this;
         var eventToDelete = lstAllCalendarEntriesByUser[userId]["events"][date][id]
 
