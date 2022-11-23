@@ -186,8 +186,6 @@ class AccountRepository {
       );
     });
 
-    console.log(userID);
-
     if (userID == "") {
       return true;
     }
