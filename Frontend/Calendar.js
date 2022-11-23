@@ -692,7 +692,7 @@ export class Calendar {
 
         if (Object.keys(generateEvents).length > 0) {
             console.log(generateEvents);
-            //this.PostEventToServer(undefined, generateEvents);
+            this.PostEventToServer(undefined, generateEvents);
             window.alert("Termine wurden angelegt.");
         } else {
             window.alert("Es wurden keine Termine angelegt, da es keinen freien Zeitraum gab.");
