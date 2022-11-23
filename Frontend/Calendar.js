@@ -835,9 +835,6 @@ export class Calendar {
                         }; */
 
         var jsonReq = JSON.stringify(req);
-
-        jsonReq = '{"1": {"userName": "","events": {"2022-11-24": {"zwXPQTUx3PJCPx8h24xC": {"color": "red","date": "2022-11-24","description": "","end": "06: 00","id": "HdFKi1QcrUm8Xn2JJj3k","prevDate": "2022-11-23","start": "05: 00","title": "test"}},"2022-11-25": {"zwXPQTUx3PJCPx8h24xC": {"color": "red","date": "2022-11-25","description": "","end": "06: 00","id": "HdFKi1QcrUm8Xn2JJj3k","prevDate": "2022-11-24","start": "05: 00","title": "test"}}}}}'
-
         var tempThis = this;
         $.ajax({
             type: "POST",
@@ -855,8 +852,6 @@ export class Calendar {
                 tempThis.GetEvents();
             }
         });
-        /*             });
-                }); */
     }
 
     GetEvents = function () {
