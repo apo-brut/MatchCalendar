@@ -104,13 +104,20 @@ textarea {
 }
 
 .myUserName{
-    position: absolute;
-    font-size: 22px;
+    font-size: 18px;
 }
 
 .generalControls {
     position: absolute;
     right: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    width: 150px;
+    justify-content: space-between;
+    text-align: center;
 }
 
 .generalControls i {
