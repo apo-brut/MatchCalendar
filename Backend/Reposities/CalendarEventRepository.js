@@ -81,15 +81,18 @@ async DeleteCalenderEvent(Id) {
   connection.query("DELETE FROM `save` WHERE `ID` = ?",
     [Id],
     function (err, results, fields) {
-   //   console.log(err);
+      console.log(err);
     }
     );
 }
-async UpdateCalenderEvent(Id,start,end,title,description,color,calender_type,matchID){
-  connection.query("UPDATE `save` SET `Date` = ?, `Start` = ?, `End` = ?, `Title` = ?, `Description` = ?, `Color`= ?, `calendar_type` = ?  WHERE Id = ?",
-    [Id, utils.getCurrentDate(), start, end, title, description,color,0,matchID],
+async UpdateCalenderEvent(Id,start,end,title,description,color,date){
+
+  console.log(Id,start,end,title,description,color,date);
+
+  connection.query("UPDATE `save` SET `Date` = ?, `Start` = ?, `End` = ?, `Title` = ?, `Description` = ?, `Color`= ?, `calendar_type` = ? WHERE `ID` = ?",
+    [date, start, end, title, description,color,0,Id],
     function(err, results,fields) {
-      // console.log(err);
+       console.log(err);
     }
   )
 

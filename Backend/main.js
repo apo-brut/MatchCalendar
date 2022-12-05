@@ -363,7 +363,6 @@ class main {
     });
 
     app.put("/api/:token/:identifier/calenderevent", async (req, res) => {
-      await calenderevent.UpdateCalenderEvent();
       if (req.body == null) {
         res.send("Error Body invalid");
         return false;
@@ -381,12 +380,9 @@ class main {
         let title = "Title";
         let matchID = "";
 
-        let uuid = "";
-
         userID = key;
 
         Object.keys(body[key]["events"]).forEach((dateKey) => {
-          uuid = "rfregreg";
           Object.keys(body[key]["events"][dateKey]).forEach((eventID) => {
             let event = body[key]["events"][dateKey][eventID];
 
@@ -397,9 +393,16 @@ class main {
             start = date + " " + event["start"] + ":00";
             title = event["title"];
 
+            console.log("color: " + color);
+            console.log("date: " + date);
+            console.log("description: " + description);
+            console.log("end: " + end);
+            console.log("eventID: " + eventID);
+
             if (matchID.length > 0) {
               //updatr event with matchID
               calenderevent.UpdateCalenderEvent(
+                eventID,
                 start,
                 end,
                 title,
@@ -410,6 +413,7 @@ class main {
             } else {
               //update event without matchID
               calenderevent.UpdateCalenderEvent(
+                eventID,
                 start,
                 end,
                 title,
