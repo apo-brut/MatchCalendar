@@ -151,7 +151,7 @@ export class Calendar {
 
     setup = function () {
         this.isLogIn = false;
-        document.getElementById("myUserName").innerHTML  = lstAllCalendarEntriesByUser[this.currentUserId].username;
+        document.getElementById("myUserName").innerHTML = lstAllCalendarEntriesByUser[this.currentUserId].username;
         this.setupTimes();
         this.setupDays();
         this.calculateCurrentWeek();
@@ -691,6 +691,7 @@ export class Calendar {
         }
 
         if (Object.keys(generateEvents).length > 0) {
+            console.log("Valah");
             console.log(generateEvents);
             this.PostEventToServer(undefined, generateEvents);
             window.alert("Termine wurden angelegt.");
@@ -706,15 +707,30 @@ export class Calendar {
         var prevDate = this.GetFormatedDate(date, true);
         var generateEvent = {};
         generateEvent[date] = {};
+        var tempStart = "";
+        var tempEnd = "";
+        if (start.length > 5) {
+            let newDate = new Date(start);
+            let hours = newDate.getHours().toString().length === 1 ? "0" + newDate.getHours().toString() : newDate.getHours().toString();
+            let minutes = newDate.getMinutes().toString().length === 1 ? "0" + newDate.getMinutes().toString() : newDate.getMinutes().toString();
+            tempStart = hours + ':' + minutes;
+        }
+        if (end.length > 5) {
+            let newDate = new Date(end);
+            let hours = newDate.getHours().toString().length === 1 ? "0" + newDate.getHours().toString() : newDate.getHours().toString();
+            let minutes = newDate.getMinutes().toString().length === 1 ? "0" + newDate.getMinutes().toString() : newDate.getMinutes().toString();
+            tempEnd = hours + ':' + minutes;
+        }
+
 
         return generateEvent[date][id] = {
             "color": color
             , "date": date
             , "description": description
-            , "end": end
+            , "end": tempEnd === "" ? end : tempEnd
             , "id": id
             , "prevDate": prevDate
-            , "start": start
+            , "start": tempStart === "" ? start : tempStart
             , "title": title
             , 'calendar_type': calendar_Type
             , 'matchID': "0"
@@ -732,7 +748,9 @@ export class Calendar {
                 Object.keys(generateEvents).forEach(date => {
                     Object.keys(generateEvents[date]).forEach(id => {
 
-                        req[key]["events"][date] = {};
+                        if (!req[key]["events"][date]){
+                            req[key]["events"][date] = {};
+                        }
                         req[key]["events"][date][id] = {};
 
                         req[key]["events"][date][id] = {
@@ -795,6 +813,8 @@ export class Calendar {
 
         var jsonReq = JSON.stringify(req);
         var tempThis = this;
+        console.log("hallo");
+        console.log(req);
         $.ajax({
             type: "POST",
             url: "https://h2970110.stratoserver.net/api/" + this.token + "/" + this.identifier + "/calenderevent",
